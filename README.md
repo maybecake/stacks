@@ -18,3 +18,7 @@ vscode extensions:
 # Stack 1
 
 Python backend
+
+# Stack 2
+
+React frontend
