@@ -1,0 +1,4 @@
+build --action_env=BAZEL_CXXOPTS="/std:c++latest"
+build --host_cxxopt=/std:c++latest
+build --define=protobuf_allow_msvc=true
+build --shell_executable=C:/tools/msys64/usr/bin/bash.exe

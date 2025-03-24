@@ -1,0 +1,12 @@
+load("@protobuf//bazel:proto_library.bzl", "proto_library")
+load("@rules_proto_grpc_python//:defs.bzl", "python_proto_compile")
+
+proto_library(
+    name = "hello_service_proto",
+    srcs = ["hello_service.proto"],
+)
+
+python_proto_compile(
+    name = "hello_service_python_proto",
+    protos = [":hello_service_proto"],
+)
