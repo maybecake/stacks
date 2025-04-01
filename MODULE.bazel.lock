@@ -271,7 +271,7 @@
   "moduleExtensions": {
     "@@apple_support+//crosstool:setup.bzl%apple_cc_configure_extension": {
       "general": {
-        "bzlTransitiveDigest": "okb7JAyJ9zeL+SDmtbWT0XBLq8WRoLJ0zWAG783RLVI=",
+        "bzlTransitiveDigest": "E970FlMbwpgJPdPUQzatKh6BMfeE0ZpWABvwshh7Tmg=",
         "usagesDigest": "xv9z2c7OWE3Yp+Azbwv1ImqlF3yAZhfTG5FR1K+/isk=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -5947,7 +5947,7 @@
     },
     "@@rules_rust+//rust:extensions.bzl%rust": {
       "general": {
-        "bzlTransitiveDigest": "tuX+v7uYkywcUGfTOepkhN1oSag3rbqPRCi7hA3BU/Y=",
+        "bzlTransitiveDigest": "YsaTPw20Z8ZMM3WlG6OGXJBzyoyBZcY7FTiU04eEdYw=",
         "usagesDigest": "ozx08ZbgRXTJw0zCaO/xtMUzgGLvwaQkZGnUo6tlyHM=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -8896,6 +8896,11 @@
             "rules_cc+",
             "bazel_tools",
             "bazel_tools"
+          ],
+          [
+            "rules_cc+",
+            "rules_cc",
+            "rules_cc+"
           ],
           [
             "rules_rust+",
