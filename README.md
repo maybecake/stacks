@@ -22,3 +22,10 @@ Python backend
 # Stack 2
 
 React frontend
+
+# Dev containers
+
+Trying to use dev containers for development.
+see `.devcontainer/` for the container definitions.
+
+Need to install dev container related VSCode extensions.
