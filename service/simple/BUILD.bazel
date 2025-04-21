@@ -5,14 +5,14 @@ load("@rules_proto_grpc_go//:defs.bzl", "go_grpc_library")
 
 python_grpc_compile(
     name = "hello_proto",
-    protos = ["//service/protos:hello_service_proto"],
+    protos = ["//api/protos:hello_service_proto"],
 )
 
 py_library(
     name = "simple_lib",
     srcs = ["server.py"],
     deps = [
-        ":hello_proto",
+        "//api/protos:hello_service_proto",
         "@pypi_grpcio//:pkg",
         "@pypi_protobuf//:pkg",
     ],
@@ -29,7 +29,7 @@ py_binary(
 go_grpc_library(
     name = "hello_go_proto",
     importpath = "stacks/service/simple",
-    protos = ["//service/protos:hello_service_proto"],
+    protos = ["//api/protos:hello_service_proto"],
     deps = [
         "@com_github_golang_protobuf//proto:go_default_library",
         "@org_golang_google_grpc//:go_default_library",
