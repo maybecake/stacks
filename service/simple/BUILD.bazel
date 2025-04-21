@@ -1,0 +1,53 @@
+load("@rules_python//python:defs.bzl", "py_binary", "py_library")
+load("@rules_proto_grpc_python//:defs.bzl", "python_grpc_compile")
+load("@rules_go//go:def.bzl", "go_binary", "go_library")
+load("@rules_proto_grpc_go//:defs.bzl", "go_grpc_library")
+
+python_grpc_compile(
+    name = "hello_proto",
+    protos = ["//service/protos:hello_service_proto"],
+)
+
+py_library(
+    name = "simple_lib",
+    srcs = ["server.py"],
+    deps = [
+        ":hello_proto",
+        "@pypi_grpcio//:pkg",
+        "@pypi_protobuf//:pkg",
+    ],
+)
+
+py_binary(
+    name = "simple_service",
+    srcs = ["server.py"],
+    deps = [
+        ":simple_lib",
+    ],
+)
+
+go_grpc_library(
+    name = "hello_go_proto",
+    importpath = "stacks/service/simple",
+    protos = ["//service/protos:hello_service_proto"],
+    deps = [
+        "@com_github_golang_protobuf//proto:go_default_library",
+        "@org_golang_google_grpc//:go_default_library",
+    ],
+)
+
+go_library(
+    name = "go_server_lib",
+    srcs = ["server.go"],
+    importpath = "stacks/service/simple",
+    deps = [
+        ":hello_go_proto",
+        "@com_github_golang_protobuf//proto:go_default_library",
+        "@org_golang_google_grpc//:go_default_library",
+    ],
+)
+
+go_binary(
+    name = "go_server",
+    embed = [":go_server_lib"],
+) 

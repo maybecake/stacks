@@ -1,12 +1,24 @@
-load("@protobuf//bazel:proto_library.bzl", "proto_library")
+load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@rules_proto_grpc_python//:defs.bzl", "python_proto_compile")
+load("@rules_proto_grpc_go//:defs.bzl", "go_proto_compile")
 
 proto_library(
     name = "hello_service_proto",
     srcs = ["hello_service.proto"],
+    visibility = ["//visibility:public"],
 )
 
 python_proto_compile(
     name = "hello_service_python_proto",
     protos = [":hello_service_proto"],
+)
+
+go_proto_compile(
+    name = "hello_service_go_proto",
+    protos = [":hello_service_proto"],
+)
+
+go_proto_compile(
+    name = "person_go_proto",
+    protos = ["@rules_proto_grpc_example_protos//:person_proto"],
 )
