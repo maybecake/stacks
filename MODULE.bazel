@@ -1,3 +1,8 @@
+module(
+    name = "stacks",
+    repo_name = "com_github_maybecake_stacks",
+)
+
 bazel_dep(name = "protobuf", version = "31.0-rc1")
 bazel_dep(name = "rules_go", version = "0.54.0")
 bazel_dep(name = "rules_proto", version = "7.1.0")

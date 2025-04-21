@@ -4,3 +4,6 @@
 # build --host_cxxopt=/std:c++latest
 # build --define=protobuf_allow_msvc=true
 # build --shell_executable=C:/tools/msys64/usr/bin/bash.exe
+
+# Enable Bzlmod for every Bazel command
+common --enable_bzlmod
