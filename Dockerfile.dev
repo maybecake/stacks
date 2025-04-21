@@ -16,6 +16,7 @@ RUN apt-get update && apt-get install -y \
     git \
     unzip \
     vim \
+    # golang \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -23,6 +24,10 @@ RUN apt-get update && apt-get install -y \
 RUN useradd -m -s /bin/bash devcontainer \
     && mkdir -p /home/devcontainer/.local/bin \
     && chown -R devcontainer:devcontainer /home/devcontainer
+
+# # Install Gazelle
+# RUN go install github.com/bazelbuild/bazel-gazelle/cmd/gazelle@latest
+# ENV PATH="$PATH:$HOME/go/bin/"
 
 USER devcontainer
 WORKDIR /home/devcontainer

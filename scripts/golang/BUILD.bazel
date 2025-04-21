@@ -1,7 +1,21 @@
-load("@rules_go//go:def.bzl", "go_binary")
+load("@rules_go//go:def.bzl", "go_binary", "go_library")
 
 go_binary(
     name = "hello_world",
-    srcs = ["hello_world.go"],
+    embed = [":golang_lib"],
     visibility = ["//visibility:public"],
-) 
+)
+
+go_library(
+    name = "lib",
+    srcs = ["hello_world.go"],
+    importpath = "",
+    visibility = ["//visibility:private"],
+)
+
+go_library(
+    name = "golang_lib",
+    srcs = ["hello_world.go"],
+    importpath = "github.com/maybecake/stacks/scripts/golang",
+    visibility = ["//visibility:private"],
+)

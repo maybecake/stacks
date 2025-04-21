@@ -15,7 +15,8 @@
 		"ghcr.io/devcontainers/features/python:1": {},
 		"ghcr.io/balazs23/devcontainers-features/bazel:1": {},
 		"ghcr.io/itsmechlark/features/postgresql:1": {},
-		"ghcr.io/robbert229/devcontainer-features/postgresql-client:1": {}
+		"ghcr.io/robbert229/devcontainer-features/postgresql-client:1": {},
+		"ghcr.io/devcontainers-extra/features/protoc-asdf:1": {}
 	},
 	"customizations": {
 		"vscode": {
