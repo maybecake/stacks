@@ -3,22 +3,22 @@ load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@rules_proto_grpc_go//:defs.bzl", "go_proto_compile")
 load("@rules_proto_grpc_python//:defs.bzl", "python_proto_compile")
 
+visibility = ["//visibility:public"]
+
 proto_library(
-    name = "hello_service_proto",
-    srcs = ["hello_service.proto"],
+    name = "hello_proto",
+    srcs = ["hello.proto"],
 )
 
 python_proto_compile(
-    name = "hello_service_python_proto",
-    protos = [":hello_service_proto"],
+    name = "hello_python_proto",
+    protos = [":hello_proto"],
 )
 
 go_proto_library(
-    name = "hello_service_go_proto",
-    proto = ":hello_service_proto",
-)
-
-go_proto_compile(
     name = "hello_go_proto",
-    protos = [":hello_service_proto"],
+    importpath = "com.github/maybecake/stacks/api/protos/hello",
+    compilers = ["@rules_go//proto:go_grpc"],
+    proto = ":hello_proto",
+    visibility = ["//visibility:public"],
 )

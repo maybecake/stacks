@@ -37,6 +37,8 @@ ENV PATH="$PATH:/usr/local/bin"
 RUN go install github.com/bazelbuild/bazel-gazelle/cmd/gazelle@latest
 ENV PATH="$PATH:$HOME/go/bin/"
 
+RUN go install github.com/fullstorydev/grpcurl/cmd/grpcurl@latest
+
 USER devcontainer
 WORKDIR /home/devcontainer
 

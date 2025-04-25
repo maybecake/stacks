@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-option go_package = "github.com/maybecake/stacks/api/protos/hello";
+package adam.hello;
 
-package hello;
+option go_package = "adam/hello";
 
 message HelloRequest {
     string name = 1;

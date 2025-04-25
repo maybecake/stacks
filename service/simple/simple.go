@@ -2,12 +2,12 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net"
 
 	"google.golang.org/grpc"
-	pb "github.com/maybecake/stacks/api/protos/hello"
+	"google.golang.org/grpc/reflection"
+	pb "com.github/maybecake/stacks/api/protos/hello"
 )
 
 type server struct {
@@ -25,6 +25,8 @@ func main() {
 	}
 	s := grpc.NewServer()
 	pb.RegisterHelloServiceServer(s, &server{})
+	// Register reflection service on gRPC server
+	reflection.Register(s)
 	log.Printf("server listening at %v", lis.Addr())
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)

@@ -7,7 +7,6 @@ toolchain go1.23.8
 require google.golang.org/grpc v1.71.1
 
 require (
-	github.com/golang/protobuf v1.5.4 // indirect
 	golang.org/x/net v0.34.0 // indirect
 	golang.org/x/sys v0.29.0 // indirect
 	golang.org/x/text v0.21.0 // indirect
