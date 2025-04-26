@@ -6,7 +6,9 @@ FROM ubuntu:24.04
 # Set environment variables
 ENV DEBIAN_FRONTEND=noninteractive \
     LANG=C.UTF-8 \
-    LC_ALL=C.UTF-8
+    LC_ALL=C.UTF-8 \
+    GOPATH="/home/devcontainer/go" \
+    PATH="/home/devcontainer/go/bin:${PATH}"
 
 # Install base dependencies
 RUN apt-get update && apt-get install -y \
@@ -16,30 +18,29 @@ RUN apt-get update && apt-get install -y \
     git \
     unzip \
     vim \
-    nodejs \
     python3 \
     golang \
     protobuf-compiler \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Install Node.js 23
+RUN curl -fsSL https://deb.nodesource.com/setup_23.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install -g npm@latest pnpm
+
 # Create and set up non-root user
 RUN useradd -m -s /bin/bash devcontainer \
     && mkdir -p /home/devcontainer/.local/bin \
+    && mkdir -p /home/devcontainer/go \
     && chown -R devcontainer:devcontainer /home/devcontainer
 
-RUN go install github.com/bazelbuild/buildtools/buildifier@latest
-
-# Add Buildifier to the PATH (optional, but recommended)
-ENV PATH="$PATH:/usr/local/bin"
-
-# # Install Gazelle
-RUN go install github.com/bazelbuild/bazel-gazelle/cmd/gazelle@latest
-ENV PATH="$PATH:$HOME/go/bin/"
-
-RUN go install github.com/fullstorydev/grpcurl/cmd/grpcurl@latest
-
+# Install Buildifier and other Go tools
 USER devcontainer
+RUN go install github.com/bazelbuild/buildtools/buildifier@latest \
+    && go install github.com/bazelbuild/bazel-gazelle/cmd/gazelle@latest \
+    && go install github.com/fullstorydev/grpcurl/cmd/grpcurl@latest
+
 WORKDIR /home/devcontainer
 
 # Default command
