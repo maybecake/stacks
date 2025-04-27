@@ -5,7 +5,7 @@ import * as Tabs from '@radix-ui/react-tabs'
 import * as Avatar from '@radix-ui/react-avatar'
 import { Button } from '../ui/button'
 import { Toggle } from '../ui/Toggle'
-import { TwoColumnLayout } from '../ui/TwoColumnLayout'
+import { TwoColumnLayout } from '../layout/TwoColumnLayout'
 import { OptionsSlider } from '../OptionSlider'
 import './samples.css'
 
@@ -21,14 +21,6 @@ export const Samples: React.FC = () => {
 
   return (
     <div className="samples">
-      <section className="samples__section">
-        <h2>Options Slider</h2>
-        <div className="theme-slider__group">
-          <OptionsSlider
-          />
-          <p className="theme-slider__label">Current theme: {selectedTheme}</p>
-        </div>
-      </section>
 
       <section className="samples__section">
         <h2>Toggle Showcase</h2>
@@ -42,6 +34,11 @@ export const Samples: React.FC = () => {
                 label="Subscribe to newsletter (must be registered!)" 
                 defaultPressed 
                 disabled 
+              />
+              <Toggle 
+                id="t3" 
+                label="Enable dark mode" 
+                defaultPressed={true}
               />
             </div>
           }
@@ -162,6 +159,15 @@ export const Samples: React.FC = () => {
               JD
             </Avatar.Fallback>
           </Avatar.Root>
+        </div>
+      </section>
+
+      <section className="samples__section">
+        <h2>Options Slider</h2>
+        <div className="theme-slider__group">
+          <OptionsSlider
+          />
+          <p className="theme-slider__label">Current theme: {selectedTheme}</p>
         </div>
       </section>
 

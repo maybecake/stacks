@@ -5,7 +5,7 @@ import * as Tabs from '@radix-ui/react-tabs'
 import * as Avatar from '@radix-ui/react-avatar'
 import { Button } from './button'
 import { Toggle } from './Toggle'
-import { TwoColumnLayout } from './TwoColumnLayout'
+import { TwoColumnLayout } from '../layout/TwoColumnLayout'
 import { OptionsSlider } from '../OptionSlider'
 import './samples.css'
 
