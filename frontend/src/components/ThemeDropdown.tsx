@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { Theme } from '../themes';
 import { Compactness } from '../themes/compactness';
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import './ThemeDropdown.css';
 
 export const ThemeDropdown: React.FC = () => {
   const { theme, setTheme, compactness, setCompactness } = useTheme();
-  const [isOpen, setIsOpen] = useState(false);
-  const [isCompactnessOpen, setIsCompactnessOpen] = useState(false);
 
   const themes: { id: Theme; label: string; icon: string }[] = [
     { id: 'light', label: 'Light Theme', icon: '🌞' },
@@ -27,82 +26,68 @@ export const ThemeDropdown: React.FC = () => {
 
   return (
     <div className="theme-dropdown">
-      <div className="theme-dropdown-section">
-        <button
-          className="theme-dropdown-trigger"
-          onClick={() => setIsOpen(!isOpen)}
-          aria-expanded={isOpen}
-          aria-label="Theme selector"
-        >
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger className="theme-dropdown-trigger" aria-label="Theme selector">
           <span className="theme-icon" role="img" aria-label={currentTheme?.label}>
             {currentTheme?.icon}
           </span>
           <span className="dropdown-arrow" aria-hidden="true">▼</span>
-        </button>
-        {isOpen && (
-          <div 
-            className="theme-dropdown-menu"
-            role="menu"
-            aria-label="Theme options"
+        </DropdownMenu.Trigger>
+        
+        <DropdownMenu.Portal>
+          <DropdownMenu.Content 
+            className="theme-dropdown-menu" 
+            sideOffset={5}
+            align="end"
+            collisionPadding={8}
           >
             {themes.map(({ id, label, icon }) => (
-              <button
+              <DropdownMenu.Item
                 key={id}
                 className={`theme-dropdown-item ${theme === id ? 'active' : ''}`}
-                onClick={() => {
-                  setTheme(id);
-                  setIsOpen(false);
-                }}
-                role="menuitem"
+                onClick={() => setTheme(id)}
                 aria-label={label}
               >
                 <span className="theme-icon" role="img" aria-hidden="true">
                   {icon}
                 </span>
-              </button>
+              </DropdownMenu.Item>
             ))}
-          </div>
-        )}
-      </div>
+          </DropdownMenu.Content>
+        </DropdownMenu.Portal>
+      </DropdownMenu.Root>
 
-      <div className="theme-dropdown-section">
-        <button
-          className="theme-dropdown-trigger"
-          onClick={() => setIsCompactnessOpen(!isCompactnessOpen)}
-          aria-expanded={isCompactnessOpen}
-          aria-label="Layout compactness selector"
-        >
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger className="theme-dropdown-trigger" aria-label="Layout compactness selector">
           <span className="theme-icon" role="img" aria-label={currentCompactness?.label}>
             {currentCompactness?.icon}
           </span>
           <span className="dropdown-arrow" aria-hidden="true">▼</span>
-        </button>
-        {isCompactnessOpen && (
-          <div 
-            className="theme-dropdown-menu"
-            role="menu"
-            aria-label="Layout compactness options"
+        </DropdownMenu.Trigger>
+        
+        <DropdownMenu.Portal>
+          <DropdownMenu.Content 
+            className="theme-dropdown-menu" 
+            sideOffset={5}
+            align="end"
+            collisionPadding={8}
           >
             {compactnessOptions.map(({ id, label, icon }) => (
-              <button
+              <DropdownMenu.Item
                 key={id}
                 className={`theme-dropdown-item ${compactness === id ? 'active' : ''}`}
-                onClick={() => {
-                  setCompactness(id);
-                  setIsCompactnessOpen(false);
-                }}
-                role="menuitem"
+                onClick={() => setCompactness(id)}
                 aria-label={label}
                 data-compactness={id}
               >
                 <span className="theme-icon" role="img" aria-hidden="true">
                   {icon}
                 </span>
-              </button>
+              </DropdownMenu.Item>
             ))}
-          </div>
-        )}
-      </div>
+          </DropdownMenu.Content>
+        </DropdownMenu.Portal>
+      </DropdownMenu.Root>
     </div>
   );
 }; 

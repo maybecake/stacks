@@ -4,20 +4,17 @@
   position: relative;
 }
 
-.theme-dropdown-section {
-  position: relative;
-}
-
+/* Radix trigger styling */
 .theme-dropdown-trigger {
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
-  padding: var(--spacing-xs);
+  gap: var(--spacing-xxs);
+  padding: var(--spacing-xxs);
   background-color: var(--bg-secondary);
-  border: 1px solid var(--border);
+  border: 0;
   border-radius: var(--border-radius);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--transition-fast) ease;
 }
 
 .theme-dropdown-trigger:hover {
@@ -25,11 +22,8 @@
   color: var(--bg-primary);
 }
 
+/* Radix content styling */
 .theme-dropdown-menu {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  margin-top: var(--spacing-xs);
   background-color: var(--bg-primary);
   border: 1px solid var(--border);
   border-radius: var(--border-radius);
@@ -41,6 +35,7 @@
   padding: var(--spacing-xs);
 }
 
+/* Radix item styling */
 .theme-dropdown-item {
   display: flex;
   align-items: center;
@@ -51,10 +46,13 @@
   border-radius: var(--border-radius);
   cursor: pointer;
   transition: all var(--transition-normal) ease;
+  outline: none;
 }
 
-.theme-dropdown-item:hover {
+.theme-dropdown-item:hover,
+.theme-dropdown-item:focus {
   background-color: var(--bg-secondary);
+  outline: none;
 }
 
 .theme-dropdown-item.active {
@@ -62,7 +60,11 @@
   color: var(--bg-primary);
 }
 
-// Custom sizes!
+.theme-icon {
+  font-size: var(--icon-size);
+}
+
+/* Custom sizes for compactness options */
 .theme-dropdown-item[data-compactness="spacious"] .theme-icon {
   font-size: 3rem;
 }
@@ -80,6 +82,79 @@
   transition: transform var(--transition-fast) ease;
 }
 
-.theme-dropdown-trigger[aria-expanded="true"] .dropdown-arrow {
+/* Animation for Radix UI states */
+[data-state="open"] .dropdown-arrow {
   transform: rotate(180deg);
+}
+
+/* Animation for different dropdown positions */
+.theme-dropdown-menu[data-side="top"] {
+  animation: slideUpAndFade var(--transition-normal)
+    cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.theme-dropdown-menu[data-side="bottom"] {
+  animation: slideDownAndFade var(--transition-normal)
+    cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.theme-dropdown-menu[data-side="left"] {
+  animation: slideLeftAndFade var(--transition-normal)
+    cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.theme-dropdown-menu[data-side="right"] {
+  animation: slideRightAndFade var(--transition-normal)
+    cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUpAndFade {
+  from {
+    opacity: 0;
+    transform: translateY(var(--spacing-xxs));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDownAndFade {
+  from {
+    opacity: 0;
+    transform: translateY(calc(-1 * var(--spacing-xxs)));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideLeftAndFade {
+  from {
+    opacity: 0;
+    transform: translateX(var(--spacing-xxs));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideRightAndFade {
+  from {
+    opacity: 0;
+    transform: translateX(calc(-1 * var(--spacing-xxs)));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Keyboard focus effects for Radix UI */
+.theme-dropdown-item[data-highlighted] {
+  background-color: var(--accent);
+  color: var(--bg-primary);
+  outline: none;
 }
