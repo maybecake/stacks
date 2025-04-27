@@ -1,11 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { Theme, themes } from '../themes'
+import { Compactness, compactnessThemes } from '../themes/compactness'
 
 /**
  * Theme Context & Provider
  * 
  * RESPONSIBILITIES:
- * 1. Manage theme state
+ * 1. Manage theme state (color and compactness)
  * 2. Handle theme persistence
  * 3. Apply theme variables to DOM
  * 4. Provide theme switching capability
@@ -13,6 +14,7 @@ import { Theme, themes } from '../themes'
  * IMPLEMENTATION NOTES:
  * - Uses localStorage for theme persistence
  * - Defaults to 'solarized-dark' theme if no saved preference
+ * - Defaults to 'normal' compactness if no saved preference
  * - Applies theme variables to document.documentElement
  * 
  * USAGE:
@@ -31,11 +33,15 @@ import { Theme, themes } from '../themes'
 interface ThemeContextType {
   theme: Theme
   setTheme: (theme: Theme) => void
+  compactness: Compactness
+  setCompactness: (compactness: Compactness) => void
 }
 
 const ThemeContext = createContext<ThemeContextType>({
   theme: 'solarized-dark',
   setTheme: () => {},
+  compactness: 'normal',
+  setCompactness: () => {},
 })
 
 export const useTheme = () => useContext(ThemeContext)
@@ -47,21 +53,36 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return savedTheme && Object.keys(themes).includes(savedTheme) ? savedTheme : 'solarized-dark'
   })
 
+  const [compactness, setCompactness] = useState<Compactness>(() => {
+    const savedCompactness = localStorage.getItem('compactness') as Compactness
+    return savedCompactness && Object.keys(compactnessThemes).includes(savedCompactness) 
+      ? savedCompactness 
+      : 'normal'
+  })
+
   useEffect(() => {
-    // Save theme preference to localStorage
+    // Save theme preferences to localStorage
     localStorage.setItem('theme', theme)
+    localStorage.setItem('compactness', compactness)
     
     // Apply theme variables to document root
     const root = document.documentElement
     const themeVariables = themes[theme]
+    const compactnessVariables = compactnessThemes[compactness]
     
+    // Apply color theme variables
     Object.entries(themeVariables).forEach(([key, value]) => {
       root.style.setProperty(key, value)
     })
-  }, [theme])
+
+    // Apply compactness theme variables
+    Object.entries(compactnessVariables).forEach(([key, value]) => {
+      root.style.setProperty(key, value)
+    })
+  }, [theme, compactness])
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme }}>
+    <ThemeContext.Provider value={{ theme, setTheme, compactness, setCompactness }}>
       {children}
     </ThemeContext.Provider>
   )
