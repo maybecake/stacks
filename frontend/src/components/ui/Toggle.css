@@ -1,0 +1,114 @@
+.toggle__item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: 0 var(--spacing-sm);
+  background-color: var(--bg-secondary);
+  border-radius: var(--border-radius);
+}
+
+.toggle__label {
+  color: var(--text-primary);
+  cursor: pointer;
+  line-height: 1;
+  padding: var(--spacing-sm) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex: 1;
+}
+
+.toggle__label--off {
+  color: var(--text-secondary);
+}
+
+.toggle__label--disabled {
+  color: var(--text-tertiary);
+  cursor: not-allowed;
+  opacity: 0.6;
+  font-style: italic;
+}
+
+.toggle__label--disabled::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background-color: var(--text-tertiary);
+  opacity: 0.5;
+}
+
+.toggle__line {
+  flex: 1;
+  height: 1px;
+  background-color: var(--border);
+  opacity: 0.3;
+  transition: opacity var(--transition-fast) ease;
+}
+
+.toggle__label:hover .toggle__line {
+  opacity: 0.5;
+}
+
+.toggle {
+  --toggle-indicator-size: var(--icon-size);
+  --toggle-indicator-movement: calc(
+    var(--toggle-indicator-size) - var(--spacing-xxs)
+  );
+  width: calc(
+    var(--toggle-indicator-size) + var(--toggle-indicator-movement) +
+      var(--spacing-xxs)
+  );
+  height: calc(var(--toggle-indicator-size) + var(--spacing-xxs) / 2);
+  border-radius: var(--toggle-indicator-size);
+  border: 1px solid var(--border);
+  background-color: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+  transition: background-color var(--transition-fast) ease;
+}
+
+.toggle[data-state="on"] {
+  background-color: var(--accent);
+  border-color: var(--accent);
+}
+
+.toggle[data-state="off"] {
+  background-color: var(--bg-tertiary);
+  border-color: var(--border);
+}
+
+.toggle:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: var(--bg-tertiary);
+  border-color: var(--border);
+}
+
+.toggle:disabled[data-state="on"] {
+  background-color: var(--bg-tertiary);
+  border-color: var(--border);
+}
+
+.toggle:disabled .toggle__indicator {
+  background-color: var(--bg-secondary);
+}
+
+.toggle__indicator {
+  width: calc(var(--toggle-indicator-size) - var(--spacing-xxs));
+  height: calc(var(--toggle-indicator-size) - var(--spacing-xxs));
+  border-radius: 50%;
+  background-color: var(--bg-primary);
+  position: absolute;
+  left: var(--spacing-xxs);
+  transition: transform var(--transition-fast) ease;
+}
+
+.toggle[data-state="on"] .toggle__indicator {
+  transform: translateX(var(--toggle-indicator-movement));
+}

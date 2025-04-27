@@ -2,6 +2,7 @@ export type Compactness = 'spacious' | 'normal' | 'compact'
 
 export const compactnessThemes = {
   spacious: {
+    '--spacing-xxs': '0.375rem',
     '--spacing-xs': '0.75rem',
     '--spacing-sm': '1rem',
     '--spacing-md': '1.5rem',
@@ -17,8 +18,12 @@ export const compactnessThemes = {
     '--font-size-lg': '1.25rem',
     '--grid-gap': '1.5rem',
     '--list-item-height': '4rem',
+    '--transition-fast': '0.3s',
+    '--transition-normal': '0.4s',
+    '--transition-slow': '0.5s',
   },
   normal: {
+    '--spacing-xxs': '0.25rem',
     '--spacing-xs': '0.5rem',
     '--spacing-sm': '0.75rem',
     '--spacing-md': '1rem',
@@ -34,8 +39,12 @@ export const compactnessThemes = {
     '--font-size-lg': '1.125rem',
     '--grid-gap': '1rem',
     '--list-item-height': '3rem',
+    '--transition-fast': '0.2s',
+    '--transition-normal': '0.3s',
+    '--transition-slow': '0.4s',
   },
   compact: {
+    '--spacing-xxs': '0.125rem',
     '--spacing-xs': '0.25rem',
     '--spacing-sm': '0.5rem',
     '--spacing-md': '0.75rem',
@@ -44,12 +53,15 @@ export const compactnessThemes = {
     '--button-padding': '0.375rem 0.75rem',
     '--input-padding': '0.375rem 0.5rem',
     '--card-padding': '0.75rem',
-    '--border-radius': '0.375rem',
+    '--border-radius': '0.125rem',
     '--icon-size': '1rem',
     '--font-size-sm': '0.625rem',
     '--font-size-md': '0.75rem',
-    '--font-size-lg': '1rem',
+    '--font-size-lg': '0.875rem',
     '--grid-gap': '0.75rem',
-    '--list-item-height': '2.5rem',
+    '--list-item-height': '2rem',
+    '--transition-fast': '0.1s',
+    '--transition-normal': '0.15s',
+    '--transition-slow': '0.2s',
   },
 } 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { Theme } from '../themes';
 import { Compactness } from '../themes/compactness';
+import './ThemeDropdown.css';
 
 export const ThemeDropdown: React.FC = () => {
   const { theme, setTheme, compactness, setCompactness } = useTheme();
@@ -9,16 +10,16 @@ export const ThemeDropdown: React.FC = () => {
   const [isCompactnessOpen, setIsCompactnessOpen] = useState(false);
 
   const themes: { id: Theme; label: string; icon: string }[] = [
-    { id: 'light', label: 'Light Theme', icon: '☀️' },
-    { id: 'dark', label: 'Dark Theme', icon: '🌑' },
-    { id: 'solarized', label: 'Solarized Light Theme', icon: '🌞' },
-    { id: 'solarized-dark', label: 'Solarized Dark Theme', icon: '🌚' },
+    { id: 'light', label: 'Light Theme', icon: '🌞' },
+    { id: 'solarized', label: 'Solarized Light Theme', icon: '🌕' },
+    { id: 'solarized-dark', label: 'Solarized Dark Theme', icon: '🌒' },
+    { id: 'dark', label: 'Dark Theme', icon: '🌚' },
   ];
 
   const compactnessOptions: { id: Compactness; label: string; icon: string }[] = [
-    { id: 'spacious', label: 'Spacious Layout', icon: '↔️' },
-    { id: 'normal', label: 'Normal Layout', icon: '↕️' },
-    { id: 'compact', label: 'Compact Layout', icon: '↕️' },
+    { id: 'spacious', label: 'Spacious Layout', icon: '🐳' },
+    { id: 'normal', label: 'Normal Layout', icon: '🐬' },
+    { id: 'compact', label: 'Compact Layout', icon: '🐟' },
   ];
 
   const currentTheme = themes.find(t => t.id === theme);
@@ -92,6 +93,7 @@ export const ThemeDropdown: React.FC = () => {
                 }}
                 role="menuitem"
                 aria-label={label}
+                data-compactness={id}
               >
                 <span className="theme-icon" role="img" aria-hidden="true">
                   {icon}

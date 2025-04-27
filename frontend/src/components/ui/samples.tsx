@@ -3,13 +3,47 @@ import * as Dialog from '@radix-ui/react-dialog'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import * as Tabs from '@radix-ui/react-tabs'
 import * as Avatar from '@radix-ui/react-avatar'
-import * as Checkbox from '@radix-ui/react-checkbox'
 import { Button } from './button'
+import { Toggle } from './Toggle'
+import { TwoColumnLayout } from './TwoColumnLayout'
 import './samples.css'
 
 export const Samples: React.FC = () => {
   return (
     <div className="samples">
+      <section className="samples__section">
+        <h2>Toggle Showcase</h2>
+        <TwoColumnLayout
+          leftContent={
+            <div className="toggle__group">
+              <h3>Basic Toggle</h3>
+              <Toggle id="t1" label="Accept terms and conditions" />
+              <Toggle 
+                id="t2" 
+                label="Subscribe to newsletter (must be registered!)" 
+                defaultPressed 
+                disabled 
+              />
+            </div>
+          }
+          rightContent={
+            <div className="toggle__group">
+              <h3>Toggle with Different States</h3>
+              <Toggle 
+                id="t3" 
+                label="Enable dark mode" 
+                defaultPressed={true}
+              />
+              <Toggle 
+                id="t4" 
+                label="Enable notifications" 
+                disabled={true}
+              />
+            </div>
+          }
+        />
+      </section>
+      
       <section className="samples__section">
         <h2>Dialog</h2>
         <Dialog.Root>
@@ -112,27 +146,6 @@ export const Samples: React.FC = () => {
         </div>
       </section>
 
-      <section className="samples__section">
-        <h2>Checkbox</h2>
-        <div className="checkbox__group">
-          <div className="checkbox__item">
-            <Checkbox.Root className="checkbox" id="c1">
-              <Checkbox.Indicator className="checkbox__indicator" />
-            </Checkbox.Root>
-            <label className="checkbox__label" htmlFor="c1">
-              Accept terms and conditions
-            </label>
-          </div>
-          <div className="checkbox__item">
-            <Checkbox.Root className="checkbox" id="c2" defaultChecked>
-              <Checkbox.Indicator className="checkbox__indicator" />
-            </Checkbox.Root>
-            <label className="checkbox__label" htmlFor="c2">
-              Subscribe to newsletter
-            </label>
-          </div>
-        </div>
-      </section>
     </div>
   )
 }
