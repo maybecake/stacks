@@ -1,6 +1,6 @@
 .app {
-  min-height: 100vh;
   display: flex;
+  height: 100vh;
   flex-direction: column;
   background-color: var(--bg-primary);
   color: var(--text-primary);
@@ -8,10 +8,21 @@
 
 .main-content {
   flex: 1;
-  margin-top: 4rem; /* Account for fixed header */
   padding: 1rem;
   max-width: 1200px;
   width: 100%;
+
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
   margin-left: auto;
   margin-right: auto;
+  overflow-y: auto;
 }
+
+.main-content-inner {
+  height: 150px;
+  background-color: var(--bg-secondary);
+  padding: 20px;
+}
+
+

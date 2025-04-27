@@ -15,7 +15,6 @@
 body {
   margin: 0;
   min-width: 320px;
-  min-height: 100vh;
   background-color: var(--bg-primary);
   color: var(--text-primary);
   transition: background-color 0.3s ease, color 0.3s ease;
@@ -25,4 +24,24 @@ body {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+.scrollable {
+  overflow-y: auto;
+  height: 100%;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: var(--spacing-xs);
+}
+
+::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-track {
+  border-radius: var(--spacing-xs);
+  background: rgba(128, 128, 128, 0.08);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(128, 128, 128, 0.4);
 }

@@ -17,8 +17,8 @@ python_proto_compile(
 
 go_proto_library(
     name = "hello_go_proto",
-    importpath = "com.github/maybecake/stacks/api/protos/hello",
     compilers = ["@rules_go//proto:go_grpc"],
+    importpath = "com.github/maybecake/stacks/api/protos/hello",
     proto = ":hello_proto",
     visibility = ["//visibility:public"],
 )
