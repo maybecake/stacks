@@ -1,34 +1,47 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import React from 'react'
+import { useTheme } from './context/ThemeContext'
 import './App.css'
+import { Samples } from './components/ui/samples'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { theme, setTheme } = useTheme()
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Yay?</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+    <div className="app">
+      <h1>React Version Check</h1>
+      <p>Current React version: {React.version}</p>
+
+      <Samples />
+      
+      <div className="theme-switcher">
+        <button
+          className={`theme-button ${theme === 'light' ? 'active' : ''}`}
+          onClick={() => setTheme('light')}
+        >
+          Light
         </button>
-        <p>
-          yay
-        </p>
+        <button
+          className={`theme-button ${theme === 'dark' ? 'active' : ''}`}
+          onClick={() => setTheme('dark')}
+        >
+          Dark
+        </button>
+        <button
+          className={`theme-button ${theme === 'solarized' ? 'active' : ''}`}
+          onClick={() => setTheme('solarized')}
+          title="Solarized Light"
+        >
+          <span className="theme-icon">☀️</span>
+        </button>
+        <button
+          className={`theme-button ${theme === 'solarized-dark' ? 'active' : ''}`}
+          onClick={() => setTheme('solarized-dark')}
+          title="Solarized Dark"
+        >
+          <span className="theme-icon">🌙</span>
+        </button>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   )
 }
 

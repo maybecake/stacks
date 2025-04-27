@@ -1,0 +1,232 @@
+.samples {
+  padding: var(--spacing-6);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.samples__section {
+  margin-bottom: var(--spacing-6);
+}
+
+.samples__section h2 {
+  margin-bottom: var(--spacing-4);
+  color: var(--text-primary);
+}
+
+/* Dialog Styles */
+.dialog__overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dialog__content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--bg-primary);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  padding: var(--spacing-6);
+  width: 90vw;
+  max-width: 450px;
+  animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dialog__title {
+  margin: 0;
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+}
+
+.dialog__description {
+  margin: var(--spacing-4) 0 var(--spacing-6);
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+}
+
+.dialog__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-3);
+}
+
+/* Dropdown Menu Styles */
+.dropdown__content {
+  min-width: 220px;
+  background-color: var(--bg-primary);
+  border-radius: var(--radius);
+  padding: var(--spacing-2);
+  box-shadow: var(--shadow-md);
+  animation: slideDown 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dropdown__item {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--radius);
+  cursor: pointer;
+  outline: none;
+  color: var(--text-primary);
+}
+
+.dropdown__item[data-disabled] {
+  color: var(--text-secondary);
+  pointer-events: none;
+}
+
+.dropdown__item[data-highlighted] {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.dropdown__separator {
+  height: 1px;
+  background-color: var(--border);
+  margin: var(--spacing-2);
+}
+
+/* Tabs Styles */
+.tabs__list {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: var(--spacing-4);
+}
+
+.tabs__trigger {
+  padding: var(--spacing-3) var(--spacing-4);
+  color: var(--text-secondary);
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+}
+
+.tabs__trigger[data-state="active"] {
+  color: var(--text-primary);
+  border-bottom-color: var(--accent);
+}
+
+.tabs__content {
+  padding: var(--spacing-4);
+  background-color: var(--bg-primary);
+  border-radius: var(--radius);
+}
+
+/* Avatar Styles */
+.avatar__group {
+  display: flex;
+  gap: var(--spacing-4);
+}
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  overflow: hidden;
+  user-select: none;
+  width: 45px;
+  height: 45px;
+  border-radius: 100%;
+  background-color: var(--bg-secondary);
+}
+
+.avatar--large {
+  width: 60px;
+  height: 60px;
+}
+
+.avatar__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+.avatar__fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 15px;
+  line-height: 1;
+  font-weight: var(--font-weight-medium);
+}
+
+/* Checkbox Styles */
+.checkbox__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.checkbox__item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.checkbox {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background-color: var(--bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.checkbox[data-state="checked"] {
+  background-color: var(--accent);
+  border-color: var(--accent);
+}
+
+.checkbox__indicator {
+  color: var(--bg-primary);
+}
+
+.checkbox__label {
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+}
+
+/* Animations */
+@keyframes overlayShow {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes contentShow {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
