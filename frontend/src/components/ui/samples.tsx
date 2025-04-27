@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import * as Tabs from '@radix-ui/react-tabs'
@@ -6,11 +6,30 @@ import * as Avatar from '@radix-ui/react-avatar'
 import { Button } from './button'
 import { Toggle } from './Toggle'
 import { TwoColumnLayout } from './TwoColumnLayout'
+import { OptionsSlider } from '../OptionSlider'
 import './samples.css'
 
 export const Samples: React.FC = () => {
+  const [selectedTheme, _setSelectedTheme] = useState('light')
+
+//   const themeOptions = [
+//     { value: 'light', icon: '🌞' },
+//     { value: 'solarized', icon: '🌕' },
+//     { value: 'solarized-dark', icon: '🌒' },
+//     { value: 'dark', icon: '🌚' },
+//   ]
+
   return (
     <div className="samples">
+      <section className="samples__section">
+        <h2>Options Slider</h2>
+        <div className="theme-slider__group">
+          <OptionsSlider
+          />
+          <p className="theme-slider__label">Current theme: {selectedTheme}</p>
+        </div>
+      </section>
+
       <section className="samples__section">
         <h2>Toggle Showcase</h2>
         <TwoColumnLayout

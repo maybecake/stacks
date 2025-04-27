@@ -1,0 +1,83 @@
+/* Styles for OptionSlider Component */
+
+.option-slider {
+  position: relative;
+  width: 100%;
+  height: 40px; /* Adjust height as needed */
+  padding: 0 20px; /* Half of handle width */
+  box-sizing: border-box;
+  display: flex;
+  align-items: center; /* Vertically center track and handle container */
+  -webkit-user-select: none; /* Prevent text selection during drag */
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.option-slider__track {
+  position: absolute;
+  top: 50%;
+  left: 20px; /* Match slider padding */
+  right: 20px; /* Match slider padding */
+  height: 4px;
+  background-color: #ccc;
+  transform: translateY(-50%);
+  pointer-events: none; /* Allow clicks/drags to pass through to handle */
+}
+
+.option-slider__marker {
+  position: absolute;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  background-color: #888;
+  border-radius: 50%;
+  transform: translate(-50%, -50%); /* Center marker over its 'left' position */
+  pointer-events: none;
+}
+
+.option-slider__handle-container {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  /* The 'left' style is set inline based on current value */
+  display: flex;
+  align-items: center;
+  z-index: 1; /* Ensure handle is above track/markers */
+  pointer-events: none; /* Container shouldn't intercept pointer events */
+}
+
+.option-slider__handle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: blue; /* Example color */
+  border: none;
+  cursor: grab;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative; /* Needed for transform/positioning context */
+  transform: translateX(
+    -50%
+  ); /* Center the handle over its container's 'left' position */
+  touch-action: none; /* Crucial for preventing default touch actions like scrolling */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  /* Only transition background-color, let dnd-kit handle transform */
+  transition: background-color 0.2s ease;
+  pointer-events: auto; /* Ensure handle itself receives pointer events */
+}
+
+.option-slider__handle--dragging {
+  cursor: grabbing;
+  background-color: darkblue; /* Example color change */
+  z-index: 2; /* Ensure dragging handle is above everything */
+  /* Keep translateX(-50%) during drag for consistent centering */
+  transform: translateX(-50%);
+}
+
+.option-slider__handle-icon {
+  font-size: 20px; /* Adjust as needed */
+  color: white;
+  pointer-events: none; /* Prevent icon from interfering with drag */
+}

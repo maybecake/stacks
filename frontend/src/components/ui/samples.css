@@ -200,3 +200,19 @@
     transform: translateY(0);
   }
 }
+
+.theme-slider__group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+}
+
+.theme-slider__label {
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
