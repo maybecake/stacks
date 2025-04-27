@@ -1,0 +1,90 @@
+# Frontend Engineering Standards
+# This file defines our team's coding standards and best practices.
+# It's meant to be read and understood by humans first, machines second.
+
+## TypeScript & React Patterns
+
+We use modern React with TypeScript. Here's how we do it:
+
+- Always use function components (no class components)
+- Use hooks for state and effects (useState, useEffect)
+- Use Context for global state (like our ThemeContext)
+- Don't use PropTypes - TypeScript handles our type checking
+- Don't use defaultProps - use TypeScript default values instead
+
+## How We Organize Components
+
+When writing a component, follow this order:
+1. Import statements
+2. Type definitions and interfaces
+3. Constants and configuration
+4. The component itself
+5. Exports
+
+This makes components easier to read and maintain.
+
+## Naming Things
+
+We follow these naming conventions:
+- Components: PascalCase (e.g., ThemeDropdown)
+- Utilities: camelCase (e.g., formatDate)
+- Hooks: camelCase with 'use' prefix (e.g., useTheme)
+- Types: PascalCase (e.g., Theme)
+- Constants: UPPER_SNAKE_CASE (e.g., MAX_RETRIES)
+- Test files: .test.tsx
+- Style files: .css or .module.css
+
+## Project Structure
+
+Our src directory is organized like this:
+```
+src/
+├── components/     # All React components
+│   ├── ui/        # Reusable UI components (buttons, inputs, etc.)
+│   ├── layout/    # Layout components (header, footer, etc.)
+│   └── features/  # Feature-specific components
+├── context/       # React Context providers
+├── hooks/         # Custom React hooks
+├── types/         # TypeScript type definitions
+└── assets/        # Static assets (images, fonts, etc.)
+```
+
+## Styling Guidelines
+
+We write CSS with these principles:
+- Use BEM-like naming for components (e.g., .theme-dropdown__trigger)
+- Use CSS custom properties for theming (like our --bg-primary)
+- Organize styles in this order:
+  1. Layout (positioning, display)
+  2. Typography (fonts, sizes)
+  3. Colors
+  4. Spacing (margin, padding)
+  5. Component-specific styles
+
+## TypeScript Settings
+
+We use strict TypeScript with these settings:
+- strict: true (enables all strict checks)
+- noImplicitAny: true (no any types without explicit declaration)
+- strictNullChecks: true (null and undefined are separate types)
+- noUnusedLocals: true (error on unused variables)
+- noUnusedParameters: true (error on unused parameters)
+- noImplicitReturns: true (all code paths must return)
+- noFallthroughCasesInSwitch: true (no fallthrough in switch)
+
+Follow react best practices
+
+### Patterns
+- Favor composition over inheritance
+- Use controlled components
+- Lift state up when needed
+- Create custom hooks for reusable logic
+
+## Documentation
+
+We document our code:
+- Document components with JSDoc
+- Document props and their types
+- Document TypeScript types
+- Document custom hooks
+- Keep README files up to date
