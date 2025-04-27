@@ -1,7 +1,9 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { DndContext, useDraggable, DragEndEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
-import { restrictToHorizontalAxis } from '@dnd-kit/modifiers';
-import './OptionSlider.css';
+import React from 'react';
+// import React, { useState, useRef, useEffect, useMemo } from 'react';
+import { useDraggable } from '@dnd-kit/core';
+// import { DndContext, useDraggable, DragEndEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+// import { restrictToHorizontalAxis } from '@dnd-kit/modifiers';
+import './option-slider.css';
 
 /**
  * OptionSlider Component
@@ -27,16 +29,16 @@ import './OptionSlider.css';
  *    - Maintains current selection if not dragged far enough
  */
 
-interface SliderOption<T> {
-  value: T;
-  icon: string;
-}
+// interface SliderOption<T> {
+//   value: T;
+//   icon: string;
+// }
 
-interface OptionsSliderProps<T> {
-  options: SliderOption<T>[];
-  value: T;
-  onChange: (value: T) => void;
-}
+// interface OptionsSliderProps<T> {
+//   options: SliderOption<T>[];
+//   value: T;
+//   onChange: (value: T) => void;
+// }
 
 // --- DraggableHandle Component ---
 interface DraggableHandleProps {
@@ -73,6 +75,7 @@ export const OptionsSlider = () => {
     return (
         <div>
             <h1>Options Slider</h1>
+            <DraggableHandle icon="🔄" isDragging={false} />
         </div>
     )
 }

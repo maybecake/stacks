@@ -3,7 +3,7 @@ import { useTheme } from '../context/ThemeContext';
 import { Theme } from '../themes';
 import { Compactness } from '../themes/compactness';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import './ThemeDropdown.css';
+import './theme-dropdown.css';
 
 export const ThemeDropdown: React.FC = () => {
   const { theme, setTheme, compactness, setCompactness } = useTheme();

@@ -21,7 +21,16 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+
+    "baseUrl": ".",
+    "paths": {
+      "@ui/*": ["src/components/ui/*"],
+      "@layout/*": ["src/components/layout/*"],
+      "@features": ["src/features"],
+      "@features/*": ["src/features/*"],
+      "@components/*": ["src/components/*"]
+    }
   },
   "include": ["src"]
 }

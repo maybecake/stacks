@@ -1,9 +1,8 @@
 import React from 'react'
 import './App.css'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import { Samples } from './components/features/samples'
-import { Home } from './components/features/Home'
-import { Header } from './components/Header'
+import { Home, Samples } from '@features/index'
+import { Header } from '@components/Header'
 
 function App() {
   return (
@@ -22,3 +21,4 @@ function App() {
 }
 
 export default App
+

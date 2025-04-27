@@ -1,3 +1,7 @@
+"""
+Bazel external dependencies for the Stacks project.
+"""
+
 module(
     name = "stacks",
     repo_name = "com_github_maybecake_stacks",
@@ -21,6 +25,7 @@ go_sdk.host()
 go_deps = use_extension("@gazelle//:extensions.bzl", "go_deps")
 go_deps.from_file(go_mod = "//:go.mod")
 
-use_repo(go_deps,
-         "org_golang_google_grpc", 
+use_repo(
+    go_deps,
+    "org_golang_google_grpc",
 )

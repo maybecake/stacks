@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ThemeDropdown } from './ThemeDropdown';
-import './Header.css';
+import './header.css';
 
 export const Header: React.FC = () => {
   return (
