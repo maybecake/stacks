@@ -12,7 +12,7 @@ import { Theme, themes } from '../themes'
  * 
  * IMPLEMENTATION NOTES:
  * - Uses localStorage for theme persistence
- * - Defaults to 'light' theme if no saved preference
+ * - Defaults to 'solarized-dark' theme if no saved preference
  * - Applies theme variables to document.documentElement
  * 
  * USAGE:
@@ -34,7 +34,7 @@ interface ThemeContextType {
 }
 
 const ThemeContext = createContext<ThemeContextType>({
-  theme: 'light',
+  theme: 'solarized-dark',
   setTheme: () => {},
 })
 
@@ -42,9 +42,9 @@ export const useTheme = () => useContext(ThemeContext)
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setTheme] = useState<Theme>(() => {
-    // Try to get saved theme from localStorage, default to light
+    // Try to get saved theme from localStorage, default to solarized-dark
     const savedTheme = localStorage.getItem('theme') as Theme
-    return savedTheme && Object.keys(themes).includes(savedTheme) ? savedTheme : 'light'
+    return savedTheme && Object.keys(themes).includes(savedTheme) ? savedTheme : 'solarized-dark'
   })
 
   useEffect(() => {
