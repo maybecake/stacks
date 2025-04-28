@@ -1,0 +1,319 @@
+.time-learner {
+  min-height: 100vh;
+  background-color: #f9fafb;
+  padding: 1.5rem;
+}
+
+.time-learner__container {
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+.time-learner__title {
+  font-size: 1.875rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.time-learner__info-box {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.time-learner__info-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.time-learner__info-text {
+  font-size: 0.875rem;
+  color: #4b5563;
+  margin-bottom: 1rem;
+}
+
+.time-learner__grid {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.time-learner__grid-header {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.time-learner__header-cell {
+  background-color: #f3f4f6;
+  padding: 1rem;
+  font-weight: 600;
+}
+
+.time-learner__grid-row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  border-bottom: 1px solid #e5e7eb;
+  transition: background-color 0.2s;
+}
+
+.time-learner__city-cell {
+  padding: 1rem;
+  font-weight: 500;
+  border-right: 1px solid #e5e7eb;
+}
+
+.time-learner__city-name {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.time-learner__time-differences {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 0.25rem;
+}
+
+.time-learner__time-difference {
+  display: block;
+  line-height: 1.4;
+}
+
+.time-learner__time-difference--ahead {
+  color: #059669;
+}
+
+.time-learner__time-difference--behind {
+  color: #dc2626;
+}
+
+.time-learner__time-cell {
+  padding: 1rem;
+}
+
+.time-learner__time-display {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.time-learner__time {
+  font-weight: 500;
+  font-size: 1.125rem;
+}
+
+.time-learner__time-badge {
+  margin-left: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  border-radius: 9999px;
+}
+
+.time-learner__time-badge--day {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.time-learner__time-badge--night {
+  background-color: #e0e7ff;
+  color: #4338ca;
+}
+
+.time-learner__day-indicator {
+  margin-left: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  border-radius: 9999px;
+  background-color: #e5e7eb;
+  color: #4b5563;
+  font-weight: 500;
+}
+
+.time-learner__day-indicator--next {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.time-learner__day-indicator--prev {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+.time-learner__slider-container {
+  display: flex;
+  align-items: center;
+}
+
+.time-learner__slider-label {
+  width: 4rem;
+  text-align: right;
+}
+
+.time-learner__slider-label-text {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.time-learner__slider-wrapper {
+  flex: 1;
+  padding: 0 1rem;
+}
+
+.time-learner__time-markers {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 5rem;
+  margin-top: 0.25rem;
+}
+
+.time-learner__time-marker {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.time-learner__utc-display {
+  text-align: center;
+  font-size: 1rem;
+  color: #6b7280;
+  margin-top: 1rem;
+}
+
+/* Time section indicators */
+.time-section-indicators {
+  display: flex;
+  width: 100%;
+  margin-top: 8px;
+  height: 4px;
+}
+
+.time-section {
+  flex: 1;
+  height: 100%;
+  position: relative;
+}
+
+.time-section::after {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 6px;
+  background-color: #d1d5db;
+}
+
+.time-section__label {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.7rem;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+.time-section--night {
+  background-color: #312e81;
+}
+
+.time-section--morning {
+  background-color: #fbbf24;
+}
+
+.time-section--afternoon {
+  background-color: #f59e0b;
+}
+
+.time-section--evening {
+  background-color: #7c3aed;
+}
+
+.time-section--active {
+  height: 8px;
+  margin-top: -2px;
+  z-index: 1;
+}
+
+.time-section--active::after {
+  top: -6px;
+}
+
+/* Radix UI Slider Styles */
+.slider-root {
+  position: relative;
+  display: flex;
+  align-items: center;
+  user-select: none;
+  touch-action: none;
+  width: 100%;
+  height: 20px;
+}
+
+.slider-track {
+  position: relative;
+  flex-grow: 1;
+  background-color: #e5e7eb;
+  border-radius: 9999px;
+  height: 8px;
+}
+
+.slider-range {
+  position: absolute;
+  background-color: #3b82f6;
+  border-radius: 9999px;
+  height: 100%;
+}
+
+.slider-thumb {
+  display: block;
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border: 2px solid #3b82f6;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.slider-thumb:hover {
+  background-color: #f9fafb;
+}
+
+.slider-thumb:focus {
+  outline: none;
+}
+
+.time-learner__drag-indicator {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #3b82f6;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.time-learner__drag-indicator--visible {
+  opacity: 1;
+}
+
+.time-learner__drag-indicator--positive {
+  background-color: #059669;
+}
+
+.time-learner__drag-indicator--negative {
+  background-color: #dc2626;
+}
