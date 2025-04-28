@@ -1,7 +1,6 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: Helvetica, Arial, sans-serif;
   line-height: 1.5;
-  font-weight: 400;
 
   /* Default theme variables (will be overridden by ThemeProvider) */
   --bg-primary: #ffffff;

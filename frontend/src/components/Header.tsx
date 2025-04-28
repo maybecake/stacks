@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { ThemeDropdown } from "./ThemeDropdown";
 import "./header.css";
 
@@ -9,15 +9,28 @@ export const Header: React.FC = () => {
       <div className="header-content">
         <h1 className="header-title">Stacks</h1>
         <nav className="header-nav">
-          <Link to="/" className="nav-link">
+          <NavLink
+            to="/"
+            exact
+            className="nav-link"
+            activeClassName="nav-link--active"
+          >
             Home
-          </Link>
-          <Link to="/samples" className="nav-link">
+          </NavLink>
+          <NavLink
+            to="/samples"
+            className="nav-link"
+            activeClassName="nav-link--active"
+          >
             Samples
-          </Link>
-          <Link to="/learner" className="nav-link">
+          </NavLink>
+          <NavLink
+            to="/learner"
+            className="nav-link"
+            activeClassName="nav-link--active"
+          >
             Learner
-          </Link>
+          </NavLink>
         </nav>
         <ThemeDropdown />
       </div>

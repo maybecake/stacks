@@ -39,3 +39,21 @@
   color: var(--text-primary);
   background-color: var(--bg-hover);
 }
+
+.nav-link--active {
+  color: var(--text-primary);
+  font-weight: 500;
+  font-style: italic;
+  position: relative;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: var(--border-radius);
+}
+
+.nav-link--active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: var(--spacing-sm);
+  right: var(--spacing-sm);
+  background-color: var(--accent);
+}

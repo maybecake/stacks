@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
 import * as Slider from "@radix-ui/react-slider";
 import "./time-learner.css";
+import { timeZonesTheme } from "./time-zones-theme";
+
+// Apply time zones theme
+const applyTimeZonesTheme = () => {
+  Object.entries(timeZonesTheme).forEach(([key, value]) => {
+    document.documentElement.style.setProperty(key, value);
+  });
+};
 
 // Define the three locations with their time zones (offset in hours from UTC)
 const cities = [
@@ -12,6 +20,11 @@ const cities = [
 ];
 
 export default function TimeLearner() {
+  // Apply the theme when component mounts
+  useEffect(() => {
+    applyTimeZonesTheme();
+  }, []);
+
   // Define time sections
   const timeSections = [
     { name: "night", label: "Night", range: [0, 6] },
