@@ -10,23 +10,6 @@ function App() {
       <div className="app">
         <Header />
         <main className="main-content">
-          <div className="main-content-inner">
-            <div className="scrollable">
-              <p> a lot of content in here </p>
-              <p> a lot of content in here </p>
-              <p> a lot of content in here </p>
-              <p> a lot of content in here </p>
-              <p> a lot of content in here </p>
-              <p> a lot of content in here </p>
-              <p> a lot of content in here </p>
-              <p> a lot of content in here </p>
-              <p> a lot of content in here </p>
-              <p> a lot of content in here </p>
-              <p> a lot of content in here </p>
-              <p> a lot of content in here </p>
-              <p> a lot of content in here </p>
-            </div>
-          </div>
           <Switch>
             <Route exact path="/" component={Home} />
             <Route path="/samples" component={Samples} />
