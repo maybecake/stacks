@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useHistory, useParams } from "react-router-dom";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import * as Tabs from "@radix-ui/react-tabs";
@@ -75,45 +76,37 @@ const ScrollabelShowcase: React.FC = () => {
       <h2>Scrollable</h2>
       <TwoColumnLayout
         leftContent={
-          <div
-            className="scrollable"
-            style={{ height: "200px", padding: "20px" }}
-          >
+          <div className="scrollable" style={{ height: "200px", padding: "20px" }}>
             <h3>A very boring story</h3>
             <p>
-              A very boring story about a boy that likes to play with his dog.
-              One day, he decided to play with his dog in the park. The dog was
-              very happy and the boy was very happy. And they lived happily ever
-              after. But the boy was very tired and the dog was very tired. So
-              they went home and went to sleep. They were very tired and they
-              slept for a long time. When they woke up, they were very hungry
-              and they went to the kitchen to eat. They ate a lot of food and
-              they were very happy. But the boy was very tired and the dog was
-              very tired. So they went home and went to sleep. They were very
-              tired and they slept for a long time.
+              A very boring story about a boy that likes to play with his dog. One day, he decided
+              to play with his dog in the park. The dog was very happy and the boy was very happy.
+              And they lived happily ever after. But the boy was very tired and the dog was very
+              tired. So they went home and went to sleep. They were very tired and they slept for a
+              long time. When they woke up, they were very hungry and they went to the kitchen to
+              eat. They ate a lot of food and they were very happy. But the boy was very tired and
+              the dog was very tired. So they went home and went to sleep. They were very tired and
+              they slept for a long time.
             </p>
             <p>
               {" "}
-              He got a cat and a dog. The cat was very happy and the dog was
-              very happy. And they lived happily ever after. But the boy was
-              very tired and the dog was very tired. So they went home and went
-              to sleep. They were very tired and they slept for a long time.
+              He got a cat and a dog. The cat was very happy and the dog was very happy. And they
+              lived happily ever after. But the boy was very tired and the dog was very tired. So
+              they went home and went to sleep. They were very tired and they slept for a long time.
             </p>
             <p>
               {" "}
-              The cat and dog did not get along. The cat was very happy and the
-              dog was very happy. And they lived happily ever after. But the boy
-              was very tired and the dog was very tired. So they went home and
-              went to sleep. They were very tired and they slept for a long
-              time.
+              The cat and dog did not get along. The cat was very happy and the dog was very happy.
+              And they lived happily ever after. But the boy was very tired and the dog was very
+              tired. So they went home and went to sleep. They were very tired and they slept for a
+              long time.
             </p>
             <p>
               {" "}
-              What about some other pets? There could be a cat and a dog. The
-              cat was very happy and the dog was very happy. And they lived
-              happily ever after. But the boy was very tired and the dog was
-              very tired. So they went home and went to sleep. They were very
-              tired and they slept for a long time.
+              What about some other pets? There could be a cat and a dog. The cat was very happy and
+              the dog was very happy. And they lived happily ever after. But the boy was very tired
+              and the dog was very tired. So they went home and went to sleep. They were very tired
+              and they slept for a long time.
             </p>
           </div>
         }
@@ -133,12 +126,8 @@ const DropdownMenuShowcase: React.FC = () => {
         </DropdownMenu.Trigger>
         <DropdownMenu.Portal>
           <DropdownMenu.Content className="dropdown__content" sideOffset={5}>
-            <DropdownMenu.Item className="dropdown__item">
-              New Tab
-            </DropdownMenu.Item>
-            <DropdownMenu.Item className="dropdown__item">
-              New Window
-            </DropdownMenu.Item>
+            <DropdownMenu.Item className="dropdown__item">New Tab</DropdownMenu.Item>
+            <DropdownMenu.Item className="dropdown__item">New Window</DropdownMenu.Item>
             <DropdownMenu.Separator className="dropdown__separator" />
             <DropdownMenu.Item className="dropdown__item" disabled>
               Share
@@ -211,9 +200,7 @@ const AvatarShowcase: React.FC = () => {
   );
 };
 
-const OptionsSliderShowcase: React.FC<{ selectedTheme: string }> = ({
-  selectedTheme,
-}) => {
+const OptionsSliderShowcase: React.FC<{ selectedTheme: string }> = ({ selectedTheme }) => {
   return (
     <section className="samples__section">
       <h2>Options Slider</h2>
@@ -227,16 +214,60 @@ const OptionsSliderShowcase: React.FC<{ selectedTheme: string }> = ({
 
 export const Samples: React.FC = () => {
   const [selectedTheme, _setSelectedTheme] = useState("light");
+  const history = useHistory();
+  const { count: countParam } = useParams<{ count?: string }>();
+  const [showCount, setShowCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    setShowCount(countParam ? parseInt(countParam, 10) : null);
+  }, [countParam]);
+
+  const handleCountChange = (value: number | null) => {
+    setShowCount(value);
+
+    if (value === null) {
+      history.push("/samples");
+    } else {
+      history.push(`/samples/${value}`);
+    }
+  };
+
+  const showcases = [
+    <ToggleShowcase key="toggle" />,
+    <DialogShowcase key="dialog" />,
+    <ScrollabelShowcase key="scrollable" />,
+    <DropdownMenuShowcase key="dropdown" />,
+    <TabsShowcase key="tabs" />,
+    <AvatarShowcase key="avatar" />,
+    <OptionsSliderShowcase key="options" selectedTheme={selectedTheme} />,
+  ];
+
+  const displayedShowcases = showCount !== null ? showcases.slice(0, showCount) : showcases;
 
   return (
     <div className="samples">
-      <ToggleShowcase />
-      <DialogShowcase />
-      <ScrollabelShowcase />
-      <DropdownMenuShowcase />
-      <TabsShowcase />
-      <AvatarShowcase />
-      <OptionsSliderShowcase selectedTheme={selectedTheme} />
+      <div className="samples__controls">
+        <label htmlFor="sample-count" className="samples__control-label">
+          Number of samples to display:
+        </label>
+        <select
+          id="sample-count"
+          className="samples__count-selector"
+          value={showCount === null ? "all" : showCount}
+          onChange={(e) => {
+            const value = e.target.value;
+            handleCountChange(value === "all" ? null : parseInt(value, 10));
+          }}
+        >
+          <option value="all">All</option>
+          {Array.from({ length: showcases.length }, (_, i) => (
+            <option key={i + 1} value={i + 1}>
+              {i + 1}
+            </option>
+          ))}
+        </select>
+      </div>
+      {displayedShowcases}
     </div>
   );
 };
