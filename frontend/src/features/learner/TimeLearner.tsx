@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import * as Slider from "@radix-ui/react-slider";
 import "./time-learner.css";
 import { timeZonesTheme } from "./time-zones-theme";
@@ -36,16 +36,6 @@ export default function TimeLearner() {
   // State to track the UTC time (in hours)
   const [utcTime, setUtcTime] = useState<number>(12); // Start with noon UTC
 
-  // State to track local times for each city
-  const [localTimes, setLocalTimes] = useState<number[]>([]);
-
-  // State to track day differences for each city
-  const [dayDifferences, setDayDifferences] = useState<number[]>([]);
-
-  // Reference date for today (midnight UTC)
-  const referenceDate = new Date();
-  referenceDate.setUTCHours(0, 0, 0, 0);
-
   // State to track dragging state for each city
   const [draggingStates, setDraggingStates] = useState<
     {
@@ -55,41 +45,38 @@ export default function TimeLearner() {
     }[]
   >(cities.map(() => ({ isDragging: false, startValue: 0, currentValue: 0 })));
 
-  // Update local times and day differences whenever UTC time changes
-  useEffect(() => {
-    const newLocalTimes = [];
-    const newDayDifferences = [];
+  // Derive local times and day differences directly from utcTime
+  const { localTimes, dayDifferences } = useMemo(() => {
+    const referenceDate = new Date();
+    referenceDate.setUTCHours(0, 0, 0, 0);
+
+    const newLocalTimes: number[] = [];
+    const newDayDifferences: number[] = [];
 
     for (const city of cities) {
-      // Calculate local time
       const localHour = (utcTime + city.timezone + 24) % 24;
       newLocalTimes.push(localHour);
 
-      // Calculate day difference
-      // Create date objects for UTC and local time
       const utcDate = new Date(referenceDate);
       utcDate.setUTCHours(utcTime);
 
       const localDate = new Date(referenceDate);
-      // Need to adjust for timezone when setting hours to get the correct day
       localDate.setUTCHours(utcTime + city.timezone);
 
-      // Calculate day difference
       const utcDay = utcDate.getUTCDate();
       const localDay = localDate.getUTCDate();
 
       let dayDiff = 0;
       if (localDay > utcDay) {
-        dayDiff = 1; // Next day
+        dayDiff = 1;
       } else if (localDay < utcDay) {
-        dayDiff = -1; // Previous day
+        dayDiff = -1;
       }
 
       newDayDifferences.push(dayDiff);
     }
 
-    setLocalTimes(newLocalTimes);
-    setDayDifferences(newDayDifferences);
+    return { localTimes: newLocalTimes, dayDifferences: newDayDifferences };
   }, [utcTime]);
 
   // Function to format time as 12-hour with AM/PM
