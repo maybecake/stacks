@@ -50,6 +50,9 @@
 	// "runArgs": ["--add-host=host.docker.internal:host-gateway"]
 	// Uncomment the next line to run commands after the container is created.
 	// "postCreateCommand": "npm install -g pnpm"
+	"mounts": [
+		"source=stacks-ssh,target=/home/devcontainer/.ssh,type=volume"
+	],
 	"postCreateCommand": "go install github.com/bazelbuild/buildtools/buildifier@latest && git clone https://github.com/bazelbuild/bazel-gazelle.git /tmp/gazelle && cd /tmp/gazelle && go install ./cmd/gazelle && cd .. && rm -rf /tmp/gazelle && go install github.com/fullstorydev/grpcurl/cmd/grpcurl@latest"
 	// Configure tool-specific properties.
 	// "customizations": {},
