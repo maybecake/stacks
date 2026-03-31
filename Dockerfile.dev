@@ -1,16 +1,21 @@
-# Docker container used for development
-# Extra features are added via ./devcontainer/devcontainer.json definitions.
-
 FROM ubuntu:24.04
 
-# Set environment variables
+# Create the user that VS Code is looking for
+ARG USERNAME=devcontainer
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+
+RUN if ! getent group $USER_GID; then groupadd --gid $USER_GID $USERNAME; fi \
+    && if ! getent passwd $USER_UID; then useradd --uid $USER_UID --gid $USER_GID -m $USERNAME; fi \
+    && apt-get update \
+    && apt-get install -y sudo \
+    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+    && chmod 0440 /etc/sudoers.d/$USERNAME
+
 ENV DEBIAN_FRONTEND=noninteractive \
     LANG=C.UTF-8 \
-    LC_ALL=C.UTF-8 \
-    GOPATH="/home/devcontainer/go" \
-    PATH="/home/devcontainer/go/bin:${PATH}"
+    LC_ALL=C.UTF-8
 
-# Install base dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
     curl \
@@ -19,8 +24,9 @@ RUN apt-get update && apt-get install -y \
     unzip \
     vim \
     python3 \
-    golang \
     protobuf-compiler \
+    ca-certificates \
+    sudo \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -29,20 +35,10 @@ RUN curl -fsSL https://deb.nodesource.com/setup_23.x | bash - \
     && apt-get install -y nodejs \
     && npm install -g npm@latest pnpm
 
-# Create and set up non-root user
+# Create non-root user and add to sudo
 RUN useradd -m -s /bin/bash devcontainer \
-    && mkdir -p /home/devcontainer/.local/bin \
-    && mkdir -p /home/devcontainer/go \
-    && chown -R devcontainer:devcontainer /home/devcontainer
+    && echo '%devcontainer ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-# Install Buildifier and other Go tools
 USER devcontainer
-RUN go install github.com/bazelbuild/buildtools/buildifier@latest \
-    && go install github.com/bazelbuild/bazel-gazelle/cmd/gazelle@latest \
-    && go install github.com/fullstorydev/grpcurl/cmd/grpcurl@latest
-
 WORKDIR /home/devcontainer
-
-# Default command
 CMD ["/bin/bash"]
-
