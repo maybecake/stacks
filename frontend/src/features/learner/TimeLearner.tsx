@@ -54,23 +54,28 @@ export default function TimeLearner() {
     const newDayDifferences: number[] = [];
 
     for (const city of cities) {
+      // Calculate local time
       const localHour = (utcTime + city.timezone + 24) % 24;
       newLocalTimes.push(localHour);
 
+      // Calculate day difference
+      // Create date objects for UTC and local time
       const utcDate = new Date(referenceDate);
       utcDate.setUTCHours(utcTime);
 
       const localDate = new Date(referenceDate);
+      // Need to adjust for timezone when setting hours to get the correct day
       localDate.setUTCHours(utcTime + city.timezone);
 
+      // Calculate day difference
       const utcDay = utcDate.getUTCDate();
       const localDay = localDate.getUTCDate();
 
       let dayDiff = 0;
       if (localDay > utcDay) {
-        dayDiff = 1;
+        dayDiff = 1; // Next day
       } else if (localDay < utcDay) {
-        dayDiff = -1;
+        dayDiff = -1; // Previous day
       }
 
       newDayDifferences.push(dayDiff);
