@@ -68,6 +68,8 @@ Go and Python services both implement `HelloService` defined in `api/protos/hell
 
 The `.devcontainer/` setup provides an Ubuntu 24.04 container with Node 23, Go, and Python pre-installed. Open in VSCode with the Dev Containers extension to use it.
 
+**IMPORTANT:** All build and run commands must be executed inside the dev container, not on the host. Do not run `pnpm`, `bazel`, `go`, or `python` commands directly in the host shell. Use `docker exec stacks-dev <command>` to run commands in the container.
+
 ## Formatting
 
 Prettier config (`.prettierrc`): 2-space indent, 100-char line width.
