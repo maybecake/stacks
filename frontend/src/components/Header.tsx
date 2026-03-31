@@ -11,23 +11,19 @@ export const Header: React.FC = () => {
         <nav className="header-nav">
           <NavLink
             to="/"
-            exact
-            className="nav-link"
-            activeClassName="nav-link--active"
+            className={({ isActive }) => isActive ? "nav-link nav-link--active" : "nav-link"}
           >
             Home
           </NavLink>
           <NavLink
             to="/samples"
-            className="nav-link"
-            activeClassName="nav-link--active"
+            className={({ isActive }) => isActive ? "nav-link nav-link--active" : "nav-link"}
           >
             Samples
           </NavLink>
           <NavLink
             to="/learner"
-            className="nav-link"
-            activeClassName="nav-link--active"
+            className={({ isActive }) => isActive ? "nav-link nav-link--active" : "nav-link"}
           >
             Learner
           </NavLink>

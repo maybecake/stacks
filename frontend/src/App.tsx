@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Home, Learner, Samples } from "@features/index";
 import { Header } from "@components/Header";
 
@@ -10,11 +10,12 @@ function App() {
       <div className="app">
         <Header />
         <main className="main-content">
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route path="/samples" component={Samples} />
-            <Route path="/learner" component={Learner} />
-          </Switch>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/samples" element={<Samples />} />
+            <Route path="/samples/:count" element={<Samples />} />
+            <Route path="/learner" element={<Learner />} />
+          </Routes>
         </main>
       </div>
     </Router>

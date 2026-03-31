@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import * as Tabs from "@radix-ui/react-tabs";
@@ -214,7 +214,7 @@ const OptionsSliderShowcase: React.FC<{ selectedTheme: string }> = ({ selectedTh
 
 export const Samples: React.FC = () => {
   const [selectedTheme, _setSelectedTheme] = useState("light");
-  const history = useHistory();
+  const navigate = useNavigate();
   const { count: countParam } = useParams<{ count?: string }>();
   const [showCount, setShowCount] = useState<number | null>(null);
 
@@ -226,9 +226,9 @@ export const Samples: React.FC = () => {
     setShowCount(value);
 
     if (value === null) {
-      history.push("/samples");
+      navigate("/samples");
     } else {
-      history.push(`/samples/${value}`);
+      navigate(`/samples/${value}`);
     }
   };
 
