@@ -32,11 +32,13 @@
 				"dbaeumer.vscode-eslint",
 				"ms-python.vscode-pylance",
 				"ms-python.python",
-				"zxh404.vscode-proto3",
+				"drblury.protobuf-vsc",
 				"esbenp.prettier-vscode",
 				"dbaeumer.vscode-eslint",
 				"christian-kohler.path-intellisense",
-				"dsznajder.es7-react-js-snippets"
+				"dsznajder.es7-react-js-snippets",
+				"codder13.openspec",
+				"anthropic.claude-code"
 			]
 		}
 	},
