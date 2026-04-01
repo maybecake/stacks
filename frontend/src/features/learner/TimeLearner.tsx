@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import * as Slider from "@radix-ui/react-slider";
 import "./time-learner.css";
 import { timeZonesTheme } from "./time-zones-theme";
@@ -36,16 +36,6 @@ export default function TimeLearner() {
   // State to track the UTC time (in hours)
   const [utcTime, setUtcTime] = useState<number>(12); // Start with noon UTC
 
-  // State to track local times for each city
-  const [localTimes, setLocalTimes] = useState<number[]>([]);
-
-  // State to track day differences for each city
-  const [dayDifferences, setDayDifferences] = useState<number[]>([]);
-
-  // Reference date for today (midnight UTC)
-  const referenceDate = new Date();
-  referenceDate.setUTCHours(0, 0, 0, 0);
-
   // State to track dragging state for each city
   const [draggingStates, setDraggingStates] = useState<
     {
@@ -55,10 +45,13 @@ export default function TimeLearner() {
     }[]
   >(cities.map(() => ({ isDragging: false, startValue: 0, currentValue: 0 })));
 
-  // Update local times and day differences whenever UTC time changes
-  useEffect(() => {
-    const newLocalTimes = [];
-    const newDayDifferences = [];
+  // Derive local times and day differences directly from utcTime
+  const { localTimes, dayDifferences } = useMemo(() => {
+    const referenceDate = new Date();
+    referenceDate.setUTCHours(0, 0, 0, 0);
+
+    const newLocalTimes: number[] = [];
+    const newDayDifferences: number[] = [];
 
     for (const city of cities) {
       // Calculate local time
@@ -88,8 +81,7 @@ export default function TimeLearner() {
       newDayDifferences.push(dayDiff);
     }
 
-    setLocalTimes(newLocalTimes);
-    setDayDifferences(newDayDifferences);
+    return { localTimes: newLocalTimes, dayDifferences: newDayDifferences };
   }, [utcTime]);
 
   // Function to format time as 12-hour with AM/PM

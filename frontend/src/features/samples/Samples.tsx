@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
@@ -216,15 +216,9 @@ export const Samples: React.FC = () => {
   const [selectedTheme, _setSelectedTheme] = useState("light");
   const navigate = useNavigate();
   const { count: countParam } = useParams<{ count?: string }>();
-  const [showCount, setShowCount] = useState<number | null>(null);
-
-  useEffect(() => {
-    setShowCount(countParam ? parseInt(countParam, 10) : null);
-  }, [countParam]);
+  const showCount: number | null = countParam ? parseInt(countParam, 10) : null;
 
   const handleCountChange = (value: number | null) => {
-    setShowCount(value);
-
     if (value === null) {
       navigate("/samples");
     } else {
