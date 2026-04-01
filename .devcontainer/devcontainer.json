@@ -53,9 +53,10 @@
 	// "postCreateCommand": "npm install -g pnpm"
 	"mounts": [
 		"source=stacks-ssh,target=/home/devcontainer/.ssh,type=volume",
-		"source=stacks-claude,target=/home/devcontainer/.claude,type=volume"
+		"source=stacks-claude,target=/home/devcontainer/.claude,type=volume",
+		"source=stacks-vercel,target=/home/devcontainer/.local/share/com.vercel.cli,type=volume"
 	],
-	"postCreateCommand": "pnpm add -g @anthropic-ai/claude-code && go install github.com/bazelbuild/buildtools/buildifier@latest && git clone https://github.com/bazelbuild/bazel-gazelle.git /tmp/gazelle && cd /tmp/gazelle && go install ./cmd/gazelle && cd .. && rm -rf /tmp/gazelle && go install github.com/fullstorydev/grpcurl/cmd/grpcurl@latest"
+	"postCreateCommand": "pnpm add -g @anthropic-ai/claude-code vercel && go install github.com/bazelbuild/buildtools/buildifier@latest && git clone https://github.com/bazelbuild/bazel-gazelle.git /tmp/gazelle && cd /tmp/gazelle && go install ./cmd/gazelle && cd .. && rm -rf /tmp/gazelle && go install github.com/fullstorydev/grpcurl/cmd/grpcurl@latest"
 	// Configure tool-specific properties.
 	// "customizations": {},
 	// Uncomment to connect as an existing user other than the container default. More info: https://aka.ms/dev-containers-non-root.
