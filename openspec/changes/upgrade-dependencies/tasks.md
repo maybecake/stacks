@@ -54,4 +54,4 @@
 
 - [x] 8.1 Add `.nvmrc` to repo root pinning `v23` (documents current Node version)
 - [x] 8.2 Run full `pnpm build` and `pnpm lint` from `frontend/` one final time — confirm clean
-- [ ] 8.3 Push branch `upgrade/dependencies` and open a PR to `main`
+- [x] 8.3 Push branch `upgrade/dependencies` and open a PR to `main`
