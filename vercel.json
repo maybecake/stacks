@@ -1,4 +1,4 @@
 {
-  "ignoreCommand": "git diff HEAD^ HEAD --quiet -- frontend/",
-  "buildCommand": "npx buf generate && cd frontend && pnpm install && pnpm build"
+  "ignoreCommand": "git diff HEAD^ HEAD --name-only -- frontend/ api/ | grep -q .",
+  "buildCommand": "pnpm install && (cd .. && ./frontend/node_modules/.bin/buf generate) && pnpm build"
 }
