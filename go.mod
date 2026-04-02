@@ -5,6 +5,7 @@ go 1.25.0
 require google.golang.org/grpc v1.79.3
 
 require (
+	connectrpc.com/connect v1.19.1 // indirect
 	golang.org/x/crypto v0.49.0 // indirect
 	golang.org/x/net v0.52.0 // indirect
 	golang.org/x/sys v0.42.0 // indirect
