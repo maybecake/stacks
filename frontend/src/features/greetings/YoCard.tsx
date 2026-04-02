@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { createConnectTransport } from "@connectrpc/connect-web";
 import { createClient } from "@connectrpc/connect";
-import { YoService } from "../../gen/yo_connect.js";
-import { YoRequest } from "../../gen/yo_pb.js";
+import { create } from "@bufbuild/protobuf";
+import { YoService, YoRequestSchema } from "../../gen/yo/yo_pb.js";
 
 const transport = createConnectTransport({ baseUrl: "" });
 const client = createClient(YoService, transport);
@@ -19,7 +19,7 @@ export const YoCard: React.FC = () => {
     setResult(null);
     setError(null);
     try {
-      const res = await client.sayYo(new YoRequest({ name }));
+      const res = await client.sayYo(create(YoRequestSchema, { name }));
       setResult(res.message);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Request failed");

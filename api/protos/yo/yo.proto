@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package adam.yo;
 
-option go_package = "adam/yo";
+option go_package = "github.com/maybecake/stacks/api/gen/go/yo;yo";
 
 message YoRequest { string name = 1; }
 message YoResponse { string message = 1; }

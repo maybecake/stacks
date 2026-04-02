@@ -1,32 +1,26 @@
 package handler
 
 import (
-	"encoding/json"
+	"context"
 	"fmt"
 	"net/http"
+
+	"connectrpc.com/connect"
+	yov1 "github.com/maybecake/stacks/api/gen/go/yo"
+	"github.com/maybecake/stacks/api/gen/go/yo/yoconnect"
 )
 
-type yoRequest struct {
-	Name string `json:"name"`
-}
+type yoServer struct{}
 
-type yoResponse struct {
-	Message string `json:"message"`
+func (s *yoServer) SayYo(_ context.Context, req *connect.Request[yov1.YoRequest]) (*connect.Response[yov1.YoResponse], error) {
+	return connect.NewResponse(&yov1.YoResponse{
+		Message: fmt.Sprintf("Yo, %s!", req.Msg.Name),
+	}), nil
 }
 
 func Handler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
-	var req yoRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, "Bad Request", http.StatusBadRequest)
-		return
-	}
-
-	resp := yoResponse{Message: fmt.Sprintf("Yo, %s!", req.Name)}
-	w.Header().Set("Content-Type", "application/connect+json")
-	json.NewEncoder(w).Encode(resp) //nolint:errcheck
+	mux := http.NewServeMux()
+	path, h := yoconnect.NewYoServiceHandler(&yoServer{})
+	mux.Handle(path, h)
+	mux.ServeHTTP(w, r)
 }
