@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package adam.sup;
+
+option go_package = "adam/sup";
+
+message SupRequest { string name = 1; }
+message SupResponse { string message = 1; }
+service SupService {
+  rpc SaySup (SupRequest) returns (SupResponse) {}
+}

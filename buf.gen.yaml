@@ -1,0 +1,21 @@
+version: v2
+plugins:
+  # TypeScript: protobuf messages
+  - remote: buf.build/bufbuild/es
+    out: frontend/src/gen
+    opt: target=ts
+  # TypeScript: Connect service clients/handlers
+  - remote: buf.build/connectrpc/es
+    out: frontend/src/gen
+    opt: target=ts
+  # Go: protobuf messages
+  - remote: buf.build/protocolbuffers/go
+    out: api/gen/go
+    opt: paths=source_relative
+  # Go: Connect service handlers
+  - remote: buf.build/connectrpc/go
+    out: api/gen/go
+    opt: paths=source_relative
+  # Python: protobuf messages
+  - remote: buf.build/protocolbuffers/python
+    out: api/gen/python

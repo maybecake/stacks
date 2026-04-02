@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package adam.yo;
+
+option go_package = "adam/yo";
+
+message YoRequest { string name = 1; }
+message YoResponse { string message = 1; }
+service YoService {
+  rpc SayYo (YoRequest) returns (YoResponse) {}
+}
