@@ -26,5 +26,7 @@ yarn-error.log*
 *.out
 /vendor/
 
-
-
+# buf generated output
+frontend/src/gen/
+api/gen/go/
+api/gen/python/

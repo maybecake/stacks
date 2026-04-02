@@ -7,9 +7,13 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "gen:proto": "buf generate"
   },
   "devDependencies": {
+    "@bufbuild/buf": "latest",
+    "@bufbuild/protoc-gen-es": "latest",
+    "@connectrpc/protoc-gen-connect-es": "latest",
     "@eslint/js": "^10.0.1",
     "@types/node": "^25.5.0",
     "@vitejs/plugin-react": "^6.0.1",
@@ -22,6 +26,10 @@
     "vite": "^8.0.3"
   },
   "dependencies": {
+    "@bufbuild/protobuf": "latest",
+    "@connectrpc/connect": "latest",
+    "@connectrpc/connect-node": "latest",
+    "@connectrpc/connect-web": "latest",
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/modifiers": "^9.0.0",
     "@radix-ui/react-avatar": "^1.1.11",
