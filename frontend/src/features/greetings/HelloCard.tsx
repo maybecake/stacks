@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { createConnectTransport } from "@connectrpc/connect-web";
 import { createClient } from "@connectrpc/connect";
-import { HelloService } from "../../gen/hello_connect.js";
-import { HelloRequest } from "../../gen/hello_pb.js";
+import { create } from "@bufbuild/protobuf";
+import { HelloService, HelloRequestSchema } from "../../gen/hello_pb.js";
 
 const transport = createConnectTransport({ baseUrl: "" });
 const client = createClient(HelloService, transport);
@@ -19,7 +19,7 @@ export const HelloCard: React.FC = () => {
     setResult(null);
     setError(null);
     try {
-      const res = await client.sayHello(new HelloRequest({ name }));
+      const res = await client.sayHello(create(HelloRequestSchema, { name }));
       setResult(res.message);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Request failed");

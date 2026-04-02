@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { createConnectTransport } from "@connectrpc/connect-web";
 import { createClient } from "@connectrpc/connect";
-import { SupService } from "../../gen/sup_connect.js";
-import { SupRequest } from "../../gen/sup_pb.js";
+import { create } from "@bufbuild/protobuf";
+import { SupService, SupRequestSchema } from "../../gen/sup/sup_pb.js";
 
 const transport = createConnectTransport({ baseUrl: "" });
 const client = createClient(SupService, transport);
@@ -19,7 +19,7 @@ export const SupCard: React.FC = () => {
     setResult(null);
     setError(null);
     try {
-      const res = await client.saySup(new SupRequest({ name }));
+      const res = await client.saySup(create(SupRequestSchema, { name }));
       setResult(res.message);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Request failed");

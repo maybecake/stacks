@@ -27,6 +27,7 @@ yarn-error.log*
 /vendor/
 
 # buf generated output
+# TypeScript only — regenerated at Vercel build time via installCommand before tsc runs
+# Go and Python ARE committed: Vercel compiles Go before installCommand, so they must exist in the repo
 frontend/src/gen/
-api/gen/go/
-api/gen/python/
+.vercel
