@@ -121,7 +121,7 @@ const file_sup_sup_proto_rawDesc = "" +
 	"\amessage\x18\x01 \x01(\tR\amessage2E\n" +
 	"\n" +
 	"SupService\x127\n" +
-	"\x06SaySup\x12\x14.adam.sup.SupRequest\x1a\x15.adam.sup.SupResponse\"\x00B0Z.github.com/maybecake/stacks/api/gen/go/sup;supb\x06proto3"
+	"\x06SaySup\x12\x14.adam.sup.SupRequest\x1a\x15.adam.sup.SupResponse\"\x00B,Z*github.com/maybecake/stacks/gen/go/sup;supb\x06proto3"
 
 var (
 	file_sup_sup_proto_rawDescOnce sync.Once

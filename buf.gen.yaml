@@ -6,12 +6,12 @@ plugins:
     opt: target=ts
   # Go: protobuf messages
   - remote: buf.build/protocolbuffers/go
-    out: api/gen/go
+    out: gen/go
     opt: paths=source_relative
   # Go: Connect service handlers
   - remote: buf.build/connectrpc/go
-    out: api/gen/go
+    out: gen/go
     opt: paths=source_relative
   # Python: protobuf messages
   - remote: buf.build/protocolbuffers/python
-    out: api/gen/python
+    out: gen/python

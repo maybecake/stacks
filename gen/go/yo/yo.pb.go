@@ -120,7 +120,7 @@ const file_yo_yo_proto_rawDesc = "" +
 	"YoResponse\x12\x18\n" +
 	"\amessage\x18\x01 \x01(\tR\amessage2?\n" +
 	"\tYoService\x122\n" +
-	"\x05SayYo\x12\x12.adam.yo.YoRequest\x1a\x13.adam.yo.YoResponse\"\x00B.Z,github.com/maybecake/stacks/api/gen/go/yo;yob\x06proto3"
+	"\x05SayYo\x12\x12.adam.yo.YoRequest\x1a\x13.adam.yo.YoResponse\"\x00B*Z(github.com/maybecake/stacks/gen/go/yo;yob\x06proto3"
 
 var (
 	file_yo_yo_proto_rawDescOnce sync.Once

@@ -8,7 +8,7 @@ import (
 	connect "connectrpc.com/connect"
 	context "context"
 	errors "errors"
-	sup "github.com/maybecake/stacks/api/gen/go/sup"
+	sup "github.com/maybecake/stacks/gen/go/sup"
 	http "net/http"
 	strings "strings"
 )

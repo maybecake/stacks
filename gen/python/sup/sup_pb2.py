@@ -24,14 +24,14 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rsup/sup.proto\x12\x08\x61\x64\x61m.sup\" \n\nSupRequest\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\"\'\n\x0bSupResponse\x12\x18\n\x07message\x18\x01 \x01(\tR\x07message2E\n\nSupService\x12\x37\n\x06SaySup\x12\x14.adam.sup.SupRequest\x1a\x15.adam.sup.SupResponse\"\x00\x42\x30Z.github.com/maybecake/stacks/api/gen/go/sup;supb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rsup/sup.proto\x12\x08\x61\x64\x61m.sup\" \n\nSupRequest\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\"\'\n\x0bSupResponse\x12\x18\n\x07message\x18\x01 \x01(\tR\x07message2E\n\nSupService\x12\x37\n\x06SaySup\x12\x14.adam.sup.SupRequest\x1a\x15.adam.sup.SupResponse\"\x00\x42,Z*github.com/maybecake/stacks/gen/go/sup;supb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'sup.sup_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
-  _globals['DESCRIPTOR']._serialized_options = b'Z.github.com/maybecake/stacks/api/gen/go/sup;sup'
+  _globals['DESCRIPTOR']._serialized_options = b'Z*github.com/maybecake/stacks/gen/go/sup;sup'
   _globals['_SUPREQUEST']._serialized_start=27
   _globals['_SUPREQUEST']._serialized_end=59
   _globals['_SUPRESPONSE']._serialized_start=61

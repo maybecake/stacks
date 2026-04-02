@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package adam.sup;
 
-option go_package = "github.com/maybecake/stacks/api/gen/go/sup;sup";
+option go_package = "github.com/maybecake/stacks/gen/go/sup;sup";
 
 message SupRequest { string name = 1; }
 message SupResponse { string message = 1; }

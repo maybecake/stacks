@@ -120,7 +120,7 @@ const file_hello_proto_rawDesc = "" +
 	"\rHelloResponse\x12\x18\n" +
 	"\amessage\x18\x01 \x01(\tR\amessage2Q\n" +
 	"\fHelloService\x12A\n" +
-	"\bSayHello\x12\x18.adam.hello.HelloRequest\x1a\x19.adam.hello.HelloResponse\"\x00B.Z,github.com/maybecake/stacks/api/gen/go;hellob\x06proto3"
+	"\bSayHello\x12\x18.adam.hello.HelloRequest\x1a\x19.adam.hello.HelloResponse\"\x00B*Z(github.com/maybecake/stacks/gen/go;hellob\x06proto3"
 
 var (
 	file_hello_proto_rawDescOnce sync.Once
