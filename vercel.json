@@ -1,4 +1,7 @@
 {
-  "ignoreCommand": "git diff HEAD^ HEAD --name-only -- frontend/ api/ | grep -q .",
-  "buildCommand": "pnpm install && (cd .. && ./frontend/node_modules/.bin/buf generate) && pnpm build"
+  "framework": "vite",
+  "installCommand": "pnpm install --prefix frontend",
+  "buildCommand": "frontend/node_modules/.bin/buf generate && pnpm build --prefix frontend",
+  "outputDirectory": "frontend/dist",
+  "ignoreCommand": "git diff HEAD^ HEAD --name-only -- frontend/ api/ | grep -q ."
 }
