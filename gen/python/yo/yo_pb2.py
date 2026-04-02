@@ -24,14 +24,14 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0byo/yo.proto\x12\x07\x61\x64\x61m.yo\"\x1f\n\tYoRequest\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\"&\n\nYoResponse\x12\x18\n\x07message\x18\x01 \x01(\tR\x07message2?\n\tYoService\x12\x32\n\x05SayYo\x12\x12.adam.yo.YoRequest\x1a\x13.adam.yo.YoResponse\"\x00\x42.Z,github.com/maybecake/stacks/api/gen/go/yo;yob\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0byo/yo.proto\x12\x07\x61\x64\x61m.yo\"\x1f\n\tYoRequest\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\"&\n\nYoResponse\x12\x18\n\x07message\x18\x01 \x01(\tR\x07message2?\n\tYoService\x12\x32\n\x05SayYo\x12\x12.adam.yo.YoRequest\x1a\x13.adam.yo.YoResponse\"\x00\x42*Z(github.com/maybecake/stacks/gen/go/yo;yob\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'yo.yo_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
-  _globals['DESCRIPTOR']._serialized_options = b'Z,github.com/maybecake/stacks/api/gen/go/yo;yo'
+  _globals['DESCRIPTOR']._serialized_options = b'Z(github.com/maybecake/stacks/gen/go/yo;yo'
   _globals['_YOREQUEST']._serialized_start=24
   _globals['_YOREQUEST']._serialized_end=55
   _globals['_YORESPONSE']._serialized_start=57

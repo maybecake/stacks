@@ -6,8 +6,8 @@ import (
 	"net/http"
 
 	"connectrpc.com/connect"
-	yov1 "github.com/maybecake/stacks/api/gen/go/yo"
-	"github.com/maybecake/stacks/api/gen/go/yo/yoconnect"
+	yov1 "github.com/maybecake/stacks/gen/go/yo"
+	"github.com/maybecake/stacks/gen/go/yo/yoconnect"
 )
 
 type yoServer struct{}

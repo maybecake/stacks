@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package adam.hello;
 
-option go_package = "github.com/maybecake/stacks/api/gen/go;hello";
+option go_package = "github.com/maybecake/stacks/gen/go;hello";
 
 message HelloRequest {
     string name = 1;
