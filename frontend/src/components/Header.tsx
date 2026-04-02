@@ -27,6 +27,12 @@ export const Header: React.FC = () => {
           >
             Learner
           </NavLink>
+          <NavLink
+            to="/greetings"
+            className={({ isActive }) => isActive ? "nav-link nav-link--active" : "nav-link"}
+          >
+            Greetings
+          </NavLink>
         </nav>
         <ThemeDropdown />
       </div>
