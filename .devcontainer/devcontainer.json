@@ -1,64 +1,77 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/docker-existing-dockerfile
 {
-	"name": "Existing Dockerfile",
-	"build": {
-		// Sets the run context to one level up instead of the .devcontainer folder.
-		"context": "..",
-		// Update the 'dockerFile' property if you aren't using the standard 'Dockerfile' filename.
-		"dockerfile": "../Dockerfile.dev"
-	},
-	// Features to add to the dev container. More info: https://containers.dev/features.
-	"features": {
-		"ghcr.io/devcontainers/features/go:1": {
-			"version": "latest"
-		},
-		"ghcr.io/balazs23/devcontainers-features/bazel:1": {},
-		"ghcr.io/itsmechlark/features/postgresql:1": {},
-		"ghcr.io/robbert229/devcontainer-features/postgresql-client:1": {},
-		"ghcr.io/devcontainers/features/github-cli:1": {},
-		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
-			"moby": true,
-			"installDockerBuildx": true,
-			"installDockerCompose": true,
-			"version": "latest"
-		}
-	},
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				"ms-azuretools.vscode-docker",
-				"golang.go",
-				"BazelBuild.vscode-bazel",
-				"dbaeumer.vscode-eslint",
-				"ms-python.vscode-pylance",
-				"ms-python.python",
-				"drblury.protobuf-vsc",
-				"esbenp.prettier-vscode",
-				"dbaeumer.vscode-eslint",
-				"christian-kohler.path-intellisense",
-				"dsznajder.es7-react-js-snippets",
-				"codder13.openspec",
-				"anthropic.claude-code"
-			]
-		}
-	},
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	"forwardPorts": [
-		3000,
-		5173
-	],
-	// "runArgs": ["--add-host=host.docker.internal:host-gateway"]
-	// Uncomment the next line to run commands after the container is created.
-	// "postCreateCommand": "npm install -g pnpm"
-	"mounts": [
-		"source=stacks-ssh,target=/home/devcontainer/.ssh,type=volume",
-		"source=stacks-claude,target=/home/devcontainer/.claude,type=volume",
-		"source=stacks-vercel,target=/home/devcontainer/.local/share/com.vercel.cli,type=volume"
-	],
-	"postCreateCommand": "pnpm add -g @anthropic-ai/claude-code vercel && go install github.com/bazelbuild/buildtools/buildifier@latest && git clone https://github.com/bazelbuild/bazel-gazelle.git /tmp/gazelle && cd /tmp/gazelle && go install ./cmd/gazelle && cd .. && rm -rf /tmp/gazelle && go install github.com/fullstorydev/grpcurl/cmd/grpcurl@latest"
-	// Configure tool-specific properties.
-	// "customizations": {},
-	// Uncomment to connect as an existing user other than the container default. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "devcontainer"
+  "name": "Existing Dockerfile",
+  "build": {
+    // Sets the run context to one level up instead of the .devcontainer folder.
+    "context": "..",
+    // Update the 'dockerFile' property if you aren't using the standard 'Dockerfile' filename.
+    "dockerfile": "../Dockerfile.dev"
+  },
+  "remoteUser": "devcontainer",
+  // Features to add to the dev container. More info: https://containers.dev/features.
+  "features": {
+    "ghcr.io/devcontainers/features/go:1": {
+      "version": "latest"
+    },
+    "ghcr.io/balazs23/devcontainers-features/bazel:1": {},
+    "ghcr.io/itsmechlark/features/postgresql:1": {},
+    "ghcr.io/robbert229/devcontainer-features/postgresql-client:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+      "moby": true,
+      "installDockerBuildx": true,
+      "installDockerCompose": true,
+      "version": "latest"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        // 1. Define what "zsh" actually is
+        "terminal.integrated.profiles.linux": {
+          "zsh": {
+            "path": "/bin/zsh"
+          }
+        },
+        // 2. Now you can safely set it as the default
+        "terminal.integrated.defaultProfile.linux": "zsh"
+      },
+      "extensions": [
+        "ms-azuretools.vscode-docker",
+        "golang.go",
+        "BazelBuild.vscode-bazel",
+        "dbaeumer.vscode-eslint",
+        "ms-python.vscode-pylance",
+        "ms-python.python",
+        "drblury.protobuf-vsc",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "christian-kohler.path-intellisense",
+        "dsznajder.es7-react-js-snippets",
+        "codder13.openspec",
+        "anthropic.claude-code"
+      ]
+    }
+  },
+  "containerEnv": {
+    "SHELL": "/bin/zsh",
+    "PNPM_HOME": "/home/devcontainer/.local/share/pnpm"
+  },
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  "forwardPorts": [3000, 5173],
+  // "runArgs": ["--add-host=host.docker.internal:host-gateway"]
+  // Uncomment the next line to run commands after the container is created.
+  // "postCreateCommand": "npm install -g pnpm"
+  "mounts": [
+    "source=stacks-ssh,target=/home/devcontainer/.ssh,type=volume",
+    "source=stacks-claude,target=/home/devcontainer/.claude,type=volume",
+    "source=stacks-pnpm,target=/home/devcontainer/.local/share/pnpm,type=volume",
+    "source=stacks-vercel,target=/home/devcontainer/.local/share/com.vercel.cli,type=volume"
+  ],
+  "postCreateCommand": "sudo chown -R devcontainer:devcontainer /home/devcontainer/.local/share/pnpm && pnpm add -g @anthropic-ai/claude-code vercel && go install github.com/bazelbuild/buildtools/buildifier@latest && git clone https://github.com/bazelbuild/bazel-gazelle.git /tmp/gazelle && cd /tmp/gazelle && go install ./cmd/gazelle && cd .. && rm -rf /tmp/gazelle && go install github.com/fullstorydev/grpcurl/cmd/grpcurl@latest"
+  // Configure tool-specific properties.
+  // "customizations": {},
+  // Uncomment to connect as an existing user other than the container default. More info: https://aka.ms/dev-containers-non-root.
+  // "remoteUser": "devcontainer"
 }
