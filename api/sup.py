@@ -24,7 +24,7 @@ class handler(BaseHTTPRequestHandler):
         except Exception:
             error = json.dumps({"code": "invalid_argument", "message": "Invalid request body"}).encode()
             self.send_response(400)
-            self.send_header("Content-Type", "application/connect+json")
+            self.send_header("Content-Type", "application/json")
             self.send_header("Content-Length", str(len(error)))
             self.end_headers()
             self.wfile.write(error)
@@ -33,7 +33,7 @@ class handler(BaseHTTPRequestHandler):
         resp = sup_pb2.SupResponse(message=f"Sup, {req.name}!")
         result = json_format.MessageToJson(resp, preserving_proto_field_name=True).encode()
         self.send_response(200)
-        self.send_header("Content-Type", "application/connect+json")
+        self.send_header("Content-Type", "application/json")
         self.send_header("Content-Length", str(len(result)))
         self.end_headers()
         self.wfile.write(result)
@@ -41,7 +41,7 @@ class handler(BaseHTTPRequestHandler):
     def do_GET(self):
         error = json.dumps({"code": "unimplemented", "message": "Method not allowed"}).encode()
         self.send_response(405)
-        self.send_header("Content-Type", "application/connect+json")
+        self.send_header("Content-Type", "application/json")
         self.send_header("Content-Length", str(len(error)))
         self.end_headers()
         self.wfile.write(error)

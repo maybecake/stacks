@@ -3,7 +3,7 @@ plugins:
   # TypeScript: protobuf messages + service descriptors (protoc-gen-es v2 includes services)
   - remote: buf.build/bufbuild/es
     out: frontend/src/gen
-    opt: target=ts
+    opt: target=js+dts
   # Go: protobuf messages
   - remote: buf.build/protocolbuffers/go
     out: gen/go
