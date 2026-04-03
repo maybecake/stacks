@@ -1,0 +1,10 @@
+{
+  "name": "stacks",
+  "private": true,
+  "version": "0.0.0",
+  "dependencies": {
+    "@bufbuild/protobuf": "latest",
+    "@connectrpc/connect": "latest",
+    "@connectrpc/connect-node": "latest"
+  }
+}

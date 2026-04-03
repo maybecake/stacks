@@ -1,6 +1,6 @@
 {
   "framework": "vite",
-  "installCommand": "pnpm install --prefix frontend && frontend/node_modules/.bin/buf generate",
+  "installCommand": "pnpm install && pnpm install --prefix frontend && frontend/node_modules/.bin/buf generate",
   "buildCommand": "cd frontend && pnpm build",
   "outputDirectory": "frontend/dist"
 }
