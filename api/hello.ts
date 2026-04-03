@@ -1,7 +1,6 @@
 import { ConnectRouter } from "@connectrpc/connect";
-import { createNodeHttpHandler } from "@connectrpc/connect-node";
+import { connectNodeAdapter } from "@connectrpc/connect-node";
 import { create } from "@bufbuild/protobuf";
-import type { IncomingMessage, ServerResponse } from "http";
 // These imports resolve after `buf generate` runs at build time
 import { HelloService, HelloResponseSchema } from "../frontend/src/gen/hello_pb.js";
 
@@ -13,10 +12,4 @@ function routes(router: ConnectRouter) {
   });
 }
 
-const handler = createNodeHttpHandler({
-  routes,
-});
-
-export default function (req: IncomingMessage, res: ServerResponse) {
-  return handler(req, res);
-}
+export default connectNodeAdapter({ routes });

@@ -5,6 +5,7 @@
   "dependencies": {
     "@bufbuild/protobuf": "latest",
     "@connectrpc/connect": "latest",
-    "@connectrpc/connect-node": "latest"
+    "@connectrpc/connect-node": "latest",
+    "@types/node": "latest"
   }
 }
