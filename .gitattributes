@@ -1,4 +1,4 @@
 MODULE.bazel.lock linguist-generated=true
-.gen/ linguist-generated=true
+gen/ linguist-generated=true
 api/.gen/ linguist-generated=true
 frontend/src/gen/ linguist-generated=true

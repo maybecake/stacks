@@ -10,12 +10,12 @@ plugins:
     opt: target=js+dts
   # Go: protobuf messages
   - remote: buf.build/protocolbuffers/go
-    out: .gen/go
+    out: gen/go
     opt: paths=source_relative
   # Go: Connect service handlers
   - remote: buf.build/connectrpc/go
-    out: .gen/go
+    out: gen/go
     opt: paths=source_relative
   # Python: protobuf messages
   - remote: buf.build/protocolbuffers/python
-    out: .gen/python
+    out: gen/python
