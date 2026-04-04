@@ -22,7 +22,7 @@ const _ = connect.IsAtLeastVersion1_13_0
 
 const (
 	// YoServiceName is the fully-qualified name of the YoService service.
-	YoServiceName = "adam.yo.YoService"
+	YoServiceName = "yo.YoService"
 )
 
 // These constants are the fully-qualified names of the RPCs defined in this package. They're
@@ -34,15 +34,15 @@ const (
 // period.
 const (
 	// YoServiceSayYoProcedure is the fully-qualified name of the YoService's SayYo RPC.
-	YoServiceSayYoProcedure = "/adam.yo.YoService/SayYo"
+	YoServiceSayYoProcedure = "/yo.YoService/SayYo"
 )
 
-// YoServiceClient is a client for the adam.yo.YoService service.
+// YoServiceClient is a client for the yo.YoService service.
 type YoServiceClient interface {
 	SayYo(context.Context, *connect.Request[yo.YoRequest]) (*connect.Response[yo.YoResponse], error)
 }
 
-// NewYoServiceClient constructs a client for the adam.yo.YoService service. By default, it uses the
+// NewYoServiceClient constructs a client for the yo.YoService service. By default, it uses the
 // Connect protocol with the binary Protobuf Codec, asks for gzipped responses, and sends
 // uncompressed requests. To use the gRPC or gRPC-Web protocols, supply the connect.WithGRPC() or
 // connect.WithGRPCWeb() options.
@@ -67,12 +67,12 @@ type yoServiceClient struct {
 	sayYo *connect.Client[yo.YoRequest, yo.YoResponse]
 }
 
-// SayYo calls adam.yo.YoService.SayYo.
+// SayYo calls yo.YoService.SayYo.
 func (c *yoServiceClient) SayYo(ctx context.Context, req *connect.Request[yo.YoRequest]) (*connect.Response[yo.YoResponse], error) {
 	return c.sayYo.CallUnary(ctx, req)
 }
 
-// YoServiceHandler is an implementation of the adam.yo.YoService service.
+// YoServiceHandler is an implementation of the yo.YoService service.
 type YoServiceHandler interface {
 	SayYo(context.Context, *connect.Request[yo.YoRequest]) (*connect.Response[yo.YoResponse], error)
 }
@@ -90,7 +90,7 @@ func NewYoServiceHandler(svc YoServiceHandler, opts ...connect.HandlerOption) (s
 		connect.WithSchema(yoServiceMethods.ByName("SayYo")),
 		connect.WithHandlerOptions(opts...),
 	)
-	return "/adam.yo.YoService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	return "/yo.YoService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case YoServiceSayYoProcedure:
 			yoServiceSayYoHandler.ServeHTTP(w, r)
@@ -104,5 +104,5 @@ func NewYoServiceHandler(svc YoServiceHandler, opts ...connect.HandlerOption) (s
 type UnimplementedYoServiceHandler struct{}
 
 func (UnimplementedYoServiceHandler) SayYo(context.Context, *connect.Request[yo.YoRequest]) (*connect.Response[yo.YoResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("adam.yo.YoService.SayYo is not implemented"))
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("yo.YoService.SayYo is not implemented"))
 }

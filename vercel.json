@@ -5,8 +5,8 @@
   "buildCommand": "cd frontend && pnpm build",
   "outputDirectory": "frontend/dist",
   "rewrites": [
-    { "source": "/adam.hello.HelloService/:path*", "destination": "/api/hello" },
-    { "source": "/adam.yo.YoService/:path*", "destination": "/api/yo" },
-    { "source": "/adam.sup.SupService/:path*", "destination": "/api/sup" }
+    { "source": "/hello.HelloService/:path*", "destination": "/api/hello" },
+    { "source": "/yo.YoService/:path*", "destination": "/api/yo" },
+    { "source": "/sup.SupService/:path*", "destination": "/api/sup" }
   ]
 }

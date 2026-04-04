@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package adam.yo;
+package yo;
 
 option go_package = "github.com/maybecake/stacks/gen/go/yo;yo";
 

@@ -113,14 +113,14 @@ var File_yo_yo_proto protoreflect.FileDescriptor
 
 const file_yo_yo_proto_rawDesc = "" +
 	"\n" +
-	"\vyo/yo.proto\x12\aadam.yo\"\x1f\n" +
+	"\vyo/yo.proto\x12\x02yo\"\x1f\n" +
 	"\tYoRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\"&\n" +
 	"\n" +
 	"YoResponse\x12\x18\n" +
-	"\amessage\x18\x01 \x01(\tR\amessage2?\n" +
-	"\tYoService\x122\n" +
-	"\x05SayYo\x12\x12.adam.yo.YoRequest\x1a\x13.adam.yo.YoResponse\"\x00B*Z(github.com/maybecake/stacks/gen/go/yo;yob\x06proto3"
+	"\amessage\x18\x01 \x01(\tR\amessage25\n" +
+	"\tYoService\x12(\n" +
+	"\x05SayYo\x12\r.yo.YoRequest\x1a\x0e.yo.YoResponse\"\x00B*Z(github.com/maybecake/stacks/gen/go/yo;yob\x06proto3"
 
 var (
 	file_yo_yo_proto_rawDescOnce sync.Once
@@ -136,12 +136,12 @@ func file_yo_yo_proto_rawDescGZIP() []byte {
 
 var file_yo_yo_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_yo_yo_proto_goTypes = []any{
-	(*YoRequest)(nil),  // 0: adam.yo.YoRequest
-	(*YoResponse)(nil), // 1: adam.yo.YoResponse
+	(*YoRequest)(nil),  // 0: yo.YoRequest
+	(*YoResponse)(nil), // 1: yo.YoResponse
 }
 var file_yo_yo_proto_depIdxs = []int32{
-	0, // 0: adam.yo.YoService.SayYo:input_type -> adam.yo.YoRequest
-	1, // 1: adam.yo.YoService.SayYo:output_type -> adam.yo.YoResponse
+	0, // 0: yo.YoService.SayYo:input_type -> yo.YoRequest
+	1, // 1: yo.YoService.SayYo:output_type -> yo.YoResponse
 	1, // [1:2] is the sub-list for method output_type
 	0, // [0:1] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name

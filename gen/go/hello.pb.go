@@ -113,14 +113,13 @@ var File_hello_proto protoreflect.FileDescriptor
 
 const file_hello_proto_rawDesc = "" +
 	"\n" +
-	"\vhello.proto\x12\n" +
-	"adam.hello\"\"\n" +
+	"\vhello.proto\x12\x05hello\"\"\n" +
 	"\fHelloRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\")\n" +
 	"\rHelloResponse\x12\x18\n" +
-	"\amessage\x18\x01 \x01(\tR\amessage2Q\n" +
-	"\fHelloService\x12A\n" +
-	"\bSayHello\x12\x18.adam.hello.HelloRequest\x1a\x19.adam.hello.HelloResponse\"\x00B*Z(github.com/maybecake/stacks/gen/go;hellob\x06proto3"
+	"\amessage\x18\x01 \x01(\tR\amessage2G\n" +
+	"\fHelloService\x127\n" +
+	"\bSayHello\x12\x13.hello.HelloRequest\x1a\x14.hello.HelloResponse\"\x00B*Z(github.com/maybecake/stacks/gen/go;hellob\x06proto3"
 
 var (
 	file_hello_proto_rawDescOnce sync.Once
@@ -136,12 +135,12 @@ func file_hello_proto_rawDescGZIP() []byte {
 
 var file_hello_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_hello_proto_goTypes = []any{
-	(*HelloRequest)(nil),  // 0: adam.hello.HelloRequest
-	(*HelloResponse)(nil), // 1: adam.hello.HelloResponse
+	(*HelloRequest)(nil),  // 0: hello.HelloRequest
+	(*HelloResponse)(nil), // 1: hello.HelloResponse
 }
 var file_hello_proto_depIdxs = []int32{
-	0, // 0: adam.hello.HelloService.SayHello:input_type -> adam.hello.HelloRequest
-	1, // 1: adam.hello.HelloService.SayHello:output_type -> adam.hello.HelloResponse
+	0, // 0: hello.HelloService.SayHello:input_type -> hello.HelloRequest
+	1, // 1: hello.HelloService.SayHello:output_type -> hello.HelloResponse
 	1, // [1:2] is the sub-list for method output_type
 	0, // [0:1] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name

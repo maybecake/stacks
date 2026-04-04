@@ -22,7 +22,7 @@ const _ = connect.IsAtLeastVersion1_13_0
 
 const (
 	// SupServiceName is the fully-qualified name of the SupService service.
-	SupServiceName = "adam.sup.SupService"
+	SupServiceName = "sup.SupService"
 )
 
 // These constants are the fully-qualified names of the RPCs defined in this package. They're
@@ -34,16 +34,16 @@ const (
 // period.
 const (
 	// SupServiceSaySupProcedure is the fully-qualified name of the SupService's SaySup RPC.
-	SupServiceSaySupProcedure = "/adam.sup.SupService/SaySup"
+	SupServiceSaySupProcedure = "/sup.SupService/SaySup"
 )
 
-// SupServiceClient is a client for the adam.sup.SupService service.
+// SupServiceClient is a client for the sup.SupService service.
 type SupServiceClient interface {
 	SaySup(context.Context, *connect.Request[sup.SupRequest]) (*connect.Response[sup.SupResponse], error)
 }
 
-// NewSupServiceClient constructs a client for the adam.sup.SupService service. By default, it uses
-// the Connect protocol with the binary Protobuf Codec, asks for gzipped responses, and sends
+// NewSupServiceClient constructs a client for the sup.SupService service. By default, it uses the
+// Connect protocol with the binary Protobuf Codec, asks for gzipped responses, and sends
 // uncompressed requests. To use the gRPC or gRPC-Web protocols, supply the connect.WithGRPC() or
 // connect.WithGRPCWeb() options.
 //
@@ -67,12 +67,12 @@ type supServiceClient struct {
 	saySup *connect.Client[sup.SupRequest, sup.SupResponse]
 }
 
-// SaySup calls adam.sup.SupService.SaySup.
+// SaySup calls sup.SupService.SaySup.
 func (c *supServiceClient) SaySup(ctx context.Context, req *connect.Request[sup.SupRequest]) (*connect.Response[sup.SupResponse], error) {
 	return c.saySup.CallUnary(ctx, req)
 }
 
-// SupServiceHandler is an implementation of the adam.sup.SupService service.
+// SupServiceHandler is an implementation of the sup.SupService service.
 type SupServiceHandler interface {
 	SaySup(context.Context, *connect.Request[sup.SupRequest]) (*connect.Response[sup.SupResponse], error)
 }
@@ -90,7 +90,7 @@ func NewSupServiceHandler(svc SupServiceHandler, opts ...connect.HandlerOption) 
 		connect.WithSchema(supServiceMethods.ByName("SaySup")),
 		connect.WithHandlerOptions(opts...),
 	)
-	return "/adam.sup.SupService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	return "/sup.SupService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case SupServiceSaySupProcedure:
 			supServiceSaySupHandler.ServeHTTP(w, r)
@@ -104,5 +104,5 @@ func NewSupServiceHandler(svc SupServiceHandler, opts ...connect.HandlerOption) 
 type UnimplementedSupServiceHandler struct{}
 
 func (UnimplementedSupServiceHandler) SaySup(context.Context, *connect.Request[sup.SupRequest]) (*connect.Response[sup.SupResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("adam.sup.SupService.SaySup is not implemented"))
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("sup.SupService.SaySup is not implemented"))
 }

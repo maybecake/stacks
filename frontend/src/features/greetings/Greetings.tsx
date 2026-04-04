@@ -2,6 +2,7 @@ import React from "react";
 import { HelloCard } from "./HelloCard";
 import { YoCard } from "./YoCard";
 import { SupCard } from "./SupCard";
+import { TestCard } from "./TestCard";
 import "./greetings.css";
 
 export const Greetings: React.FC = () => {
@@ -13,6 +14,7 @@ export const Greetings: React.FC = () => {
         <HelloCard />
         <YoCard />
         <SupCard />
+        <TestCard />
       </div>
     </div>
   );

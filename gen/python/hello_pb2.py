@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0bhello.proto\x12\nadam.hello\"\"\n\x0cHelloRequest\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\")\n\rHelloResponse\x12\x18\n\x07message\x18\x01 \x01(\tR\x07message2Q\n\x0cHelloService\x12\x41\n\x08SayHello\x12\x18.adam.hello.HelloRequest\x1a\x19.adam.hello.HelloResponse\"\x00\x42*Z(github.com/maybecake/stacks/gen/go;hellob\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0bhello.proto\x12\x05hello\"\"\n\x0cHelloRequest\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\")\n\rHelloResponse\x12\x18\n\x07message\x18\x01 \x01(\tR\x07message2G\n\x0cHelloService\x12\x37\n\x08SayHello\x12\x13.hello.HelloRequest\x1a\x14.hello.HelloResponse\"\x00\x42*Z(github.com/maybecake/stacks/gen/go;hellob\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -32,10 +32,10 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'hello_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'Z(github.com/maybecake/stacks/gen/go;hello'
-  _globals['_HELLOREQUEST']._serialized_start=27
-  _globals['_HELLOREQUEST']._serialized_end=61
-  _globals['_HELLORESPONSE']._serialized_start=63
-  _globals['_HELLORESPONSE']._serialized_end=104
-  _globals['_HELLOSERVICE']._serialized_start=106
-  _globals['_HELLOSERVICE']._serialized_end=187
+  _globals['_HELLOREQUEST']._serialized_start=22
+  _globals['_HELLOREQUEST']._serialized_end=56
+  _globals['_HELLORESPONSE']._serialized_start=58
+  _globals['_HELLORESPONSE']._serialized_end=99
+  _globals['_HELLOSERVICE']._serialized_start=101
+  _globals['_HELLOSERVICE']._serialized_end=172
 # @@protoc_insertion_point(module_scope)

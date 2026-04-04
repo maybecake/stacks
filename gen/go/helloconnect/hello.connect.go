@@ -22,7 +22,7 @@ const _ = connect.IsAtLeastVersion1_13_0
 
 const (
 	// HelloServiceName is the fully-qualified name of the HelloService service.
-	HelloServiceName = "adam.hello.HelloService"
+	HelloServiceName = "hello.HelloService"
 )
 
 // These constants are the fully-qualified names of the RPCs defined in this package. They're
@@ -34,16 +34,16 @@ const (
 // period.
 const (
 	// HelloServiceSayHelloProcedure is the fully-qualified name of the HelloService's SayHello RPC.
-	HelloServiceSayHelloProcedure = "/adam.hello.HelloService/SayHello"
+	HelloServiceSayHelloProcedure = "/hello.HelloService/SayHello"
 )
 
-// HelloServiceClient is a client for the adam.hello.HelloService service.
+// HelloServiceClient is a client for the hello.HelloService service.
 type HelloServiceClient interface {
 	SayHello(context.Context, *connect.Request[_go.HelloRequest]) (*connect.Response[_go.HelloResponse], error)
 }
 
-// NewHelloServiceClient constructs a client for the adam.hello.HelloService service. By default, it
-// uses the Connect protocol with the binary Protobuf Codec, asks for gzipped responses, and sends
+// NewHelloServiceClient constructs a client for the hello.HelloService service. By default, it uses
+// the Connect protocol with the binary Protobuf Codec, asks for gzipped responses, and sends
 // uncompressed requests. To use the gRPC or gRPC-Web protocols, supply the connect.WithGRPC() or
 // connect.WithGRPCWeb() options.
 //
@@ -67,12 +67,12 @@ type helloServiceClient struct {
 	sayHello *connect.Client[_go.HelloRequest, _go.HelloResponse]
 }
 
-// SayHello calls adam.hello.HelloService.SayHello.
+// SayHello calls hello.HelloService.SayHello.
 func (c *helloServiceClient) SayHello(ctx context.Context, req *connect.Request[_go.HelloRequest]) (*connect.Response[_go.HelloResponse], error) {
 	return c.sayHello.CallUnary(ctx, req)
 }
 
-// HelloServiceHandler is an implementation of the adam.hello.HelloService service.
+// HelloServiceHandler is an implementation of the hello.HelloService service.
 type HelloServiceHandler interface {
 	SayHello(context.Context, *connect.Request[_go.HelloRequest]) (*connect.Response[_go.HelloResponse], error)
 }
@@ -90,7 +90,7 @@ func NewHelloServiceHandler(svc HelloServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(helloServiceMethods.ByName("SayHello")),
 		connect.WithHandlerOptions(opts...),
 	)
-	return "/adam.hello.HelloService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	return "/hello.HelloService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case HelloServiceSayHelloProcedure:
 			helloServiceSayHelloHandler.ServeHTTP(w, r)
@@ -104,5 +104,5 @@ func NewHelloServiceHandler(svc HelloServiceHandler, opts ...connect.HandlerOpti
 type UnimplementedHelloServiceHandler struct{}
 
 func (UnimplementedHelloServiceHandler) SayHello(context.Context, *connect.Request[_go.HelloRequest]) (*connect.Response[_go.HelloResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("adam.hello.HelloService.SayHello is not implemented"))
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("hello.HelloService.SayHello is not implemented"))
 }

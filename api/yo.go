@@ -18,9 +18,9 @@ func (s *yoServer) SayYo(_ context.Context, req *connect.Request[yov1.YoRequest]
 	}), nil
 }
 
-func Handler(w http.ResponseWriter, r *http.Request) {
+func Yo(w http.ResponseWriter, r *http.Request) {
 	mux := http.NewServeMux()
-	path, h := yoconnect.NewYoServiceHandler(&yoServer{})
-	mux.Handle(path, h)
+	_, h := yoconnect.NewYoServiceHandler(&yoServer{})
+	mux.Handle("/", h)
 	mux.ServeHTTP(w, r)
 }

@@ -113,15 +113,15 @@ var File_sup_sup_proto protoreflect.FileDescriptor
 
 const file_sup_sup_proto_rawDesc = "" +
 	"\n" +
-	"\rsup/sup.proto\x12\badam.sup\" \n" +
+	"\rsup/sup.proto\x12\x03sup\" \n" +
 	"\n" +
 	"SupRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\"'\n" +
 	"\vSupResponse\x12\x18\n" +
-	"\amessage\x18\x01 \x01(\tR\amessage2E\n" +
+	"\amessage\x18\x01 \x01(\tR\amessage2;\n" +
 	"\n" +
-	"SupService\x127\n" +
-	"\x06SaySup\x12\x14.adam.sup.SupRequest\x1a\x15.adam.sup.SupResponse\"\x00B,Z*github.com/maybecake/stacks/gen/go/sup;supb\x06proto3"
+	"SupService\x12-\n" +
+	"\x06SaySup\x12\x0f.sup.SupRequest\x1a\x10.sup.SupResponse\"\x00B,Z*github.com/maybecake/stacks/gen/go/sup;supb\x06proto3"
 
 var (
 	file_sup_sup_proto_rawDescOnce sync.Once
@@ -137,12 +137,12 @@ func file_sup_sup_proto_rawDescGZIP() []byte {
 
 var file_sup_sup_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_sup_sup_proto_goTypes = []any{
-	(*SupRequest)(nil),  // 0: adam.sup.SupRequest
-	(*SupResponse)(nil), // 1: adam.sup.SupResponse
+	(*SupRequest)(nil),  // 0: sup.SupRequest
+	(*SupResponse)(nil), // 1: sup.SupResponse
 }
 var file_sup_sup_proto_depIdxs = []int32{
-	0, // 0: adam.sup.SupService.SaySup:input_type -> adam.sup.SupRequest
-	1, // 1: adam.sup.SupService.SaySup:output_type -> adam.sup.SupResponse
+	0, // 0: sup.SupService.SaySup:input_type -> sup.SupRequest
+	1, // 1: sup.SupService.SaySup:output_type -> sup.SupResponse
 	1, // [1:2] is the sub-list for method output_type
 	0, // [0:1] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name

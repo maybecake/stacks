@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package adam.sup;
+package sup;
 
 option go_package = "github.com/maybecake/stacks/gen/go/sup;sup";
 
