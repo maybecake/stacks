@@ -2,15 +2,19 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "CommonJS",
-    "moduleResolution": "node",
     "esModuleInterop": true,
     "strict": true,
-    "types": ["node"],
+    "types": [
+      "node"
+    ],
     "outDir": ".vercel/output",
-    "baseUrl": ".",
     "paths": {
-      "../frontend/src/gen/*": ["../frontend/src/gen/*"]
+      "../frontend/src/gen/*": [
+        "../frontend/src/gen/*"
+      ]
     }
   },
-  "include": ["./**/*.ts"]
+  "include": [
+    "./**/*.ts"
+  ]
 }

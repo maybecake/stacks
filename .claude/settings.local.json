@@ -148,7 +148,9 @@
       "Bash(go run:*)",
       "Bash(ls -la /workspaces/stacks/*.mod)",
       "Bash(ls -la api/*.go)",
-      "Bash(buf generate:*)"
+      "Bash(buf generate:*)",
+      "Bash(go version:*)",
+      "Bash(chmod +x:*)"
     ]
   }
 }
