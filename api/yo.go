@@ -10,17 +10,17 @@ import (
 	"github.com/maybecake/stacks/gen/go/yo/yoconnect"
 )
 
-type yoServer struct{}
+type YoServer struct{}
 
-func (s *yoServer) SayYo(_ context.Context, req *connect.Request[yov1.YoRequest]) (*connect.Response[yov1.YoResponse], error) {
+func (s *YoServer) SayYo(_ context.Context, req *connect.Request[yov1.YoRequest]) (*connect.Response[yov1.YoResponse], error) {
 	return connect.NewResponse(&yov1.YoResponse{
 		Message: fmt.Sprintf("Yo, %s!", req.Msg.Name),
 	}), nil
 }
 
-func Yo(w http.ResponseWriter, r *http.Request) {
+func Handler(w http.ResponseWriter, r *http.Request) {
 	mux := http.NewServeMux()
-	_, h := yoconnect.NewYoServiceHandler(&yoServer{})
+	_, h := yoconnect.NewYoServiceHandler(&YoServer{})
 	mux.Handle("/", h)
 	mux.ServeHTTP(w, r)
 }
