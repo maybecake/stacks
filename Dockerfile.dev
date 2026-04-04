@@ -18,23 +18,12 @@ RUN if ! getent group $USER_GID; then groupadd --gid $USER_GID $USERNAME; fi \
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
 
-# Set up environment for pnpm
-ENV PNPM_HOME="/home/devcontainer/.local/share/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-RUN mkdir -p $PNPM_HOME
-RUN chown -R devcontainer:devcontainer /home/devcontainer
-# Prevent Corepack from asking for confirmation when downloading binaries
-ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
-# Add pnpm to the zsh shell profile for the devcontainer user
-RUN echo 'export PNPM_HOME="/home/devcontainer/.local/share/pnpm"' >> /home/devcontainer/.zshrc \
-    && echo 'export PATH="$PNPM_HOME:$PATH"' >> /home/devcontainer/.zshrc
-
-ENV PATH="/home/devcontainer/go/bin:$PATH"
-
 ENV DEBIAN_FRONTEND=noninteractive \
     LANG=C.UTF-8 \
     LC_ALL=C.UTF-8
 
+# Install base dependencies
+# (Removed the duplicate 'sudo' from your list)
 RUN apt-get update && apt-get install -y \
     build-essential \
     curl \
@@ -46,23 +35,33 @@ RUN apt-get update && apt-get install -y \
     protobuf-compiler \
     ca-certificates \
     zsh \
-    sudo \
-    && sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended \
-    && chsh -s $(which zsh) devcontainer \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Node.js 23 and enable pnpm via corepack
-
-
+# Install Node.js 23 and enable corepack (run as root)
 RUN curl -fsSL https://deb.nodesource.com/setup_23.x | bash - \
     && apt-get install -y nodejs \
     && npm install -g npm@latest \
     && corepack enable \
     && corepack prepare pnpm@latest --activate
 
-RUN pnpm add -g @anthropic-ai/claude-code @fission-ai/openspec@latest
+# --- Switch to devcontainer user for user-space configs ---
+USER $USERNAME
+WORKDIR /home/$USERNAME
 
-USER devcontainer
-WORKDIR /home/devcontainer
+# Set up environment for pnpm and go
+ENV PNPM_HOME="/home/$USERNAME/.local/share/pnpm"
+ENV PATH="$PATH:/home/$USERNAME/go/bin:$PNPM_HOME"
+ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+
+# Create pnpm directory so it has the correct permissions before the volume mounts
+RUN mkdir -p $PNPM_HOME
+
+# Install Oh My Zsh AS the devcontainer user, not root
+RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+
+# Add pnpm to the zsh shell profile
+RUN echo 'export PNPM_HOME="/home/devcontainer/.local/share/pnpm"' >> /home/devcontainer/.zshrc \
+    && echo 'export PATH="$PATH:/home/devcontainer/go/bin:$PNPM_HOME"' >> /home/devcontainer/.zshrc
+
 CMD ["/bin/zsh"]
