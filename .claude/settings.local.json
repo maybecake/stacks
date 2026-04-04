@@ -139,7 +139,15 @@
       "Bash(ls -la /workspaces/stacks/Dockerfile*)",
       "Bash(dos2unix /workspaces/stacks/Dockerfile.dev)",
       "Bash(sed -i 's/\\\\r$//' /workspaces/stacks/Dockerfile.dev)",
-      "Bash(docker compose build:*)"
+      "Bash(docker compose build:*)",
+      "Bash(curl -v http://localhost:3000/)",
+      "Bash(curl -X POST http://localhost:3000/api/hello -H 'Content-Type: application/json' -d '{\"name\":\"World\"}')",
+      "Bash(curl -X POST http://localhost:3000/api/yo -H 'Content-Type: application/json' -d '{\"name\":\"Dev\"}')",
+      "Bash(curl -X POST http://localhost:3000/api/sup -H 'Content-Type: application/json' -d '{\"name\":\"Buddy\"}')",
+      "Bash(curl:*)",
+      "Bash(go run:*)",
+      "Bash(ls -la /workspaces/stacks/*.mod)",
+      "Bash(ls -la api/*.go)"
     ]
   }
 }
