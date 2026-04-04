@@ -135,7 +135,11 @@
       "Bash(cat /workspaces/stacks/api/protos/*.proto)",
       "Bash(find /workspaces/stacks/api/protos -name *.proto)",
       "Bash(xargs cat:*)",
-      "Bash(python3 -c \"import sys,json; p=json.load\\(sys.stdin\\); print\\(p.get\\(''''main'''',''''''''\\), p.get\\(''''exports'''',{}\\).get\\(''''.'''',{}\\)\\)\")"
+      "Bash(python3 -c \"import sys,json; p=json.load\\(sys.stdin\\); print\\(p.get\\(''''main'''',''''''''\\), p.get\\(''''exports'''',{}\\).get\\(''''.'''',{}\\)\\)\")",
+      "Bash(ls -la /workspaces/stacks/Dockerfile*)",
+      "Bash(dos2unix /workspaces/stacks/Dockerfile.dev)",
+      "Bash(sed -i 's/\\\\r$//' /workspaces/stacks/Dockerfile.dev)",
+      "Bash(docker compose build:*)"
     ]
   }
 }

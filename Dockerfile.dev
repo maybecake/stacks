@@ -31,6 +31,7 @@ RUN apt-get update && apt-get install -y \
     git \
     unzip \
     vim \
+    tmux \
     python3 \
     protobuf-compiler \
     ca-certificates \
@@ -60,8 +61,20 @@ RUN mkdir -p $PNPM_HOME
 # Install Oh My Zsh AS the devcontainer user, not root
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
-# Add pnpm to the zsh shell profile
-RUN echo 'export PNPM_HOME="/home/devcontainer/.local/share/pnpm"' >> /home/devcontainer/.zshrc \
-    && echo 'export PATH="$PATH:/home/devcontainer/go/bin:$PNPM_HOME"' >> /home/devcontainer/.zshrc
+# Configure zsh shell profile
+RUN cat >> /home/devcontainer/.zshrc <<'EOF'
+
+# Export paths for pnpm and Go
+export PNPM_HOME="/home/devcontainer/.local/share/pnpm"
+export PATH="$PATH:/home/devcontainer/go/bin:$PNPM_HOME"
+
+# Welcome message for dev docker container
+echo "🐳 Welcome to stacks dev docker container"
+
+# Customize prompt to indicate Docker environmen
+ZSH_THEME="clean"
+PROMPT='🐳 %F{blue}%c%f/ $(git_prompt_info)%F{white}❯%f '
+EOF
+# RUN sed -i 's/\r$//' /home/devcontainer/.zshrc
 
 CMD ["/bin/zsh"]
