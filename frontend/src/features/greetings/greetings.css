@@ -47,10 +47,12 @@
   display: flex;
   flex-direction: row;
   gap: var(--spacing-sm);
+  min-width: 0;
 }
 
 .greeting-card__input {
   flex: 1;
+  min-width: 0;
   padding: var(--spacing-sm) var(--spacing-md);
   font-size: var(--font-size-md);
   color: var(--text-primary);
