@@ -8,7 +8,7 @@ import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2
  * Describes the file yo/yo.proto.
  */
 export const file_yo_yo = /*@__PURE__*/
-  fileDesc("Cgt5by95by5wcm90bxICeW8iGQoJWW9SZXF1ZXN0EgwKBG5hbWUYASABKAkiHQoKWW9SZXNwb25zZRIPCgdtZXNzYWdlGAEgASgJMjUKCVlvU2VydmljZRIoCgVTYXlZbxINLnlvLllvUmVxdWVzdBoOLnlvLllvUmVzcG9uc2UiAEIqWihnaXRodWIuY29tL21heWJlY2FrZS9zdGFja3MvZ2VuL2dvL3lvO3lvYgZwcm90bzM");
+  fileDesc("Cgt5by95by5wcm90bxICeW8iGQoJWW9SZXF1ZXN0EgwKBG5hbWUYASABKAkiHQoKWW9SZXNwb25zZRIPCgdtZXNzYWdlGAEgASgJIjgKEEdyZWV0aW5nVHlwZVN0YXQSFQoNZ3JlZXRpbmdfdHlwZRgBIAEoCRINCgVjb3VudBgCIAEoAyIsCg1OYW1lRnJlcXVlbmN5EgwKBG5hbWUYASABKAkSDQoFY291bnQYAiABKAMiRQocTGlzdEdyZWV0aW5nVHlwZVN0YXRzUmVxdWVzdBIRCglwYWdlX3NpemUYASABKAUSEgoKcGFnZV90b2tlbhgCIAEoCSJmCh1MaXN0R3JlZXRpbmdUeXBlU3RhdHNSZXNwb25zZRIsCg5ncmVldGluZ190eXBlcxgBIAMoCzIULnlvLkdyZWV0aW5nVHlwZVN0YXQSFwoPbmV4dF9wYWdlX3Rva2VuGAIgASgJIkAKF0xpc3RHcmVldGVkTmFtZXNSZXF1ZXN0EhEKCXBhZ2Vfc2l6ZRgBIAEoBRISCgpwYWdlX3Rva2VuGAIgASgJIlUKGExpc3RHcmVldGVkTmFtZXNSZXNwb25zZRIgCgVuYW1lcxgBIAMoCzIRLnlvLk5hbWVGcmVxdWVuY3kSFwoPbmV4dF9wYWdlX3Rva2VuGAIgASgJMuYBCglZb1NlcnZpY2USKAoFU2F5WW8SDS55by5Zb1JlcXVlc3QaDi55by5Zb1Jlc3BvbnNlIgASXgoVTGlzdEdyZWV0aW5nVHlwZVN0YXRzEiAueW8uTGlzdEdyZWV0aW5nVHlwZVN0YXRzUmVxdWVzdBohLnlvLkxpc3RHcmVldGluZ1R5cGVTdGF0c1Jlc3BvbnNlIgASTwoQTGlzdEdyZWV0ZWROYW1lcxIbLnlvLkxpc3RHcmVldGVkTmFtZXNSZXF1ZXN0GhwueW8uTGlzdEdyZWV0ZWROYW1lc1Jlc3BvbnNlIgBCKlooZ2l0aHViLmNvbS9tYXliZWNha2Uvc3RhY2tzL2dlbi9nby95bzt5b2IGcHJvdG8z");
 
 /**
  * Describes the message yo.YoRequest.
@@ -23,6 +23,48 @@ export const YoRequestSchema = /*@__PURE__*/
  */
 export const YoResponseSchema = /*@__PURE__*/
   messageDesc(file_yo_yo, 1);
+
+/**
+ * Describes the message yo.GreetingTypeStat.
+ * Use `create(GreetingTypeStatSchema)` to create a new message.
+ */
+export const GreetingTypeStatSchema = /*@__PURE__*/
+  messageDesc(file_yo_yo, 2);
+
+/**
+ * Describes the message yo.NameFrequency.
+ * Use `create(NameFrequencySchema)` to create a new message.
+ */
+export const NameFrequencySchema = /*@__PURE__*/
+  messageDesc(file_yo_yo, 3);
+
+/**
+ * Describes the message yo.ListGreetingTypeStatsRequest.
+ * Use `create(ListGreetingTypeStatsRequestSchema)` to create a new message.
+ */
+export const ListGreetingTypeStatsRequestSchema = /*@__PURE__*/
+  messageDesc(file_yo_yo, 4);
+
+/**
+ * Describes the message yo.ListGreetingTypeStatsResponse.
+ * Use `create(ListGreetingTypeStatsResponseSchema)` to create a new message.
+ */
+export const ListGreetingTypeStatsResponseSchema = /*@__PURE__*/
+  messageDesc(file_yo_yo, 5);
+
+/**
+ * Describes the message yo.ListGreetedNamesRequest.
+ * Use `create(ListGreetedNamesRequestSchema)` to create a new message.
+ */
+export const ListGreetedNamesRequestSchema = /*@__PURE__*/
+  messageDesc(file_yo_yo, 6);
+
+/**
+ * Describes the message yo.ListGreetedNamesResponse.
+ * Use `create(ListGreetedNamesResponseSchema)` to create a new message.
+ */
+export const ListGreetedNamesResponseSchema = /*@__PURE__*/
+  messageDesc(file_yo_yo, 7);
 
 /**
  * @generated from service yo.YoService

@@ -6,11 +6,27 @@ import (
 	"net/http"
 
 	"connectrpc.com/connect"
-	"github.com/maybecake/stacks/lib/adapters/postgres"
-	"github.com/maybecake/stacks/lib/domain"
 	yov1 "github.com/maybecake/stacks/gen/go/yo"
 	"github.com/maybecake/stacks/gen/go/yo/yoconnect"
+	"github.com/maybecake/stacks/lib/adapters/postgres"
+	"github.com/maybecake/stacks/lib/domain"
+	"github.com/maybecake/stacks/lib/pagination"
 )
+
+const (
+	defaultPageSize = 20
+	maxPageSize     = 100
+)
+
+func clampPageSize(size int) int {
+	if size <= 0 {
+		return defaultPageSize
+	}
+	if size > maxPageSize {
+		return maxPageSize
+	}
+	return size
+}
 
 type YoServer struct {
 	store domain.GreetingStore
@@ -22,6 +38,46 @@ func (s *YoServer) SayYo(ctx context.Context, req *connect.Request[yov1.YoReques
 		return nil, err
 	}
 	return connect.NewResponse(&yov1.YoResponse{Message: message}), nil
+}
+
+func (s *YoServer) ListGreetingTypeStats(ctx context.Context, req *connect.Request[yov1.ListGreetingTypeStatsRequest]) (*connect.Response[yov1.ListGreetingTypeStatsResponse], error) {
+	offset, err := pagination.DecodeCursor(req.Msg.PageToken)
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInvalidArgument, err)
+	}
+	limit := clampPageSize(int(req.Msg.PageSize))
+	items, nextCursor, err := s.store.ListGreetingTypeStats(ctx, limit, pagination.EncodeCursor(offset))
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInternal, err)
+	}
+	pbItems := make([]*yov1.GreetingTypeStat, len(items))
+	for i, it := range items {
+		pbItems[i] = &yov1.GreetingTypeStat{GreetingType: it.GreetingType, Count: it.Count}
+	}
+	return connect.NewResponse(&yov1.ListGreetingTypeStatsResponse{
+		GreetingTypes: pbItems,
+		NextPageToken: nextCursor,
+	}), nil
+}
+
+func (s *YoServer) ListGreetedNames(ctx context.Context, req *connect.Request[yov1.ListGreetedNamesRequest]) (*connect.Response[yov1.ListGreetedNamesResponse], error) {
+	offset, err := pagination.DecodeCursor(req.Msg.PageToken)
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInvalidArgument, err)
+	}
+	limit := clampPageSize(int(req.Msg.PageSize))
+	items, nextCursor, err := s.store.ListGreetedNames(ctx, limit, pagination.EncodeCursor(offset))
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInternal, err)
+	}
+	pbItems := make([]*yov1.NameFrequency, len(items))
+	for i, it := range items {
+		pbItems[i] = &yov1.NameFrequency{Name: it.Name, Count: it.Count}
+	}
+	return connect.NewResponse(&yov1.ListGreetedNamesResponse{
+		Names:         pbItems,
+		NextPageToken: nextCursor,
+	}), nil
 }
 
 // Handler is the Vercel entrypoint for the Yo service.

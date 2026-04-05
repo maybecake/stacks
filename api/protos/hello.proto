@@ -12,45 +12,7 @@ message HelloResponse {
     string message = 1;
 }
 
-// Stats types
-
-message GreetingTypeStat {
-    string greeting_type = 1;
-    int64  count         = 2;
-}
-
-message NameFrequency {
-    string name  = 1;
-    int64  count = 2;
-}
-
-// ListGreetingTypeStats
-
-message ListGreetingTypeStatsRequest {
-    int32  page_size  = 1;
-    string page_token = 2;
-}
-
-message ListGreetingTypeStatsResponse {
-    repeated GreetingTypeStat greeting_types  = 1;
-    string                    next_page_token = 2;
-}
-
-// ListGreetedNames
-
-message ListGreetedNamesRequest {
-    int32  page_size  = 1;
-    string page_token = 2;
-}
-
-message ListGreetedNamesResponse {
-    repeated NameFrequency names           = 1;
-    string                 next_page_token = 2;
-}
-
 service HelloService {
     rpc SayHello (HelloRequest) returns (HelloResponse) {}
-    rpc ListGreetingTypeStats (ListGreetingTypeStatsRequest) returns (ListGreetingTypeStatsResponse) {}
-    rpc ListGreetedNames (ListGreetedNamesRequest) returns (ListGreetedNamesResponse) {}
 }
 

@@ -30,19 +30,15 @@
 - [x] 4.2 Write `decodeCursor(token string) (int, error)` — decode and validate; return error on malformed input
 - [x] 4.3 Add unit tests for encode/decode round-trip and malformed-token error
 
-## 5. Implement RPC Methods in Go Server
+## 5. Move list RPCs to YoService (Go Vercel function)
 
-- [x] 5.1 Implement `ListGreetingTypeStats` in `service/simple/simple.go` — parse cursor, call store, encode next cursor, apply page_size clamp (default 20, max 100)
-- [x] 5.2 Implement `ListGreetedNames` in `service/simple/simple.go` — same pagination logic
-- [x] 5.3 Return `INVALID_ARGUMENT` gRPC status on malformed `page_token`
-- [x] 5.4 Verify `bazel build //service/simple` passes
-
-## 6. Wire grpc-gateway
-
-- [x] 6.1 Add `grpc-gateway` and `google/api/annotations.proto` dependencies to `go.mod` / Bazel WORKSPACE (replaced by Connect RPC — no gateway deps needed; Connect serves JSON/HTTP natively)
-- [x] 6.2 Generate gateway registration code for `HelloService` (replaced by `buf generate` — Connect stubs include handler registration)
-- [x] 6.3 In server startup, register gateway mux and start `http.ListenAndServe(":8080", gwMux)` in a goroutine (done: `helloconnect.NewHelloServiceHandler` registered on `http.NewServeMux` in `service/simple/simple.go`)
-- [ ] 6.4 Smoke-test: `curl localhost:8080/api/stats/names` returns `{"names":[],"nextPageToken":""}`
+- [x] 5.1 Add `GreetingTypeStat`, `NameFrequency`, and list request/response messages to `api/protos/yo/yo.proto`
+- [x] 5.2 Add `ListGreetingTypeStats` and `ListGreetedNames` RPCs to `YoService` in `yo.proto`
+- [x] 5.3 Remove list RPCs and stats messages from `hello.proto` (keep `SayHello` only)
+- [x] 5.4 Run `buf generate` to regenerate Go and TypeScript stubs
+- [x] 5.5 Implement `ListGreetingTypeStats` on `YoServer` in `api/yo.go` — parse cursor, call store, encode next cursor, clamp page_size (default 20, max 100), return `INVALID_ARGUMENT` on malformed token
+- [x] 5.6 Implement `ListGreetedNames` on `YoServer` in `api/yo.go` — same pagination logic
+- [x] 5.7 Remove list method implementations from `api/hello.ts`
 
 ## 7. Update Frontend
 

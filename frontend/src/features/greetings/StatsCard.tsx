@@ -36,11 +36,11 @@ export const StatsCard: React.FC = () => {
     try {
       const [typesRes, namesRes] = await Promise.all([
         fetchJson<{ greetingTypes: GreetingTypeStat[]; nextPageToken: string }>(
-          "/api/hello.HelloService/ListGreetingTypeStats",
+          "/yo.YoService/ListGreetingTypeStats",
           { pageSize: 20, pageToken: "" },
         ),
         fetchJson<{ names: NameFrequency[]; nextPageToken: string }>(
-          "/api/hello.HelloService/ListGreetedNames",
+          "/yo.YoService/ListGreetedNames",
           { pageSize: 20, pageToken: "" },
         ),
       ]);
