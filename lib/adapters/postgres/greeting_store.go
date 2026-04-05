@@ -11,6 +11,7 @@ import (
 
 	pgdb "github.com/maybecake/stacks/lib/adapters/postgres/db"
 	"github.com/maybecake/stacks/lib/domain"
+	"github.com/maybecake/stacks/lib/pagination"
 )
 
 // PostgresGreetingStore implements domain.GreetingStore using pgx + sqlc.
@@ -72,4 +73,57 @@ func (s *PostgresGreetingStore) GetNameFrequencies(ctx context.Context) ([]domai
 		freqs[i] = domain.NameFrequency{Name: r.Name, Count: r.Count}
 	}
 	return freqs, nil
+}
+
+// ListGreetingTypeStats delegates to GetStats and applies in-process pagination.
+// A real implementation would push pagination into the SQL query.
+func (s *PostgresGreetingStore) ListGreetingTypeStats(ctx context.Context, limit int, cursor string) ([]domain.GreetingTypeStat, string, error) {
+	all, err := s.GetStats(ctx)
+	if err != nil {
+		return nil, "", err
+	}
+	offset, err := pagination.DecodeCursor(cursor)
+	if err != nil {
+		return nil, "", err
+	}
+	if offset >= len(all) {
+		return []domain.GreetingTypeStat{}, "", nil
+	}
+	page := all[offset:]
+	if len(page) > limit {
+		page = page[:limit]
+	}
+	typed := make([]domain.GreetingTypeStat, len(page))
+	for i, s := range page {
+		typed[i] = domain.GreetingTypeStat{GreetingType: s.GreetingType, Count: s.Count}
+	}
+	nextCursor := ""
+	if offset+len(typed) < len(all) {
+		nextCursor = pagination.EncodeCursor(offset + len(typed))
+	}
+	return typed, nextCursor, nil
+}
+
+// ListGreetedNames delegates to GetNameFrequencies and applies in-process pagination.
+func (s *PostgresGreetingStore) ListGreetedNames(ctx context.Context, limit int, cursor string) ([]domain.NameFrequency, string, error) {
+	all, err := s.GetNameFrequencies(ctx)
+	if err != nil {
+		return nil, "", err
+	}
+	offset, err := pagination.DecodeCursor(cursor)
+	if err != nil {
+		return nil, "", err
+	}
+	if offset >= len(all) {
+		return []domain.NameFrequency{}, "", nil
+	}
+	page := all[offset:]
+	if len(page) > limit {
+		page = page[:limit]
+	}
+	nextCursor := ""
+	if offset+len(page) < len(all) {
+		nextCursor = pagination.EncodeCursor(offset + len(page))
+	}
+	return page, nextCursor, nil
 }

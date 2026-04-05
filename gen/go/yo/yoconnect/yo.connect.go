@@ -35,11 +35,19 @@ const (
 const (
 	// YoServiceSayYoProcedure is the fully-qualified name of the YoService's SayYo RPC.
 	YoServiceSayYoProcedure = "/yo.YoService/SayYo"
+	// YoServiceListGreetingTypeStatsProcedure is the fully-qualified name of the YoService's
+	// ListGreetingTypeStats RPC.
+	YoServiceListGreetingTypeStatsProcedure = "/yo.YoService/ListGreetingTypeStats"
+	// YoServiceListGreetedNamesProcedure is the fully-qualified name of the YoService's
+	// ListGreetedNames RPC.
+	YoServiceListGreetedNamesProcedure = "/yo.YoService/ListGreetedNames"
 )
 
 // YoServiceClient is a client for the yo.YoService service.
 type YoServiceClient interface {
 	SayYo(context.Context, *connect.Request[yo.YoRequest]) (*connect.Response[yo.YoResponse], error)
+	ListGreetingTypeStats(context.Context, *connect.Request[yo.ListGreetingTypeStatsRequest]) (*connect.Response[yo.ListGreetingTypeStatsResponse], error)
+	ListGreetedNames(context.Context, *connect.Request[yo.ListGreetedNamesRequest]) (*connect.Response[yo.ListGreetedNamesResponse], error)
 }
 
 // NewYoServiceClient constructs a client for the yo.YoService service. By default, it uses the
@@ -59,12 +67,26 @@ func NewYoServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...c
 			connect.WithSchema(yoServiceMethods.ByName("SayYo")),
 			connect.WithClientOptions(opts...),
 		),
+		listGreetingTypeStats: connect.NewClient[yo.ListGreetingTypeStatsRequest, yo.ListGreetingTypeStatsResponse](
+			httpClient,
+			baseURL+YoServiceListGreetingTypeStatsProcedure,
+			connect.WithSchema(yoServiceMethods.ByName("ListGreetingTypeStats")),
+			connect.WithClientOptions(opts...),
+		),
+		listGreetedNames: connect.NewClient[yo.ListGreetedNamesRequest, yo.ListGreetedNamesResponse](
+			httpClient,
+			baseURL+YoServiceListGreetedNamesProcedure,
+			connect.WithSchema(yoServiceMethods.ByName("ListGreetedNames")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
 // yoServiceClient implements YoServiceClient.
 type yoServiceClient struct {
-	sayYo *connect.Client[yo.YoRequest, yo.YoResponse]
+	sayYo                 *connect.Client[yo.YoRequest, yo.YoResponse]
+	listGreetingTypeStats *connect.Client[yo.ListGreetingTypeStatsRequest, yo.ListGreetingTypeStatsResponse]
+	listGreetedNames      *connect.Client[yo.ListGreetedNamesRequest, yo.ListGreetedNamesResponse]
 }
 
 // SayYo calls yo.YoService.SayYo.
@@ -72,9 +94,21 @@ func (c *yoServiceClient) SayYo(ctx context.Context, req *connect.Request[yo.YoR
 	return c.sayYo.CallUnary(ctx, req)
 }
 
+// ListGreetingTypeStats calls yo.YoService.ListGreetingTypeStats.
+func (c *yoServiceClient) ListGreetingTypeStats(ctx context.Context, req *connect.Request[yo.ListGreetingTypeStatsRequest]) (*connect.Response[yo.ListGreetingTypeStatsResponse], error) {
+	return c.listGreetingTypeStats.CallUnary(ctx, req)
+}
+
+// ListGreetedNames calls yo.YoService.ListGreetedNames.
+func (c *yoServiceClient) ListGreetedNames(ctx context.Context, req *connect.Request[yo.ListGreetedNamesRequest]) (*connect.Response[yo.ListGreetedNamesResponse], error) {
+	return c.listGreetedNames.CallUnary(ctx, req)
+}
+
 // YoServiceHandler is an implementation of the yo.YoService service.
 type YoServiceHandler interface {
 	SayYo(context.Context, *connect.Request[yo.YoRequest]) (*connect.Response[yo.YoResponse], error)
+	ListGreetingTypeStats(context.Context, *connect.Request[yo.ListGreetingTypeStatsRequest]) (*connect.Response[yo.ListGreetingTypeStatsResponse], error)
+	ListGreetedNames(context.Context, *connect.Request[yo.ListGreetedNamesRequest]) (*connect.Response[yo.ListGreetedNamesResponse], error)
 }
 
 // NewYoServiceHandler builds an HTTP handler from the service implementation. It returns the path
@@ -90,10 +124,26 @@ func NewYoServiceHandler(svc YoServiceHandler, opts ...connect.HandlerOption) (s
 		connect.WithSchema(yoServiceMethods.ByName("SayYo")),
 		connect.WithHandlerOptions(opts...),
 	)
+	yoServiceListGreetingTypeStatsHandler := connect.NewUnaryHandler(
+		YoServiceListGreetingTypeStatsProcedure,
+		svc.ListGreetingTypeStats,
+		connect.WithSchema(yoServiceMethods.ByName("ListGreetingTypeStats")),
+		connect.WithHandlerOptions(opts...),
+	)
+	yoServiceListGreetedNamesHandler := connect.NewUnaryHandler(
+		YoServiceListGreetedNamesProcedure,
+		svc.ListGreetedNames,
+		connect.WithSchema(yoServiceMethods.ByName("ListGreetedNames")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/yo.YoService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case YoServiceSayYoProcedure:
 			yoServiceSayYoHandler.ServeHTTP(w, r)
+		case YoServiceListGreetingTypeStatsProcedure:
+			yoServiceListGreetingTypeStatsHandler.ServeHTTP(w, r)
+		case YoServiceListGreetedNamesProcedure:
+			yoServiceListGreetedNamesHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -105,4 +155,12 @@ type UnimplementedYoServiceHandler struct{}
 
 func (UnimplementedYoServiceHandler) SayYo(context.Context, *connect.Request[yo.YoRequest]) (*connect.Response[yo.YoResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("yo.YoService.SayYo is not implemented"))
+}
+
+func (UnimplementedYoServiceHandler) ListGreetingTypeStats(context.Context, *connect.Request[yo.ListGreetingTypeStatsRequest]) (*connect.Response[yo.ListGreetingTypeStatsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("yo.YoService.ListGreetingTypeStats is not implemented"))
+}
+
+func (UnimplementedYoServiceHandler) ListGreetedNames(context.Context, *connect.Request[yo.ListGreetedNamesRequest]) (*connect.Response[yo.ListGreetedNamesResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("yo.YoService.ListGreetedNames is not implemented"))
 }

@@ -43,6 +43,132 @@ export declare type YoResponse = Message<"yo.YoResponse"> & {
 export declare const YoResponseSchema: GenMessage<YoResponse>;
 
 /**
+ * @generated from message yo.GreetingTypeStat
+ */
+export declare type GreetingTypeStat = Message<"yo.GreetingTypeStat"> & {
+  /**
+   * @generated from field: string greeting_type = 1;
+   */
+  greetingType: string;
+
+  /**
+   * @generated from field: int64 count = 2;
+   */
+  count: bigint;
+};
+
+/**
+ * Describes the message yo.GreetingTypeStat.
+ * Use `create(GreetingTypeStatSchema)` to create a new message.
+ */
+export declare const GreetingTypeStatSchema: GenMessage<GreetingTypeStat>;
+
+/**
+ * @generated from message yo.NameFrequency
+ */
+export declare type NameFrequency = Message<"yo.NameFrequency"> & {
+  /**
+   * @generated from field: string name = 1;
+   */
+  name: string;
+
+  /**
+   * @generated from field: int64 count = 2;
+   */
+  count: bigint;
+};
+
+/**
+ * Describes the message yo.NameFrequency.
+ * Use `create(NameFrequencySchema)` to create a new message.
+ */
+export declare const NameFrequencySchema: GenMessage<NameFrequency>;
+
+/**
+ * @generated from message yo.ListGreetingTypeStatsRequest
+ */
+export declare type ListGreetingTypeStatsRequest = Message<"yo.ListGreetingTypeStatsRequest"> & {
+  /**
+   * @generated from field: int32 page_size = 1;
+   */
+  pageSize: number;
+
+  /**
+   * @generated from field: string page_token = 2;
+   */
+  pageToken: string;
+};
+
+/**
+ * Describes the message yo.ListGreetingTypeStatsRequest.
+ * Use `create(ListGreetingTypeStatsRequestSchema)` to create a new message.
+ */
+export declare const ListGreetingTypeStatsRequestSchema: GenMessage<ListGreetingTypeStatsRequest>;
+
+/**
+ * @generated from message yo.ListGreetingTypeStatsResponse
+ */
+export declare type ListGreetingTypeStatsResponse = Message<"yo.ListGreetingTypeStatsResponse"> & {
+  /**
+   * @generated from field: repeated yo.GreetingTypeStat greeting_types = 1;
+   */
+  greetingTypes: GreetingTypeStat[];
+
+  /**
+   * @generated from field: string next_page_token = 2;
+   */
+  nextPageToken: string;
+};
+
+/**
+ * Describes the message yo.ListGreetingTypeStatsResponse.
+ * Use `create(ListGreetingTypeStatsResponseSchema)` to create a new message.
+ */
+export declare const ListGreetingTypeStatsResponseSchema: GenMessage<ListGreetingTypeStatsResponse>;
+
+/**
+ * @generated from message yo.ListGreetedNamesRequest
+ */
+export declare type ListGreetedNamesRequest = Message<"yo.ListGreetedNamesRequest"> & {
+  /**
+   * @generated from field: int32 page_size = 1;
+   */
+  pageSize: number;
+
+  /**
+   * @generated from field: string page_token = 2;
+   */
+  pageToken: string;
+};
+
+/**
+ * Describes the message yo.ListGreetedNamesRequest.
+ * Use `create(ListGreetedNamesRequestSchema)` to create a new message.
+ */
+export declare const ListGreetedNamesRequestSchema: GenMessage<ListGreetedNamesRequest>;
+
+/**
+ * @generated from message yo.ListGreetedNamesResponse
+ */
+export declare type ListGreetedNamesResponse = Message<"yo.ListGreetedNamesResponse"> & {
+  /**
+   * @generated from field: repeated yo.NameFrequency names = 1;
+   */
+  names: NameFrequency[];
+
+  /**
+   * @generated from field: string next_page_token = 2;
+   */
+  nextPageToken: string;
+};
+
+/**
+ * Describes the message yo.ListGreetedNamesResponse.
+ * Use `create(ListGreetedNamesResponseSchema)` to create a new message.
+ */
+export declare const ListGreetedNamesResponseSchema: GenMessage<ListGreetedNamesResponse>;
+
+/**
  * @generated from service yo.YoService
  */
 export declare const YoService: GenService<{
@@ -53,6 +179,22 @@ export declare const YoService: GenService<{
     methodKind: "unary";
     input: typeof YoRequestSchema;
     output: typeof YoResponseSchema;
+  },
+  /**
+   * @generated from rpc yo.YoService.ListGreetingTypeStats
+   */
+  listGreetingTypeStats: {
+    methodKind: "unary";
+    input: typeof ListGreetingTypeStatsRequestSchema;
+    output: typeof ListGreetingTypeStatsResponseSchema;
+  },
+  /**
+   * @generated from rpc yo.YoService.ListGreetedNames
+   */
+  listGreetedNames: {
+    methodKind: "unary";
+    input: typeof ListGreetedNamesRequestSchema;
+    output: typeof ListGreetedNamesResponseSchema;
   },
 }>;
 

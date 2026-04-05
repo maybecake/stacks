@@ -23,3 +23,11 @@ func (m *MockGreetingStore) GetStats(_ context.Context) ([]domain.GreetingStats,
 func (m *MockGreetingStore) GetNameFrequencies(_ context.Context) ([]domain.NameFrequency, error) {
 	return []domain.NameFrequency{}, nil
 }
+
+func (m *MockGreetingStore) ListGreetingTypeStats(_ context.Context, _ int, _ string) ([]domain.GreetingTypeStat, string, error) {
+	return []domain.GreetingTypeStat{}, "", nil
+}
+
+func (m *MockGreetingStore) ListGreetedNames(_ context.Context, _ int, _ string) ([]domain.NameFrequency, string, error) {
+	return []domain.NameFrequency{}, "", nil
+}

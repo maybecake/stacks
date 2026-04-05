@@ -1,4 +1,4 @@
-import { desc, eq, sql } from "drizzle-orm";
+import { desc, sql } from "drizzle-orm";
 import { getDb } from "../../db/client";
 import { greetingLog, greetingStats } from "../../db/schema";
 import { GreetingStats, GreetingStore, NameFrequency } from "../../domain/greeting";

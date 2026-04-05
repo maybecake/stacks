@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-interface GreetingStats {
+interface GreetingTypeStat {
   greetingType: string;
   count: number;
 }
@@ -10,13 +10,23 @@ interface NameFrequency {
   count: number;
 }
 
-interface StatsResponse {
-  stats: GreetingStats[];
+interface StatsState {
+  greetingTypes: GreetingTypeStat[];
   names: NameFrequency[];
 }
 
+async function fetchJson<T>(path: string, body: object): Promise<T> {
+  const res = await fetch(path, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json() as Promise<T>;
+}
+
 export const StatsCard: React.FC = () => {
-  const [data, setData] = useState<StatsResponse | null>(null);
+  const [data, setData] = useState<StatsState | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -24,9 +34,17 @@ export const StatsCard: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/stats");
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      setData(await res.json());
+      const [typesRes, namesRes] = await Promise.all([
+        fetchJson<{ greetingTypes: GreetingTypeStat[]; nextPageToken: string }>(
+          "/yo.YoService/ListGreetingTypeStats",
+          { pageSize: 20, pageToken: "" },
+        ),
+        fetchJson<{ names: NameFrequency[]; nextPageToken: string }>(
+          "/yo.YoService/ListGreetedNames",
+          { pageSize: 20, pageToken: "" },
+        ),
+      ]);
+      setData({ greetingTypes: typesRes.greetingTypes ?? [], names: namesRes.names ?? [] });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load stats");
     } finally {
@@ -53,7 +71,7 @@ export const StatsCard: React.FC = () => {
       {data && !loading && (
         <>
           <div className="stats-card__counts">
-            {data.stats.map((s) => (
+            {data.greetingTypes.map((s) => (
               <div key={s.greetingType} className="stats-card__count-row">
                 <span className="stats-card__type">{s.greetingType}</span>
                 <span className="stats-card__count">{s.count}</span>

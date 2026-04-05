@@ -8,6 +8,12 @@ type GreetingStats struct {
 	Count        int64
 }
 
+// GreetingTypeStat is the paginated read-side view of a per-type greeting count.
+type GreetingTypeStat struct {
+	GreetingType string
+	Count        int64
+}
+
 // NameFrequency holds a name with its total greeting frequency.
 type NameFrequency struct {
 	Name  string
@@ -20,6 +26,8 @@ type GreetingStore interface {
 	RecordGreeting(ctx context.Context, greetingType string, name string) error
 	GetStats(ctx context.Context) ([]GreetingStats, error)
 	GetNameFrequencies(ctx context.Context) ([]NameFrequency, error)
+	ListGreetingTypeStats(ctx context.Context, limit int, cursor string) ([]GreetingTypeStat, string, error)
+	ListGreetedNames(ctx context.Context, limit int, cursor string) ([]NameFrequency, string, error)
 }
 
 // Greet returns the Yo greeting string and records the event via the store.
