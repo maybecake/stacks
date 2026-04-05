@@ -8,7 +8,7 @@ import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2
  * Describes the file hello.proto.
  */
 export const file_hello = /*@__PURE__*/
-  fileDesc("CgtoZWxsby5wcm90bxIFaGVsbG8iHAoMSGVsbG9SZXF1ZXN0EgwKBG5hbWUYASABKAkiIAoNSGVsbG9SZXNwb25zZRIPCgdtZXNzYWdlGAEgASgJMkcKDEhlbGxvU2VydmljZRI3CghTYXlIZWxsbxITLmhlbGxvLkhlbGxvUmVxdWVzdBoULmhlbGxvLkhlbGxvUmVzcG9uc2UiAEIqWihnaXRodWIuY29tL21heWJlY2FrZS9zdGFja3MvZ2VuL2dvO2hlbGxvYgZwcm90bzM");
+  fileDesc("CgtoZWxsby5wcm90bxIFaGVsbG8iHAoMSGVsbG9SZXF1ZXN0EgwKBG5hbWUYASABKAkiIAoNSGVsbG9SZXNwb25zZRIPCgdtZXNzYWdlGAEgASgJIjgKEEdyZWV0aW5nVHlwZVN0YXQSFQoNZ3JlZXRpbmdfdHlwZRgBIAEoCRINCgVjb3VudBgCIAEoAyIsCg1OYW1lRnJlcXVlbmN5EgwKBG5hbWUYASABKAkSDQoFY291bnQYAiABKAMiRQocTGlzdEdyZWV0aW5nVHlwZVN0YXRzUmVxdWVzdBIRCglwYWdlX3NpemUYASABKAUSEgoKcGFnZV90b2tlbhgCIAEoCSJpCh1MaXN0R3JlZXRpbmdUeXBlU3RhdHNSZXNwb25zZRIvCg5ncmVldGluZ190eXBlcxgBIAMoCzIXLmhlbGxvLkdyZWV0aW5nVHlwZVN0YXQSFwoPbmV4dF9wYWdlX3Rva2VuGAIgASgJIkAKF0xpc3RHcmVldGVkTmFtZXNSZXF1ZXN0EhEKCXBhZ2Vfc2l6ZRgBIAEoBRISCgpwYWdlX3Rva2VuGAIgASgJIlgKGExpc3RHcmVldGVkTmFtZXNSZXNwb25zZRIjCgVuYW1lcxgBIAMoCzIULmhlbGxvLk5hbWVGcmVxdWVuY3kSFwoPbmV4dF9wYWdlX3Rva2VuGAIgASgJMoQCCgxIZWxsb1NlcnZpY2USNwoIU2F5SGVsbG8SEy5oZWxsby5IZWxsb1JlcXVlc3QaFC5oZWxsby5IZWxsb1Jlc3BvbnNlIgASZAoVTGlzdEdyZWV0aW5nVHlwZVN0YXRzEiMuaGVsbG8uTGlzdEdyZWV0aW5nVHlwZVN0YXRzUmVxdWVzdBokLmhlbGxvLkxpc3RHcmVldGluZ1R5cGVTdGF0c1Jlc3BvbnNlIgASVQoQTGlzdEdyZWV0ZWROYW1lcxIeLmhlbGxvLkxpc3RHcmVldGVkTmFtZXNSZXF1ZXN0Gh8uaGVsbG8uTGlzdEdyZWV0ZWROYW1lc1Jlc3BvbnNlIgBCKlooZ2l0aHViLmNvbS9tYXliZWNha2Uvc3RhY2tzL2dlbi9nbztoZWxsb2IGcHJvdG8z");
 
 /**
  * Describes the message hello.HelloRequest.
@@ -23,6 +23,48 @@ export const HelloRequestSchema = /*@__PURE__*/
  */
 export const HelloResponseSchema = /*@__PURE__*/
   messageDesc(file_hello, 1);
+
+/**
+ * Describes the message hello.GreetingTypeStat.
+ * Use `create(GreetingTypeStatSchema)` to create a new message.
+ */
+export const GreetingTypeStatSchema = /*@__PURE__*/
+  messageDesc(file_hello, 2);
+
+/**
+ * Describes the message hello.NameFrequency.
+ * Use `create(NameFrequencySchema)` to create a new message.
+ */
+export const NameFrequencySchema = /*@__PURE__*/
+  messageDesc(file_hello, 3);
+
+/**
+ * Describes the message hello.ListGreetingTypeStatsRequest.
+ * Use `create(ListGreetingTypeStatsRequestSchema)` to create a new message.
+ */
+export const ListGreetingTypeStatsRequestSchema = /*@__PURE__*/
+  messageDesc(file_hello, 4);
+
+/**
+ * Describes the message hello.ListGreetingTypeStatsResponse.
+ * Use `create(ListGreetingTypeStatsResponseSchema)` to create a new message.
+ */
+export const ListGreetingTypeStatsResponseSchema = /*@__PURE__*/
+  messageDesc(file_hello, 5);
+
+/**
+ * Describes the message hello.ListGreetedNamesRequest.
+ * Use `create(ListGreetedNamesRequestSchema)` to create a new message.
+ */
+export const ListGreetedNamesRequestSchema = /*@__PURE__*/
+  messageDesc(file_hello, 6);
+
+/**
+ * Describes the message hello.ListGreetedNamesResponse.
+ * Use `create(ListGreetedNamesResponseSchema)` to create a new message.
+ */
+export const ListGreetedNamesResponseSchema = /*@__PURE__*/
+  messageDesc(file_hello, 7);
 
 /**
  * @generated from service hello.HelloService

@@ -43,6 +43,132 @@ export declare type HelloResponse = Message<"hello.HelloResponse"> & {
 export declare const HelloResponseSchema: GenMessage<HelloResponse>;
 
 /**
+ * @generated from message hello.GreetingTypeStat
+ */
+export declare type GreetingTypeStat = Message<"hello.GreetingTypeStat"> & {
+  /**
+   * @generated from field: string greeting_type = 1;
+   */
+  greetingType: string;
+
+  /**
+   * @generated from field: int64 count = 2;
+   */
+  count: bigint;
+};
+
+/**
+ * Describes the message hello.GreetingTypeStat.
+ * Use `create(GreetingTypeStatSchema)` to create a new message.
+ */
+export declare const GreetingTypeStatSchema: GenMessage<GreetingTypeStat>;
+
+/**
+ * @generated from message hello.NameFrequency
+ */
+export declare type NameFrequency = Message<"hello.NameFrequency"> & {
+  /**
+   * @generated from field: string name = 1;
+   */
+  name: string;
+
+  /**
+   * @generated from field: int64 count = 2;
+   */
+  count: bigint;
+};
+
+/**
+ * Describes the message hello.NameFrequency.
+ * Use `create(NameFrequencySchema)` to create a new message.
+ */
+export declare const NameFrequencySchema: GenMessage<NameFrequency>;
+
+/**
+ * @generated from message hello.ListGreetingTypeStatsRequest
+ */
+export declare type ListGreetingTypeStatsRequest = Message<"hello.ListGreetingTypeStatsRequest"> & {
+  /**
+   * @generated from field: int32 page_size = 1;
+   */
+  pageSize: number;
+
+  /**
+   * @generated from field: string page_token = 2;
+   */
+  pageToken: string;
+};
+
+/**
+ * Describes the message hello.ListGreetingTypeStatsRequest.
+ * Use `create(ListGreetingTypeStatsRequestSchema)` to create a new message.
+ */
+export declare const ListGreetingTypeStatsRequestSchema: GenMessage<ListGreetingTypeStatsRequest>;
+
+/**
+ * @generated from message hello.ListGreetingTypeStatsResponse
+ */
+export declare type ListGreetingTypeStatsResponse = Message<"hello.ListGreetingTypeStatsResponse"> & {
+  /**
+   * @generated from field: repeated hello.GreetingTypeStat greeting_types = 1;
+   */
+  greetingTypes: GreetingTypeStat[];
+
+  /**
+   * @generated from field: string next_page_token = 2;
+   */
+  nextPageToken: string;
+};
+
+/**
+ * Describes the message hello.ListGreetingTypeStatsResponse.
+ * Use `create(ListGreetingTypeStatsResponseSchema)` to create a new message.
+ */
+export declare const ListGreetingTypeStatsResponseSchema: GenMessage<ListGreetingTypeStatsResponse>;
+
+/**
+ * @generated from message hello.ListGreetedNamesRequest
+ */
+export declare type ListGreetedNamesRequest = Message<"hello.ListGreetedNamesRequest"> & {
+  /**
+   * @generated from field: int32 page_size = 1;
+   */
+  pageSize: number;
+
+  /**
+   * @generated from field: string page_token = 2;
+   */
+  pageToken: string;
+};
+
+/**
+ * Describes the message hello.ListGreetedNamesRequest.
+ * Use `create(ListGreetedNamesRequestSchema)` to create a new message.
+ */
+export declare const ListGreetedNamesRequestSchema: GenMessage<ListGreetedNamesRequest>;
+
+/**
+ * @generated from message hello.ListGreetedNamesResponse
+ */
+export declare type ListGreetedNamesResponse = Message<"hello.ListGreetedNamesResponse"> & {
+  /**
+   * @generated from field: repeated hello.NameFrequency names = 1;
+   */
+  names: NameFrequency[];
+
+  /**
+   * @generated from field: string next_page_token = 2;
+   */
+  nextPageToken: string;
+};
+
+/**
+ * Describes the message hello.ListGreetedNamesResponse.
+ * Use `create(ListGreetedNamesResponseSchema)` to create a new message.
+ */
+export declare const ListGreetedNamesResponseSchema: GenMessage<ListGreetedNamesResponse>;
+
+/**
  * @generated from service hello.HelloService
  */
 export declare const HelloService: GenService<{
@@ -53,6 +179,22 @@ export declare const HelloService: GenService<{
     methodKind: "unary";
     input: typeof HelloRequestSchema;
     output: typeof HelloResponseSchema;
+  },
+  /**
+   * @generated from rpc hello.HelloService.ListGreetingTypeStats
+   */
+  listGreetingTypeStats: {
+    methodKind: "unary";
+    input: typeof ListGreetingTypeStatsRequestSchema;
+    output: typeof ListGreetingTypeStatsResponseSchema;
+  },
+  /**
+   * @generated from rpc hello.HelloService.ListGreetedNames
+   */
+  listGreetedNames: {
+    methodKind: "unary";
+    input: typeof ListGreetedNamesRequestSchema;
+    output: typeof ListGreetedNamesResponseSchema;
   },
 }>;
 

@@ -109,6 +109,318 @@ func (x *HelloResponse) GetMessage() string {
 	return ""
 }
 
+type GreetingTypeStat struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	GreetingType  string                 `protobuf:"bytes,1,opt,name=greeting_type,json=greetingType,proto3" json:"greeting_type,omitempty"`
+	Count         int64                  `protobuf:"varint,2,opt,name=count,proto3" json:"count,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GreetingTypeStat) Reset() {
+	*x = GreetingTypeStat{}
+	mi := &file_hello_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GreetingTypeStat) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GreetingTypeStat) ProtoMessage() {}
+
+func (x *GreetingTypeStat) ProtoReflect() protoreflect.Message {
+	mi := &file_hello_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GreetingTypeStat.ProtoReflect.Descriptor instead.
+func (*GreetingTypeStat) Descriptor() ([]byte, []int) {
+	return file_hello_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *GreetingTypeStat) GetGreetingType() string {
+	if x != nil {
+		return x.GreetingType
+	}
+	return ""
+}
+
+func (x *GreetingTypeStat) GetCount() int64 {
+	if x != nil {
+		return x.Count
+	}
+	return 0
+}
+
+type NameFrequency struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Count         int64                  `protobuf:"varint,2,opt,name=count,proto3" json:"count,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *NameFrequency) Reset() {
+	*x = NameFrequency{}
+	mi := &file_hello_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *NameFrequency) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*NameFrequency) ProtoMessage() {}
+
+func (x *NameFrequency) ProtoReflect() protoreflect.Message {
+	mi := &file_hello_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use NameFrequency.ProtoReflect.Descriptor instead.
+func (*NameFrequency) Descriptor() ([]byte, []int) {
+	return file_hello_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *NameFrequency) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *NameFrequency) GetCount() int64 {
+	if x != nil {
+		return x.Count
+	}
+	return 0
+}
+
+type ListGreetingTypeStatsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PageSize      int32                  `protobuf:"varint,1,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	PageToken     string                 `protobuf:"bytes,2,opt,name=page_token,json=pageToken,proto3" json:"page_token,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListGreetingTypeStatsRequest) Reset() {
+	*x = ListGreetingTypeStatsRequest{}
+	mi := &file_hello_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListGreetingTypeStatsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListGreetingTypeStatsRequest) ProtoMessage() {}
+
+func (x *ListGreetingTypeStatsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_hello_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListGreetingTypeStatsRequest.ProtoReflect.Descriptor instead.
+func (*ListGreetingTypeStatsRequest) Descriptor() ([]byte, []int) {
+	return file_hello_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *ListGreetingTypeStatsRequest) GetPageSize() int32 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
+func (x *ListGreetingTypeStatsRequest) GetPageToken() string {
+	if x != nil {
+		return x.PageToken
+	}
+	return ""
+}
+
+type ListGreetingTypeStatsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	GreetingTypes []*GreetingTypeStat    `protobuf:"bytes,1,rep,name=greeting_types,json=greetingTypes,proto3" json:"greeting_types,omitempty"`
+	NextPageToken string                 `protobuf:"bytes,2,opt,name=next_page_token,json=nextPageToken,proto3" json:"next_page_token,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListGreetingTypeStatsResponse) Reset() {
+	*x = ListGreetingTypeStatsResponse{}
+	mi := &file_hello_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListGreetingTypeStatsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListGreetingTypeStatsResponse) ProtoMessage() {}
+
+func (x *ListGreetingTypeStatsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_hello_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListGreetingTypeStatsResponse.ProtoReflect.Descriptor instead.
+func (*ListGreetingTypeStatsResponse) Descriptor() ([]byte, []int) {
+	return file_hello_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *ListGreetingTypeStatsResponse) GetGreetingTypes() []*GreetingTypeStat {
+	if x != nil {
+		return x.GreetingTypes
+	}
+	return nil
+}
+
+func (x *ListGreetingTypeStatsResponse) GetNextPageToken() string {
+	if x != nil {
+		return x.NextPageToken
+	}
+	return ""
+}
+
+type ListGreetedNamesRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PageSize      int32                  `protobuf:"varint,1,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	PageToken     string                 `protobuf:"bytes,2,opt,name=page_token,json=pageToken,proto3" json:"page_token,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListGreetedNamesRequest) Reset() {
+	*x = ListGreetedNamesRequest{}
+	mi := &file_hello_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListGreetedNamesRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListGreetedNamesRequest) ProtoMessage() {}
+
+func (x *ListGreetedNamesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_hello_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListGreetedNamesRequest.ProtoReflect.Descriptor instead.
+func (*ListGreetedNamesRequest) Descriptor() ([]byte, []int) {
+	return file_hello_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *ListGreetedNamesRequest) GetPageSize() int32 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
+func (x *ListGreetedNamesRequest) GetPageToken() string {
+	if x != nil {
+		return x.PageToken
+	}
+	return ""
+}
+
+type ListGreetedNamesResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Names         []*NameFrequency       `protobuf:"bytes,1,rep,name=names,proto3" json:"names,omitempty"`
+	NextPageToken string                 `protobuf:"bytes,2,opt,name=next_page_token,json=nextPageToken,proto3" json:"next_page_token,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListGreetedNamesResponse) Reset() {
+	*x = ListGreetedNamesResponse{}
+	mi := &file_hello_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListGreetedNamesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListGreetedNamesResponse) ProtoMessage() {}
+
+func (x *ListGreetedNamesResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_hello_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListGreetedNamesResponse.ProtoReflect.Descriptor instead.
+func (*ListGreetedNamesResponse) Descriptor() ([]byte, []int) {
+	return file_hello_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *ListGreetedNamesResponse) GetNames() []*NameFrequency {
+	if x != nil {
+		return x.Names
+	}
+	return nil
+}
+
+func (x *ListGreetedNamesResponse) GetNextPageToken() string {
+	if x != nil {
+		return x.NextPageToken
+	}
+	return ""
+}
+
 var File_hello_proto protoreflect.FileDescriptor
 
 const file_hello_proto_rawDesc = "" +
@@ -117,9 +429,31 @@ const file_hello_proto_rawDesc = "" +
 	"\fHelloRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\")\n" +
 	"\rHelloResponse\x12\x18\n" +
-	"\amessage\x18\x01 \x01(\tR\amessage2G\n" +
+	"\amessage\x18\x01 \x01(\tR\amessage\"M\n" +
+	"\x10GreetingTypeStat\x12#\n" +
+	"\rgreeting_type\x18\x01 \x01(\tR\fgreetingType\x12\x14\n" +
+	"\x05count\x18\x02 \x01(\x03R\x05count\"9\n" +
+	"\rNameFrequency\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n" +
+	"\x05count\x18\x02 \x01(\x03R\x05count\"Z\n" +
+	"\x1cListGreetingTypeStatsRequest\x12\x1b\n" +
+	"\tpage_size\x18\x01 \x01(\x05R\bpageSize\x12\x1d\n" +
+	"\n" +
+	"page_token\x18\x02 \x01(\tR\tpageToken\"\x87\x01\n" +
+	"\x1dListGreetingTypeStatsResponse\x12>\n" +
+	"\x0egreeting_types\x18\x01 \x03(\v2\x17.hello.GreetingTypeStatR\rgreetingTypes\x12&\n" +
+	"\x0fnext_page_token\x18\x02 \x01(\tR\rnextPageToken\"U\n" +
+	"\x17ListGreetedNamesRequest\x12\x1b\n" +
+	"\tpage_size\x18\x01 \x01(\x05R\bpageSize\x12\x1d\n" +
+	"\n" +
+	"page_token\x18\x02 \x01(\tR\tpageToken\"n\n" +
+	"\x18ListGreetedNamesResponse\x12*\n" +
+	"\x05names\x18\x01 \x03(\v2\x14.hello.NameFrequencyR\x05names\x12&\n" +
+	"\x0fnext_page_token\x18\x02 \x01(\tR\rnextPageToken2\x84\x02\n" +
 	"\fHelloService\x127\n" +
-	"\bSayHello\x12\x13.hello.HelloRequest\x1a\x14.hello.HelloResponse\"\x00B*Z(github.com/maybecake/stacks/gen/go;hellob\x06proto3"
+	"\bSayHello\x12\x13.hello.HelloRequest\x1a\x14.hello.HelloResponse\"\x00\x12d\n" +
+	"\x15ListGreetingTypeStats\x12#.hello.ListGreetingTypeStatsRequest\x1a$.hello.ListGreetingTypeStatsResponse\"\x00\x12U\n" +
+	"\x10ListGreetedNames\x12\x1e.hello.ListGreetedNamesRequest\x1a\x1f.hello.ListGreetedNamesResponse\"\x00B*Z(github.com/maybecake/stacks/gen/go;hellob\x06proto3"
 
 var (
 	file_hello_proto_rawDescOnce sync.Once
@@ -133,19 +467,31 @@ func file_hello_proto_rawDescGZIP() []byte {
 	return file_hello_proto_rawDescData
 }
 
-var file_hello_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_hello_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_hello_proto_goTypes = []any{
-	(*HelloRequest)(nil),  // 0: hello.HelloRequest
-	(*HelloResponse)(nil), // 1: hello.HelloResponse
+	(*HelloRequest)(nil),                  // 0: hello.HelloRequest
+	(*HelloResponse)(nil),                 // 1: hello.HelloResponse
+	(*GreetingTypeStat)(nil),              // 2: hello.GreetingTypeStat
+	(*NameFrequency)(nil),                 // 3: hello.NameFrequency
+	(*ListGreetingTypeStatsRequest)(nil),  // 4: hello.ListGreetingTypeStatsRequest
+	(*ListGreetingTypeStatsResponse)(nil), // 5: hello.ListGreetingTypeStatsResponse
+	(*ListGreetedNamesRequest)(nil),       // 6: hello.ListGreetedNamesRequest
+	(*ListGreetedNamesResponse)(nil),      // 7: hello.ListGreetedNamesResponse
 }
 var file_hello_proto_depIdxs = []int32{
-	0, // 0: hello.HelloService.SayHello:input_type -> hello.HelloRequest
-	1, // 1: hello.HelloService.SayHello:output_type -> hello.HelloResponse
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	2, // 0: hello.ListGreetingTypeStatsResponse.greeting_types:type_name -> hello.GreetingTypeStat
+	3, // 1: hello.ListGreetedNamesResponse.names:type_name -> hello.NameFrequency
+	0, // 2: hello.HelloService.SayHello:input_type -> hello.HelloRequest
+	4, // 3: hello.HelloService.ListGreetingTypeStats:input_type -> hello.ListGreetingTypeStatsRequest
+	6, // 4: hello.HelloService.ListGreetedNames:input_type -> hello.ListGreetedNamesRequest
+	1, // 5: hello.HelloService.SayHello:output_type -> hello.HelloResponse
+	5, // 6: hello.HelloService.ListGreetingTypeStats:output_type -> hello.ListGreetingTypeStatsResponse
+	7, // 7: hello.HelloService.ListGreetedNames:output_type -> hello.ListGreetedNamesResponse
+	5, // [5:8] is the sub-list for method output_type
+	2, // [2:5] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_hello_proto_init() }
@@ -159,7 +505,7 @@ func file_hello_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_hello_proto_rawDesc), len(file_hello_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -34,13 +34,13 @@ The `StatsCard` React component needs stats data from the backend. All backend A
 
 **Alternative considered:** `int32 page` (page number). Rejected — AIP explicitly discourages page numbers because they break under inserts.
 
-### 3. grpc-gateway as browser bridge
+### 3. Connect RPC as browser bridge
 
-**Decision:** Use [grpc-gateway](https://github.com/grpc-ecosystem/grpc-gateway) to expose the gRPC methods as JSON/HTTP endpoints that the frontend `fetch` calls can reach. Add gateway annotations to `hello.proto`.
+**Decision:** Use [Connect RPC](https://connectrpc.com) — already the project's RPC framework — to expose the new methods over HTTP/JSON. No gateway annotations needed; Connect handlers natively serve both the Connect protocol (JSON over HTTP/1.1) and gRPC from the same handler registration.
 
-**Why:** grpc-gateway is the lightest-weight option: it generates an HTTP/JSON reverse proxy from proto annotations with no separate proxy process. The frontend continues to use `fetch` (no gRPC-Web client library needed in React). The Vite proxy forwards `/api/*` to the gateway port.
+**Why:** The project already uses `connectrpc.com/connect` (Go), `@connectrpc/connect` (TypeScript), and `buf generate` for stub generation. Adding grpc-gateway would introduce a separate dependency, proto annotations, generated gateway shim code, and a second HTTP mux — none of which are needed when Connect already does the same thing. The frontend calls the methods using plain `fetch` with the Connect JSON protocol (POST with `Content-Type: application/json`).
 
-**Alternative considered:** Envoy + grpc-web. Rejected for now — requires a separate process and more ops complexity than grpc-gateway for a dev-stage project.
+**Alternative considered and rejected:** grpc-gateway — originally specified in this design, but superseded once the existing Connect RPC setup was identified. Would have required `google/api/annotations.proto` imports, a googleapis Bazel dependency, and a second HTTP listener alongside gRPC.
 
 ### 4. `GreetingStore` interface extended, not split
 

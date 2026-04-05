@@ -35,11 +35,19 @@ const (
 const (
 	// HelloServiceSayHelloProcedure is the fully-qualified name of the HelloService's SayHello RPC.
 	HelloServiceSayHelloProcedure = "/hello.HelloService/SayHello"
+	// HelloServiceListGreetingTypeStatsProcedure is the fully-qualified name of the HelloService's
+	// ListGreetingTypeStats RPC.
+	HelloServiceListGreetingTypeStatsProcedure = "/hello.HelloService/ListGreetingTypeStats"
+	// HelloServiceListGreetedNamesProcedure is the fully-qualified name of the HelloService's
+	// ListGreetedNames RPC.
+	HelloServiceListGreetedNamesProcedure = "/hello.HelloService/ListGreetedNames"
 )
 
 // HelloServiceClient is a client for the hello.HelloService service.
 type HelloServiceClient interface {
 	SayHello(context.Context, *connect.Request[_go.HelloRequest]) (*connect.Response[_go.HelloResponse], error)
+	ListGreetingTypeStats(context.Context, *connect.Request[_go.ListGreetingTypeStatsRequest]) (*connect.Response[_go.ListGreetingTypeStatsResponse], error)
+	ListGreetedNames(context.Context, *connect.Request[_go.ListGreetedNamesRequest]) (*connect.Response[_go.ListGreetedNamesResponse], error)
 }
 
 // NewHelloServiceClient constructs a client for the hello.HelloService service. By default, it uses
@@ -59,12 +67,26 @@ func NewHelloServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithSchema(helloServiceMethods.ByName("SayHello")),
 			connect.WithClientOptions(opts...),
 		),
+		listGreetingTypeStats: connect.NewClient[_go.ListGreetingTypeStatsRequest, _go.ListGreetingTypeStatsResponse](
+			httpClient,
+			baseURL+HelloServiceListGreetingTypeStatsProcedure,
+			connect.WithSchema(helloServiceMethods.ByName("ListGreetingTypeStats")),
+			connect.WithClientOptions(opts...),
+		),
+		listGreetedNames: connect.NewClient[_go.ListGreetedNamesRequest, _go.ListGreetedNamesResponse](
+			httpClient,
+			baseURL+HelloServiceListGreetedNamesProcedure,
+			connect.WithSchema(helloServiceMethods.ByName("ListGreetedNames")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
 // helloServiceClient implements HelloServiceClient.
 type helloServiceClient struct {
-	sayHello *connect.Client[_go.HelloRequest, _go.HelloResponse]
+	sayHello              *connect.Client[_go.HelloRequest, _go.HelloResponse]
+	listGreetingTypeStats *connect.Client[_go.ListGreetingTypeStatsRequest, _go.ListGreetingTypeStatsResponse]
+	listGreetedNames      *connect.Client[_go.ListGreetedNamesRequest, _go.ListGreetedNamesResponse]
 }
 
 // SayHello calls hello.HelloService.SayHello.
@@ -72,9 +94,21 @@ func (c *helloServiceClient) SayHello(ctx context.Context, req *connect.Request[
 	return c.sayHello.CallUnary(ctx, req)
 }
 
+// ListGreetingTypeStats calls hello.HelloService.ListGreetingTypeStats.
+func (c *helloServiceClient) ListGreetingTypeStats(ctx context.Context, req *connect.Request[_go.ListGreetingTypeStatsRequest]) (*connect.Response[_go.ListGreetingTypeStatsResponse], error) {
+	return c.listGreetingTypeStats.CallUnary(ctx, req)
+}
+
+// ListGreetedNames calls hello.HelloService.ListGreetedNames.
+func (c *helloServiceClient) ListGreetedNames(ctx context.Context, req *connect.Request[_go.ListGreetedNamesRequest]) (*connect.Response[_go.ListGreetedNamesResponse], error) {
+	return c.listGreetedNames.CallUnary(ctx, req)
+}
+
 // HelloServiceHandler is an implementation of the hello.HelloService service.
 type HelloServiceHandler interface {
 	SayHello(context.Context, *connect.Request[_go.HelloRequest]) (*connect.Response[_go.HelloResponse], error)
+	ListGreetingTypeStats(context.Context, *connect.Request[_go.ListGreetingTypeStatsRequest]) (*connect.Response[_go.ListGreetingTypeStatsResponse], error)
+	ListGreetedNames(context.Context, *connect.Request[_go.ListGreetedNamesRequest]) (*connect.Response[_go.ListGreetedNamesResponse], error)
 }
 
 // NewHelloServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -90,10 +124,26 @@ func NewHelloServiceHandler(svc HelloServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(helloServiceMethods.ByName("SayHello")),
 		connect.WithHandlerOptions(opts...),
 	)
+	helloServiceListGreetingTypeStatsHandler := connect.NewUnaryHandler(
+		HelloServiceListGreetingTypeStatsProcedure,
+		svc.ListGreetingTypeStats,
+		connect.WithSchema(helloServiceMethods.ByName("ListGreetingTypeStats")),
+		connect.WithHandlerOptions(opts...),
+	)
+	helloServiceListGreetedNamesHandler := connect.NewUnaryHandler(
+		HelloServiceListGreetedNamesProcedure,
+		svc.ListGreetedNames,
+		connect.WithSchema(helloServiceMethods.ByName("ListGreetedNames")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/hello.HelloService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case HelloServiceSayHelloProcedure:
 			helloServiceSayHelloHandler.ServeHTTP(w, r)
+		case HelloServiceListGreetingTypeStatsProcedure:
+			helloServiceListGreetingTypeStatsHandler.ServeHTTP(w, r)
+		case HelloServiceListGreetedNamesProcedure:
+			helloServiceListGreetedNamesHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -105,4 +155,12 @@ type UnimplementedHelloServiceHandler struct{}
 
 func (UnimplementedHelloServiceHandler) SayHello(context.Context, *connect.Request[_go.HelloRequest]) (*connect.Response[_go.HelloResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("hello.HelloService.SayHello is not implemented"))
+}
+
+func (UnimplementedHelloServiceHandler) ListGreetingTypeStats(context.Context, *connect.Request[_go.ListGreetingTypeStatsRequest]) (*connect.Response[_go.ListGreetingTypeStatsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("hello.HelloService.ListGreetingTypeStats is not implemented"))
+}
+
+func (UnimplementedHelloServiceHandler) ListGreetedNames(context.Context, *connect.Request[_go.ListGreetedNamesRequest]) (*connect.Response[_go.ListGreetedNamesResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("hello.HelloService.ListGreetedNames is not implemented"))
 }

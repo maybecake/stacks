@@ -9,6 +9,12 @@ class GreetingStats:
 
 
 @dataclass
+class GreetingTypeStat:
+    greeting_type: str
+    count: int
+
+
+@dataclass
 class NameFrequency:
     name: str
     count: int
@@ -25,6 +31,14 @@ class GreetingStore(ABC):
 
     @abstractmethod
     def get_name_frequencies(self) -> list[NameFrequency]:
+        ...
+
+    @abstractmethod
+    def list_greeting_type_stats(self, limit: int, cursor: str) -> tuple[list[GreetingTypeStat], str]:
+        ...
+
+    @abstractmethod
+    def list_greeted_names(self, limit: int, cursor: str) -> tuple[list[NameFrequency], str]:
         ...
 
 

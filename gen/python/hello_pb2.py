@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0bhello.proto\x12\x05hello\"\"\n\x0cHelloRequest\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\")\n\rHelloResponse\x12\x18\n\x07message\x18\x01 \x01(\tR\x07message2G\n\x0cHelloService\x12\x37\n\x08SayHello\x12\x13.hello.HelloRequest\x1a\x14.hello.HelloResponse\"\x00\x42*Z(github.com/maybecake/stacks/gen/go;hellob\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0bhello.proto\x12\x05hello\"\"\n\x0cHelloRequest\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\")\n\rHelloResponse\x12\x18\n\x07message\x18\x01 \x01(\tR\x07message\"M\n\x10GreetingTypeStat\x12#\n\rgreeting_type\x18\x01 \x01(\tR\x0cgreetingType\x12\x14\n\x05\x63ount\x18\x02 \x01(\x03R\x05\x63ount\"9\n\rNameFrequency\x12\x12\n\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n\x05\x63ount\x18\x02 \x01(\x03R\x05\x63ount\"Z\n\x1cListGreetingTypeStatsRequest\x12\x1b\n\tpage_size\x18\x01 \x01(\x05R\x08pageSize\x12\x1d\n\npage_token\x18\x02 \x01(\tR\tpageToken\"\x87\x01\n\x1dListGreetingTypeStatsResponse\x12>\n\x0egreeting_types\x18\x01 \x03(\x0b\x32\x17.hello.GreetingTypeStatR\rgreetingTypes\x12&\n\x0fnext_page_token\x18\x02 \x01(\tR\rnextPageToken\"U\n\x17ListGreetedNamesRequest\x12\x1b\n\tpage_size\x18\x01 \x01(\x05R\x08pageSize\x12\x1d\n\npage_token\x18\x02 \x01(\tR\tpageToken\"n\n\x18ListGreetedNamesResponse\x12*\n\x05names\x18\x01 \x03(\x0b\x32\x14.hello.NameFrequencyR\x05names\x12&\n\x0fnext_page_token\x18\x02 \x01(\tR\rnextPageToken2\x84\x02\n\x0cHelloService\x12\x37\n\x08SayHello\x12\x13.hello.HelloRequest\x1a\x14.hello.HelloResponse\"\x00\x12\x64\n\x15ListGreetingTypeStats\x12#.hello.ListGreetingTypeStatsRequest\x1a$.hello.ListGreetingTypeStatsResponse\"\x00\x12U\n\x10ListGreetedNames\x12\x1e.hello.ListGreetedNamesRequest\x1a\x1f.hello.ListGreetedNamesResponse\"\x00\x42*Z(github.com/maybecake/stacks/gen/go;hellob\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -36,6 +36,18 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_HELLOREQUEST']._serialized_end=56
   _globals['_HELLORESPONSE']._serialized_start=58
   _globals['_HELLORESPONSE']._serialized_end=99
-  _globals['_HELLOSERVICE']._serialized_start=101
-  _globals['_HELLOSERVICE']._serialized_end=172
+  _globals['_GREETINGTYPESTAT']._serialized_start=101
+  _globals['_GREETINGTYPESTAT']._serialized_end=178
+  _globals['_NAMEFREQUENCY']._serialized_start=180
+  _globals['_NAMEFREQUENCY']._serialized_end=237
+  _globals['_LISTGREETINGTYPESTATSREQUEST']._serialized_start=239
+  _globals['_LISTGREETINGTYPESTATSREQUEST']._serialized_end=329
+  _globals['_LISTGREETINGTYPESTATSRESPONSE']._serialized_start=332
+  _globals['_LISTGREETINGTYPESTATSRESPONSE']._serialized_end=467
+  _globals['_LISTGREETEDNAMESREQUEST']._serialized_start=469
+  _globals['_LISTGREETEDNAMESREQUEST']._serialized_end=554
+  _globals['_LISTGREETEDNAMESRESPONSE']._serialized_start=556
+  _globals['_LISTGREETEDNAMESRESPONSE']._serialized_end=666
+  _globals['_HELLOSERVICE']._serialized_start=669
+  _globals['_HELLOSERVICE']._serialized_end=929
 # @@protoc_insertion_point(module_scope)
