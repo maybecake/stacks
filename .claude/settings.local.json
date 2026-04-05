@@ -154,7 +154,8 @@
       "Bash(npx tsc:*)",
       "Bash(/workspaces/stacks/frontend/node_modules/.bin/tsc:*)",
       "Bash(mv /workspaces/stacks/api/domain/* /workspaces/stacks/lib/domain/)",
-      "Bash(mv /workspaces/stacks/api/adapters/mock/* /workspaces/stacks/lib/adapters/mock/)"
+      "Bash(mv /workspaces/stacks/api/adapters/mock/* /workspaces/stacks/lib/adapters/mock/)",
+      "Bash(openspec list:*)"
     ]
   }
 }
