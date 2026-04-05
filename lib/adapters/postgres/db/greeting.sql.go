@@ -88,6 +88,82 @@ func (q *Queries) InsertGreetingLog(ctx context.Context, arg InsertGreetingLogPa
 	return err
 }
 
+const listGreetedNamesPaginated = `-- name: ListGreetedNamesPaginated :many
+SELECT name, COUNT(*) AS count
+FROM greeting_log
+GROUP BY name
+ORDER BY count DESC
+LIMIT $1 OFFSET $2
+`
+
+type ListGreetedNamesPaginatedParams struct {
+	Limit  int32 `json:"limit"`
+	Offset int32 `json:"offset"`
+}
+
+type ListGreetedNamesPaginatedRow struct {
+	Name  string `json:"name"`
+	Count int64  `json:"count"`
+}
+
+func (q *Queries) ListGreetedNamesPaginated(ctx context.Context, arg ListGreetedNamesPaginatedParams) ([]ListGreetedNamesPaginatedRow, error) {
+	rows, err := q.db.QueryContext(ctx, listGreetedNamesPaginated, arg.Limit, arg.Offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []ListGreetedNamesPaginatedRow
+	for rows.Next() {
+		var i ListGreetedNamesPaginatedRow
+		if err := rows.Scan(&i.Name, &i.Count); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listGreetingTypeStatsPaginated = `-- name: ListGreetingTypeStatsPaginated :many
+SELECT greeting_type, count
+FROM greeting_stats
+ORDER BY greeting_type
+LIMIT $1 OFFSET $2
+`
+
+type ListGreetingTypeStatsPaginatedParams struct {
+	Limit  int32 `json:"limit"`
+	Offset int32 `json:"offset"`
+}
+
+func (q *Queries) ListGreetingTypeStatsPaginated(ctx context.Context, arg ListGreetingTypeStatsPaginatedParams) ([]GreetingStat, error) {
+	rows, err := q.db.QueryContext(ctx, listGreetingTypeStatsPaginated, arg.Limit, arg.Offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GreetingStat
+	for rows.Next() {
+		var i GreetingStat
+		if err := rows.Scan(&i.GreetingType, &i.Count); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const upsertGreetingStats = `-- name: UpsertGreetingStats :exec
 INSERT INTO greeting_stats (greeting_type, count)
 VALUES ($1, 1)

@@ -75,55 +75,52 @@ func (s *PostgresGreetingStore) GetNameFrequencies(ctx context.Context) ([]domai
 	return freqs, nil
 }
 
-// ListGreetingTypeStats delegates to GetStats and applies in-process pagination.
-// A real implementation would push pagination into the SQL query.
 func (s *PostgresGreetingStore) ListGreetingTypeStats(ctx context.Context, limit int, cursor string) ([]domain.GreetingTypeStat, string, error) {
-	all, err := s.GetStats(ctx)
-	if err != nil {
-		return nil, "", err
-	}
 	offset, err := pagination.DecodeCursor(cursor)
 	if err != nil {
 		return nil, "", err
 	}
-	if offset >= len(all) {
-		return []domain.GreetingTypeStat{}, "", nil
-	}
-	page := all[offset:]
-	if len(page) > limit {
-		page = page[:limit]
-	}
-	typed := make([]domain.GreetingTypeStat, len(page))
-	for i, s := range page {
-		typed[i] = domain.GreetingTypeStat{GreetingType: s.GreetingType, Count: s.Count}
+	q := pgdb.New(s.db)
+	rows, err := q.ListGreetingTypeStatsPaginated(ctx, pgdb.ListGreetingTypeStatsPaginatedParams{
+		Limit:  int32(limit + 1),
+		Offset: int32(offset),
+	})
+	if err != nil {
+		return nil, "", err
 	}
 	nextCursor := ""
-	if offset+len(typed) < len(all) {
-		nextCursor = pagination.EncodeCursor(offset + len(typed))
+	if len(rows) > limit {
+		rows = rows[:limit]
+		nextCursor = pagination.EncodeCursor(offset + limit)
 	}
-	return typed, nextCursor, nil
+	items := make([]domain.GreetingTypeStat, len(rows))
+	for i, r := range rows {
+		items[i] = domain.GreetingTypeStat{GreetingType: r.GreetingType, Count: int64(r.Count)}
+	}
+	return items, nextCursor, nil
 }
 
-// ListGreetedNames delegates to GetNameFrequencies and applies in-process pagination.
 func (s *PostgresGreetingStore) ListGreetedNames(ctx context.Context, limit int, cursor string) ([]domain.NameFrequency, string, error) {
-	all, err := s.GetNameFrequencies(ctx)
-	if err != nil {
-		return nil, "", err
-	}
 	offset, err := pagination.DecodeCursor(cursor)
 	if err != nil {
 		return nil, "", err
 	}
-	if offset >= len(all) {
-		return []domain.NameFrequency{}, "", nil
-	}
-	page := all[offset:]
-	if len(page) > limit {
-		page = page[:limit]
+	q := pgdb.New(s.db)
+	rows, err := q.ListGreetedNamesPaginated(ctx, pgdb.ListGreetedNamesPaginatedParams{
+		Limit:  int32(limit + 1),
+		Offset: int32(offset),
+	})
+	if err != nil {
+		return nil, "", err
 	}
 	nextCursor := ""
-	if offset+len(page) < len(all) {
-		nextCursor = pagination.EncodeCursor(offset + len(page))
+	if len(rows) > limit {
+		rows = rows[:limit]
+		nextCursor = pagination.EncodeCursor(offset + limit)
 	}
-	return page, nextCursor, nil
+	items := make([]domain.NameFrequency, len(rows))
+	for i, r := range rows {
+		items[i] = domain.NameFrequency{Name: r.Name, Count: r.Count}
+	}
+	return items, nextCursor, nil
 }
