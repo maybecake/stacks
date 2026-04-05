@@ -2,7 +2,7 @@
   "framework": "vite",
   "installCommand": "pnpm install && pnpm install --prefix frontend && frontend/node_modules/.bin/buf generate",
   "devCommand": "cd frontend && pnpm dev --port $PORT",
-  "buildCommand": "cd frontend && pnpm build",
+  "buildCommand": "pnpm db:migrate && cd frontend && pnpm build",
   "outputDirectory": "frontend/dist",
   "rewrites": [
     { "source": "/hello.HelloService/:path*", "destination": "/api/hello" },

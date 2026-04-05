@@ -2,10 +2,11 @@ package handler
 
 import (
 	"context"
+	"log"
 	"net/http"
 
 	"connectrpc.com/connect"
-	"github.com/maybecake/stacks/lib/adapters/mock"
+	"github.com/maybecake/stacks/lib/adapters/postgres"
 	"github.com/maybecake/stacks/lib/domain"
 	yov1 "github.com/maybecake/stacks/gen/go/yo"
 	"github.com/maybecake/stacks/gen/go/yo/yoconnect"
@@ -25,8 +26,14 @@ func (s *YoServer) SayYo(ctx context.Context, req *connect.Request[yov1.YoReques
 
 // Handler is the Vercel entrypoint for the Yo service.
 func Handler(w http.ResponseWriter, r *http.Request) {
+	store, err := postgres.NewPostgresGreetingStore()
+	if err != nil {
+		log.Printf("yo: failed to create store: %v", err)
+		http.Error(w, "internal error", http.StatusInternalServerError)
+		return
+	}
 	mux := http.NewServeMux()
-	server := &YoServer{store: &mock.MockGreetingStore{}}
+	server := &YoServer{store: store}
 	_, h := yoconnect.NewYoServiceHandler(server)
 	mux.Handle("/", h)
 	mux.ServeHTTP(w, r)

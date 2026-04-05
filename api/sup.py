@@ -17,9 +17,9 @@ if _lib_path not in sys.path:
     sys.path.insert(0, _lib_path)
 
 from domain.greeting import greet_sup  # noqa: E402
-from adapters.mock.greeting_store import MockGreetingStore  # noqa: E402
+from adapters.postgres.greeting_store import PostgresGreetingStore  # noqa: E402
 
-_store = MockGreetingStore()
+_store = PostgresGreetingStore()
 
 
 class handler(BaseHTTPRequestHandler):
