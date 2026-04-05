@@ -124,6 +124,17 @@ Stats query methods (`ListGreetingTypeStats`, `ListGreetedNames`) are added dire
 
 ---
 
+### ADR-010: Server handlers are Vercel serverless functions — no persistent server process
+**Status:** Accepted
+
+The project deploys to Vercel. Each Connect RPC handler (TypeScript) runs as a Vercel serverless function. There is no long-running server process to manage, start, or keep alive. Infrastructure concerns like port binding, process supervision, and graceful shutdown do not apply to the TypeScript service layer.
+
+**Consequence:** Go and Python service implementations (`service/simple/`) are development/exploration artifacts only. They are not deployed to production. Any new API surface that needs to be production-accessible must be implemented in the TypeScript handler layer (`api/hello.ts`, etc.) as a Vercel function.
+
+**Rejected:** Running a persistent Go or Python gRPC server alongside Vercel — introduces ops complexity (process management, health checks, networking) that Vercel's serverless model eliminates entirely.
+
+---
+
 ### ADR-008: Handlers are the composition root
 **Status:** Accepted (hexagonal-api-refactor)
 
