@@ -3,11 +3,16 @@ import { connectNodeAdapter } from "@connectrpc/connect-node";
 import { create } from "@bufbuild/protobuf";
 // These imports resolve after `buf generate` runs at build time
 import { HelloService, HelloResponseSchema } from "./.gen/hello_pb.js";
+import { greetHello } from "../lib/domain/greeting";
+import { MockGreetingStore } from "../lib/adapters/mock/greeting_store";
+
+const store = new MockGreetingStore();
 
 function routes(router: ConnectRouter) {
   router.service(HelloService, {
-    sayHello(req) {
-      return create(HelloResponseSchema, { message: `Hello, ${req.name}!` });
+    async sayHello(req) {
+      const message = await greetHello(req.name, store);
+      return create(HelloResponseSchema, { message });
     },
   });
 }

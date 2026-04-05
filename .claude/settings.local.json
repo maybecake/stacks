@@ -150,7 +150,11 @@
       "Bash(ls -la api/*.go)",
       "Bash(buf generate:*)",
       "Bash(go version:*)",
-      "Bash(chmod +x:*)"
+      "Bash(chmod +x:*)",
+      "Bash(npx tsc:*)",
+      "Bash(/workspaces/stacks/frontend/node_modules/.bin/tsc:*)",
+      "Bash(mv /workspaces/stacks/api/domain/* /workspaces/stacks/lib/domain/)",
+      "Bash(mv /workspaces/stacks/api/adapters/mock/* /workspaces/stacks/lib/adapters/mock/)"
     ]
   }
 }

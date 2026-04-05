@@ -11,6 +11,16 @@ if _gen_path not in sys.path:
 
 import sup_pb2  # noqa: E402 — path inserted above
 
+# Add lib/ to path for domain and adapters modules
+_lib_path = os.path.join(os.path.dirname(__file__), "..", "lib")
+if _lib_path not in sys.path:
+    sys.path.insert(0, _lib_path)
+
+from domain.greeting import greet_sup  # noqa: E402
+from adapters.mock.greeting_store import MockGreetingStore  # noqa: E402
+
+_store = MockGreetingStore()
+
 
 class handler(BaseHTTPRequestHandler):
     """Vercel Python serverless handler for SupService.SaySup (Connect-RPC unary over JSON)."""
@@ -30,7 +40,8 @@ class handler(BaseHTTPRequestHandler):
             self.wfile.write(error)
             return
 
-        resp = sup_pb2.SupResponse(message=f"Sup, {req.name}!")
+        message = greet_sup(req.name, _store)
+        resp = sup_pb2.SupResponse(message=message)
         result = json_format.MessageToJson(resp, preserving_proto_field_name=True).encode()
         self.send_response(200)
         self.send_header("Content-Type", "application/json")

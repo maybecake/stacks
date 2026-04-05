@@ -1,3 +1,5 @@
+*.local.json
+
 # bazel generated files
 /bazel-*
 

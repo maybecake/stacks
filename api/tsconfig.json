@@ -7,6 +7,7 @@
     "types": [
       "node"
     ],
+    "rootDir": "..",
     "outDir": ".vercel/output",
     "paths": {
       "../frontend/src/gen/*": [
@@ -15,6 +16,7 @@
     }
   },
   "include": [
-    "./**/*.ts"
+    "./**/*.ts",
+    "../lib/**/*.ts"
   ]
 }
