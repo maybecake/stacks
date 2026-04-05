@@ -2,3 +2,7 @@ MODULE.bazel.lock linguist-generated=true
 gen/ linguist-generated=true
 api/.gen/ linguist-generated=true
 frontend/src/gen/ linguist-generated=true
+lib/adapters/postgres/db/ linguist-generated=true
+pnpm-lock.yaml linguist-generated=true
+frontend/pnpm-lock.yaml linguist-generated=true
+go.sum linguist-generated=true
