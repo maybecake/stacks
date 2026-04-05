@@ -3,16 +3,23 @@
   "private": true,
   "version": "0.0.0",
   "dependencies": {
-    "@vercel/functions": "latest",
     "@bufbuild/protobuf": "latest",
     "@connectrpc/connect": "latest",
     "@connectrpc/connect-node": "latest",
     "@fission-ai/openspec": "1.2.0",
-    "@types/node": "latest"
+    "@neondatabase/serverless": "^1.0.2",
+    "@types/node": "latest",
+    "@vercel/functions": "latest",
+    "drizzle-orm": "^0.45.2"
+  },
+  "scripts": {
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate"
   },
   "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319",
   "devDependencies": {
     "@bufbuild/buf": "^1.67.0",
+    "drizzle-kit": "^0.31.10",
     "vite": "^8.0.3"
   }
 }
