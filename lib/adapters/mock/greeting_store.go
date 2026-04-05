@@ -15,3 +15,11 @@ var _ domain.GreetingStore = (*MockGreetingStore)(nil)
 func (m *MockGreetingStore) RecordGreeting(_ context.Context, _ string, _ string) error {
 	return nil
 }
+
+func (m *MockGreetingStore) GetStats(_ context.Context) ([]domain.GreetingStats, error) {
+	return []domain.GreetingStats{}, nil
+}
+
+func (m *MockGreetingStore) GetNameFrequencies(_ context.Context) ([]domain.NameFrequency, error) {
+	return []domain.NameFrequency{}, nil
+}

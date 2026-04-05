@@ -1,4 +1,4 @@
-from domain.greeting import GreetingStore
+from domain.greeting import GreetingStats, GreetingStore, NameFrequency
 
 
 class MockGreetingStore(GreetingStore):
@@ -6,3 +6,9 @@ class MockGreetingStore(GreetingStore):
 
     def record_greeting(self, greeting_type: str, name: str) -> None:
         pass
+
+    def get_stats(self) -> list[GreetingStats]:
+        return []
+
+    def get_name_frequencies(self) -> list[NameFrequency]:
+        return []

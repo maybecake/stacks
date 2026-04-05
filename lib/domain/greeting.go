@@ -2,9 +2,24 @@ package domain
 
 import "context"
 
-// GreetingStore is the storage port. Implementations must record greeting events.
+// GreetingStats holds a per-type greeting count.
+type GreetingStats struct {
+	GreetingType string
+	Count        int64
+}
+
+// NameFrequency holds a name with its total greeting frequency.
+type NameFrequency struct {
+	Name  string
+	Count int64
+}
+
+// GreetingStore is the storage port. Implementations must record greeting events
+// and provide read access to aggregated stats.
 type GreetingStore interface {
 	RecordGreeting(ctx context.Context, greetingType string, name string) error
+	GetStats(ctx context.Context) ([]GreetingStats, error)
+	GetNameFrequencies(ctx context.Context) ([]NameFrequency, error)
 }
 
 // Greet returns the Yo greeting string and records the event via the store.
