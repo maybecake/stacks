@@ -1,3 +1,4 @@
 ignoredBuiltDependencies:
-  - esbuild
   - "@bufbuild/buf"
+  - '@clerk/shared'
+  - esbuild

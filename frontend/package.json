@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@bufbuild/protobuf": "latest",
+    "@clerk/react": "^6.1.4",
     "@connectrpc/connect": "latest",
     "@connectrpc/connect-node": "latest",
     "@connectrpc/connect-web": "latest",
