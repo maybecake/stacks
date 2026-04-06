@@ -85,10 +85,10 @@
 /* Mobile nav dropdown panel */
 .mobile-nav {
   overflow: hidden;
-  border-top: 1px solid var(--border);
 }
 
 .mobile-nav[data-state="open"] {
+  border-top: 1px solid var(--border);
   animation: mobileNavSlideDown 150ms ease-out;
 }
 
