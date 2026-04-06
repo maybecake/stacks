@@ -1,50 +1,54 @@
+import * as Collapsible from "@radix-ui/react-collapsible";
 import { NavLink } from "react-router-dom";
 import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/react";
 import { ThemeDropdown } from "./ThemeDropdown";
 import "./header.css";
 
-export const Header =() => {
+const NAV_LINKS = [
+  { to: "/", label: "Home" },
+  { to: "/samples", label: "Samples" },
+  { to: "/learner", label: "Learner" },
+  { to: "/greetings", label: "Greetings" },
+] as const;
+
+const navLinkClass = ({ isActive }: { isActive: boolean }) =>
+  isActive ? "nav-link nav-link--active" : "nav-link";
+
+export const Header = () => {
   return (
-    <header className="header">
-      <div className="header-content">
-        <h1 className="header-title">Stacks</h1>
-        <nav className="header-nav">
-          <NavLink
-            to="/"
-            className={({ isActive }) => isActive ? "nav-link nav-link--active" : "nav-link"}
-          >
-            Home
-          </NavLink>
-          <NavLink
-            to="/samples"
-            className={({ isActive }) => isActive ? "nav-link nav-link--active" : "nav-link"}
-          >
-            Samples
-          </NavLink>
-          <NavLink
-            to="/learner"
-            className={({ isActive }) => isActive ? "nav-link nav-link--active" : "nav-link"}
-          >
-            Learner
-          </NavLink>
-          <NavLink
-            to="/greetings"
-            className={({ isActive }) => isActive ? "nav-link nav-link--active" : "nav-link"}
-          >
-            Greetings
-          </NavLink>
-        </nav>
-        <div className="header-auth">
-          <Show when="signed-in">
-            <UserButton />
-          </Show>
-          <Show when="signed-out">
-            <SignInButton />
-            <SignUpButton />
-          </Show>
+    <Collapsible.Root>
+      <header className="header">
+        <div className="header-content">
+          <h1 className="header-title">Stacks</h1>
+          <nav className="header-nav">
+            {NAV_LINKS.map(({ to, label }) => (
+              <NavLink key={to} to={to} className={navLinkClass}>
+                {label}
+              </NavLink>
+            ))}
+          </nav>
+          <Collapsible.Trigger className="hamburger-btn" aria-label="Toggle navigation">
+            ☰
+          </Collapsible.Trigger>
+          <div className="header-auth">
+            <Show when="signed-in">
+              <UserButton />
+            </Show>
+            <Show when="signed-out">
+              <SignInButton />
+              <SignUpButton />
+            </Show>
+          </div>
+          <ThemeDropdown />
         </div>
-        <ThemeDropdown />
-      </div>
-    </header>
+        <Collapsible.Content className="mobile-nav">
+          {NAV_LINKS.map(({ to, label }) => (
+            <NavLink key={to} to={to} className={navLinkClass}>
+              {label}
+            </NavLink>
+          ))}
+        </Collapsible.Content>
+      </header>
+    </Collapsible.Root>
   );
 };
