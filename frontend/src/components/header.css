@@ -57,3 +57,8 @@
   right: var(--spacing-sm);
   background-color: var(--accent);
 }
+
+.header-auth {
+  display: flex;
+  align-items: center;
+}

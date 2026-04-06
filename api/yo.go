@@ -2,16 +2,57 @@ package handler
 
 import (
 	"context"
+	"errors"
 	"log"
 	"net/http"
+	"os"
+	"strings"
+	"sync"
 
 	"connectrpc.com/connect"
+	"github.com/MicahParks/keyfunc/v3"
+	"github.com/golang-jwt/jwt/v5"
 	yov1 "github.com/maybecake/stacks/gen/go/yo"
 	"github.com/maybecake/stacks/gen/go/yo/yoconnect"
 	"github.com/maybecake/stacks/lib/adapters/postgres"
 	"github.com/maybecake/stacks/lib/domain"
 	"github.com/maybecake/stacks/lib/pagination"
 )
+
+var (
+	jwksOnce   sync.Once
+	jwksClient keyfunc.Keyfunc
+	jwksErr    error
+)
+
+func getJWKS() (keyfunc.Keyfunc, error) {
+	jwksOnce.Do(func() {
+		url := os.Getenv("CLERK_JWKS_URL")
+		if url == "" {
+			jwksErr = errors.New("CLERK_JWKS_URL not set")
+			return
+		}
+		jwksClient, jwksErr = keyfunc.NewDefault([]string{url})
+	})
+	return jwksClient, jwksErr
+}
+
+func requireAuth(authHeader string) error {
+	const prefix = "Bearer "
+	if !strings.HasPrefix(authHeader, prefix) {
+		return connect.NewError(connect.CodeUnauthenticated, errors.New("missing Authorization header"))
+	}
+	jwks, err := getJWKS()
+	if err != nil {
+		return connect.NewError(connect.CodeInternal, err)
+	}
+	tokenStr := strings.TrimPrefix(authHeader, prefix)
+	_, err = jwt.Parse(tokenStr, jwks.Keyfunc, jwt.WithValidMethods([]string{"RS256"}))
+	if err != nil {
+		return connect.NewError(connect.CodeUnauthenticated, err)
+	}
+	return nil
+}
 
 const (
 	defaultPageSize = 20
@@ -33,6 +74,9 @@ type YoServer struct {
 }
 
 func (s *YoServer) SayYo(ctx context.Context, req *connect.Request[yov1.YoRequest]) (*connect.Response[yov1.YoResponse], error) {
+	if err := requireAuth(req.Header().Get("Authorization")); err != nil {
+		return nil, err
+	}
 	message, err := domain.Greet(ctx, req.Msg.Name, s.store)
 	if err != nil {
 		return nil, err

@@ -1,9 +1,9 @@
-import React from "react";
 import { NavLink } from "react-router-dom";
+import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/react";
 import { ThemeDropdown } from "./ThemeDropdown";
 import "./header.css";
 
-export const Header: React.FC = () => {
+export const Header =() => {
   return (
     <header className="header">
       <div className="header-content">
@@ -34,6 +34,15 @@ export const Header: React.FC = () => {
             Greetings
           </NavLink>
         </nav>
+        <div className="header-auth">
+          <Show when="signed-in">
+            <UserButton />
+          </Show>
+          <Show when="signed-out">
+            <SignInButton />
+            <SignUpButton />
+          </Show>
+        </div>
         <ThemeDropdown />
       </div>
     </header>
