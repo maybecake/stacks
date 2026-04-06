@@ -1,11 +1,11 @@
 import * as Collapsible from "@radix-ui/react-collapsible";
 import { NavLink } from "react-router-dom";
-import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/react";
+import { Show, SignInButton, UserButton } from "@clerk/react";
 import { ThemeDropdown } from "./ThemeDropdown";
 import "./header.css";
+import { Button } from "@ui/button";
 
 const NAV_LINKS = [
-  { to: "/", label: "Home" },
   { to: "/samples", label: "Samples" },
   { to: "/learner", label: "Learner" },
   { to: "/greetings", label: "Greetings" },
@@ -19,7 +19,9 @@ export const Header = () => {
     <Collapsible.Root>
       <header className="header">
         <div className="header-content">
-          <h1 className="header-title">Stacks</h1>
+          <NavLink to="/">
+            <h1 className="header-title">Stacks</h1>
+          </NavLink>
           <nav className="header-nav">
             {NAV_LINKS.map(({ to, label }) => (
               <NavLink key={to} to={to} className={navLinkClass}>
@@ -35,12 +37,14 @@ export const Header = () => {
               <UserButton />
             </Show>
             <Show when="signed-out">
-              <SignInButton />
-              <SignUpButton />
+              <SignInButton>
+                <Button variant="outline">Sign In</Button>
+              </SignInButton>
             </Show>
           </div>
           <ThemeDropdown />
         </div>
+
         <Collapsible.Content className="mobile-nav">
           {NAV_LINKS.map(({ to, label }) => (
             <NavLink key={to} to={to} className={navLinkClass}>

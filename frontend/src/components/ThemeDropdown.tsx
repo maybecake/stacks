@@ -1,11 +1,10 @@
-import React from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { Theme } from '../themes';
 import { Compactness } from '../themes/compactness';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import './theme-dropdown.css';
 
-export const ThemeDropdown: React.FC = () => {
+export const ThemeDropdown = () => {
   const { theme, setTheme, compactness, setCompactness } = useTheme();
 
   const themes: { id: Theme; label: string; icon: string }[] = [
