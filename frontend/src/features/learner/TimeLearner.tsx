@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import * as Slider from "@radix-ui/react-slider";
 import "./time-learner.css";
 import { timeZonesTheme } from "./time-zones-theme";
