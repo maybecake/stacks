@@ -22,17 +22,25 @@ export default defineConfig({
     watch: {
       usePolling: true, // Enable polling for file changes
     },
-    proxy: {
-      "/api": {
-        target: "http://localhost:8080",
-        changeOrigin: true,
-      },
-    },
   },
   optimizeDeps: {
     include: ["react", "react-dom"], // Pre-bundle these dependencies
+    exclude: ["@clerk/react", "@clerk/shared"],
   },
   build: {
     sourcemap: true, // Enable source maps for better debugging
+    rollupOptions: {
+      output: {
+        // Use the function syntax instead of the object syntax
+        manualChunks(id) {
+          if (id.includes("@clerk/clerk-react")) {
+            return "clerk";
+          }
+          if (id.includes("node_modules")) {
+            return "vendor";
+          }
+        },
+      },
+    },
   },
 });
