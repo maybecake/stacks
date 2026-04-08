@@ -2,7 +2,9 @@ package handler
 
 import (
 	"context"
+	"encoding/base64"
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -25,11 +27,38 @@ var (
 	jwksErr    error
 )
 
+func jwksURLFromPublishableKey(key string) (string, error) {
+	for _, prefix := range []string{"pk_test_", "pk_live_"} {
+		if strings.HasPrefix(key, prefix) {
+			key = strings.TrimPrefix(key, prefix)
+			break
+		}
+	}
+	// Add base64 padding if needed
+	switch len(key) % 4 {
+	case 2:
+		key += "=="
+	case 3:
+		key += "="
+	}
+	decoded, err := base64.StdEncoding.DecodeString(key)
+	if err != nil {
+		return "", fmt.Errorf("decode publishable key: %w", err)
+	}
+	domain := strings.TrimSuffix(string(decoded), "$")
+	return "https://" + domain + "/.well-known/jwks.json", nil
+}
+
 func getJWKS() (keyfunc.Keyfunc, error) {
 	jwksOnce.Do(func() {
-		url := os.Getenv("CLERK_JWKS_URL")
-		if url == "" {
-			jwksErr = errors.New("CLERK_JWKS_URL not set")
+		key := os.Getenv("VITE_CLERK_PUBLISHABLE_KEY")
+		if key == "" {
+			jwksErr = errors.New("VITE_CLERK_PUBLISHABLE_KEY not set")
+			return
+		}
+		url, err := jwksURLFromPublishableKey(key)
+		if err != nil {
+			jwksErr = err
 			return
 		}
 		jwksClient, jwksErr = keyfunc.NewDefault([]string{url})
