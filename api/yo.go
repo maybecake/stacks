@@ -34,14 +34,7 @@ func jwksURLFromPublishableKey(key string) (string, error) {
 			break
 		}
 	}
-	// Add base64 padding if needed
-	switch len(key) % 4 {
-	case 2:
-		key += "=="
-	case 3:
-		key += "="
-	}
-	decoded, err := base64.StdEncoding.DecodeString(key)
+	decoded, err := base64.RawStdEncoding.DecodeString(key)
 	if err != nil {
 		return "", fmt.Errorf("decode publishable key: %w", err)
 	}

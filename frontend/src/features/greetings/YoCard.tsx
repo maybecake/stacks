@@ -36,7 +36,9 @@ export const YoCard: React.FC = () => {
   return (
     <div className="greeting-card">
       <p className="greeting-card__description">Yo · Go</p>
-      {!isLoaded && <p className="greeting-card__status greeting-card__status--loading">Loading…</p>}
+      {!isLoaded && (
+        <p className="greeting-card__status greeting-card__status--loading">Loading…</p>
+      )}
       <Show when="signed-in">
         <form className="greeting-card__form" onSubmit={handleSubmit}>
           <input
@@ -50,13 +52,29 @@ export const YoCard: React.FC = () => {
             Send
           </button>
         </form>
-        {loading && <p className="greeting-card__status greeting-card__status--loading">Loading…</p>}
+        {loading && (
+          <p className="greeting-card__status greeting-card__status--loading">Loading…</p>
+        )}
         {result && <p className="greeting-card__status greeting-card__status--result">{result}</p>}
         {error && <p className="greeting-card__status greeting-card__status--error">{error}</p>}
       </Show>
       <Show when="signed-out">
         <p className="greeting-card__status">Sign in to say yo</p>
         <SignInButton />
+
+        <p>Try yo when not signed in, should error:</p>
+        <form className="greeting-card__form" onSubmit={handleSubmit}>
+          <input
+            className="greeting-card__input"
+            type="text"
+            placeholder="Enter name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <button className="greeting-card__submit" type="submit" disabled={loading}>
+            Send
+          </button>
+        </form>
       </Show>
     </div>
   );
