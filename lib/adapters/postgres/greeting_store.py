@@ -3,7 +3,7 @@ import os
 
 import psycopg
 
-from domain.greeting import GreetingStats, GreetingStore, NameFrequency
+from domain.greeting import GreetingStats, GreetingStore, GreetingTypeStat, NameFrequency
 
 logger = logging.getLogger(__name__)
 
@@ -49,3 +49,27 @@ class PostgresGreetingStore(GreetingStore):
                 "SELECT name, COUNT(*) AS count FROM greeting_log GROUP BY name ORDER BY count DESC"
             ).fetchall()
         return [NameFrequency(name=r[0], count=r[1]) for r in rows]
+
+    def list_greeting_type_stats(self, limit: int, cursor: str) -> tuple[list[GreetingTypeStat], str]:
+        offset = int(cursor) if cursor else 0
+        with self._connect() as conn:
+            rows = conn.execute(
+                "SELECT greeting_type, count FROM greeting_stats ORDER BY greeting_type LIMIT %s OFFSET %s",
+                (limit + 1, offset),
+            ).fetchall()
+        has_more = len(rows) > limit
+        items = [GreetingTypeStat(greeting_type=r[0], count=r[1]) for r in rows[:limit]]
+        next_cursor = str(offset + limit) if has_more else ""
+        return items, next_cursor
+
+    def list_greeted_names(self, limit: int, cursor: str) -> tuple[list[NameFrequency], str]:
+        offset = int(cursor) if cursor else 0
+        with self._connect() as conn:
+            rows = conn.execute(
+                "SELECT name, COUNT(*) AS count FROM greeting_log GROUP BY name ORDER BY count DESC LIMIT %s OFFSET %s",
+                (limit + 1, offset),
+            ).fetchall()
+        has_more = len(rows) > limit
+        items = [NameFrequency(name=r[0], count=r[1]) for r in rows[:limit]]
+        next_cursor = str(offset + limit) if has_more else ""
+        return items, next_cursor
