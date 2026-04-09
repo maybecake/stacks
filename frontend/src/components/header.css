@@ -13,6 +13,20 @@
   gap: var(--spacing-md);
 }
 
+.header-home {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  text-decoration: none;
+}
+
+.header-logo {
+  width: 28px;
+  height: 28px;
+  color: var(--text-primary);
+  flex-shrink: 0;
+}
+
 .header-title {
   font-size: var(--font-size-lg);
   color: var(--text-primary);

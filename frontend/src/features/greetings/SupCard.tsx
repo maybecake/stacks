@@ -5,6 +5,7 @@ import { create } from "@bufbuild/protobuf";
 import { Show, SignInButton, useAuth } from "@clerk/react";
 import { SupService, SupRequestSchema } from "../../gen/sup/sup_pb.js";
 import { makeAuthInterceptor } from "../../lib/authInterceptor.js";
+import { Button } from "@ui/button.js";
 
 export const SupCard: React.FC = () => {
   const [name, setName] = useState("");
@@ -36,7 +37,9 @@ export const SupCard: React.FC = () => {
   return (
     <div className="greeting-card">
       <p className="greeting-card__description">Sup · Python</p>
-      {!isLoaded && <p className="greeting-card__status greeting-card__status--loading">Loading…</p>}
+      {!isLoaded && (
+        <p className="greeting-card__status greeting-card__status--loading">Loading…</p>
+      )}
       <Show when="signed-in">
         <form className="greeting-card__form" onSubmit={handleSubmit}>
           <input
@@ -46,17 +49,21 @@ export const SupCard: React.FC = () => {
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-          <button className="greeting-card__submit" type="submit" disabled={loading}>
+          <Button variant="default" type="submit" disabled={loading}>
             Send
-          </button>
+          </Button>
         </form>
-        {loading && <p className="greeting-card__status greeting-card__status--loading">Loading…</p>}
+        {loading && (
+          <p className="greeting-card__status greeting-card__status--loading">Loading…</p>
+        )}
         {result && <p className="greeting-card__status greeting-card__status--result">{result}</p>}
         {error && <p className="greeting-card__status greeting-card__status--error">{error}</p>}
       </Show>
       <Show when="signed-out">
         <p className="greeting-card__status">Sign in to say sup</p>
-        <SignInButton />
+        <SignInButton>
+          <Button variant="default">Sign In</Button>
+        </SignInButton>
       </Show>
     </div>
   );

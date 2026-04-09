@@ -2,6 +2,7 @@ import * as Collapsible from "@radix-ui/react-collapsible";
 import { NavLink } from "react-router-dom";
 import { Show, SignInButton, UserButton } from "@clerk/react";
 import { ThemeDropdown } from "./ThemeDropdown";
+import { Logo } from "@ui/Logo";
 import "./header.css";
 import { Button } from "@ui/button";
 
@@ -19,7 +20,8 @@ export const Header = () => {
     <Collapsible.Root>
       <header className="header">
         <div className="header-content">
-          <NavLink to="/">
+          <NavLink to="/" className="header-home">
+            <Logo className="header-logo" />
             <h1 className="header-title">Stacks</h1>
           </NavLink>
           <nav className="header-nav">
