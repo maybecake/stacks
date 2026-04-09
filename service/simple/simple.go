@@ -1,5 +1,8 @@
 package main
 
+// A simple standalong golang server.
+// This is unrelated to the deployed vercel services, which use serverless functions.
+
 import (
 	"context"
 	"log"
