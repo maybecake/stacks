@@ -7,6 +7,7 @@
   "rewrites": [
     { "source": "/hello.HelloService/:path*", "destination": "/api/hello" },
     { "source": "/yo.YoService/:path*", "destination": "/api/yo" },
+    { "source": "/invite.InviteService/:path*", "destination": "/api/invite" },
     { "source": "/sup.SupService/:path*", "destination": "/api/sup" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
