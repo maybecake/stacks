@@ -5,7 +5,10 @@
 package pgdb
 
 import (
+	"database/sql"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type GreetingLog struct {
@@ -18,4 +21,76 @@ type GreetingLog struct {
 type GreetingStat struct {
 	GreetingType string `json:"greeting_type"`
 	Count        int32  `json:"count"`
+}
+
+type Household struct {
+	ID        uuid.UUID      `json:"id"`
+	Name      sql.NullString `json:"name"`
+	CreatedAt time.Time      `json:"created_at"`
+}
+
+type HouseholdClaim struct {
+	ID          uuid.UUID    `json:"id"`
+	HouseholdID uuid.UUID    `json:"household_id"`
+	EventID     uuid.UUID    `json:"event_id"`
+	ClaimToken  uuid.UUID    `json:"claim_token"`
+	ClaimedAt   sql.NullTime `json:"claimed_at"`
+	CreatedAt   time.Time    `json:"created_at"`
+}
+
+type HouseholdMember struct {
+	HouseholdID uuid.UUID `json:"household_id"`
+	PersonID    uuid.UUID `json:"person_id"`
+	Role        string    `json:"role"`
+}
+
+type InviteEvent struct {
+	ID                uuid.UUID      `json:"id"`
+	PublicToken       uuid.UUID      `json:"public_token"`
+	HostUserID        string         `json:"host_user_id"`
+	Name              string         `json:"name"`
+	Venue             string         `json:"venue"`
+	Description       sql.NullString `json:"description"`
+	Datetime          time.Time      `json:"datetime"`
+	Capacity          int32          `json:"capacity"`
+	AllowSiblings     bool           `json:"allow_siblings"`
+	RequireParentStay bool           `json:"require_parent_stay"`
+	CreatedAt         time.Time      `json:"created_at"`
+}
+
+type InviteInvitee struct {
+	ID          uuid.UUID `json:"id"`
+	EventID     uuid.UUID `json:"event_id"`
+	PersonID    uuid.UUID `json:"person_id"`
+	HouseholdID uuid.UUID `json:"household_id"`
+	CreatedAt   time.Time `json:"created_at"`
+}
+
+type InviteRsvp struct {
+	ID                    uuid.UUID `json:"id"`
+	EventID               uuid.UUID `json:"event_id"`
+	HouseholdID           uuid.UUID `json:"household_id"`
+	Status                string    `json:"status"`
+	EmergencyContactName  string    `json:"emergency_contact_name"`
+	EmergencyContactPhone string    `json:"emergency_contact_phone"`
+	CreatedAt             time.Time `json:"created_at"`
+}
+
+type InviteRsvpAttendee struct {
+	RsvpID   uuid.UUID `json:"rsvp_id"`
+	PersonID uuid.UUID `json:"person_id"`
+}
+
+type Person struct {
+	ID        uuid.UUID      `json:"id"`
+	Name      string         `json:"name"`
+	Type      string         `json:"type"`
+	Phone     sql.NullString `json:"phone"`
+	Email     sql.NullString `json:"email"`
+	CreatedAt time.Time      `json:"created_at"`
+}
+
+type UserHousehold struct {
+	UserID      string    `json:"user_id"`
+	HouseholdID uuid.UUID `json:"household_id"`
 }
