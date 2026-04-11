@@ -10,6 +10,20 @@ proto_library(
     srcs = ["hello.proto"],
 )
 
+proto_library(
+    name = "invite_proto",
+    srcs = ["invite/invite.proto"],
+    visibility = ["//visibility:public"],
+)
+
+go_proto_library(
+    name = "invite_go_proto",
+    compilers = ["@rules_go//proto:go_grpc"],
+    importpath = "github.com/maybecake/stacks/gen/go/invite",
+    proto = ":invite_proto",
+    visibility = ["//visibility:public"],
+)
+
 python_proto_compile(
     name = "hello_python_proto",
     protos = [":hello_proto"],

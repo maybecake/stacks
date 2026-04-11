@@ -1,0 +1,237 @@
+syntax = "proto3";
+
+package invite;
+
+option go_package = "github.com/maybecake/stacks/gen/go/invite;invite";
+
+// ── Enums ────────────────────────────────────────────────────────────────────
+
+enum PersonType {
+  PERSON_TYPE_UNSPECIFIED = 0;
+  PERSON_TYPE_CHILD       = 1;
+  PERSON_TYPE_ADULT       = 2;
+}
+
+enum MemberRole {
+  MEMBER_ROLE_UNSPECIFIED = 0;
+  MEMBER_ROLE_CHILD       = 1;
+  MEMBER_ROLE_GUARDIAN    = 2;
+}
+
+enum RSVPStatus {
+  RSVP_STATUS_UNSPECIFIED = 0;
+  RSVP_STATUS_CONFIRMED   = 1;
+  RSVP_STATUS_DECLINED    = 2;
+}
+
+// ── Core messages ─────────────────────────────────────────────────────────────
+
+message Person {
+  string id    = 1;
+  string name  = 2;
+  PersonType type  = 3;
+  string phone = 4;
+  string email = 5;
+}
+
+message Household {
+  string id   = 1;
+  string name = 2;
+}
+
+message HouseholdMember {
+  string     household_id = 1;
+  string     person_id    = 2;
+  MemberRole role         = 3;
+}
+
+// Event datetime is stored as Unix seconds (UTC).
+message Event {
+  string id                 = 1;
+  string public_token       = 2;
+  string host_user_id       = 3;
+  string name               = 4;
+  string venue              = 5;
+  string description        = 6;
+  int64  datetime_unix      = 7;
+  int32  capacity           = 8;
+  bool   allow_siblings     = 9;
+  bool   require_parent_stay = 10;
+}
+
+message Invitee {
+  string id           = 1;
+  string event_id     = 2;
+  string person_id    = 3;
+  string household_id = 4;
+}
+
+message InviteeWithStatus {
+  Invitee    invitee     = 1;
+  Person     person      = 2;
+  RSVPStatus rsvp_status = 3;
+}
+
+message RSVP {
+  string     id                      = 1;
+  string     event_id                = 2;
+  string     household_id            = 3;
+  RSVPStatus status                  = 4;
+  string     emergency_contact_name  = 5;
+  string     emergency_contact_phone = 6;
+}
+
+message RSVPAttendee {
+  string rsvp_id   = 1;
+  string person_id = 2;
+}
+
+// HouseholdGroup is the host-dashboard view of one household's RSVP.
+message HouseholdGroup {
+  Household       household               = 1;
+  RSVP            rsvp                    = 2;
+  repeated Person attendees               = 3;
+  string          emergency_contact_name  = 4;
+  string          emergency_contact_phone = 5;
+}
+
+// ── Event RPCs ────────────────────────────────────────────────────────────────
+
+message CreateEventRequest {
+  string name               = 1;
+  string venue              = 2;
+  string description        = 3;
+  int64  datetime_unix      = 4;
+  int32  capacity           = 5;
+  bool   allow_siblings     = 6;
+  bool   require_parent_stay = 7;
+}
+
+message GetEventRequest {
+  string public_token = 1;
+}
+
+// ── Invitee RPCs ──────────────────────────────────────────────────────────────
+
+message AddInviteeRequest {
+  string event_id  = 1;
+  string person_id = 2;
+}
+
+message AddHouseholdInviteesRequest {
+  string event_id     = 1;
+  string household_id = 2;
+}
+
+message AddHouseholdInviteesResponse {
+  repeated Invitee invitees = 1;
+}
+
+message RemoveInviteeRequest {
+  string invitee_id = 1;
+}
+
+message RemoveInviteeResponse {}
+
+message ListInviteesRequest {
+  string event_id = 1;
+}
+
+message ListInviteesResponse {
+  repeated InviteeWithStatus invitees = 1;
+}
+
+// ── RSVP RPCs ─────────────────────────────────────────────────────────────────
+
+message SubmitRSVPRequest {
+  string            event_id                = 1;
+  string            household_id            = 2;
+  RSVPStatus        status                  = 3;
+  string            emergency_contact_name  = 4;
+  string            emergency_contact_phone = 5;
+  repeated string   attendee_person_ids     = 6;
+}
+
+message SubmitRSVPResponse {
+  RSVP   rsvp        = 1;
+  string claim_token = 2; // non-empty only when household has no owner yet
+}
+
+message ListHouseholdsRequest {
+  string event_id = 1;
+}
+
+message ListHouseholdsResponse {
+  repeated HouseholdGroup households = 1;
+}
+
+// ── Person RPCs ───────────────────────────────────────────────────────────────
+
+message GetPersonRequest {
+  string person_id    = 1;
+  string event_token  = 2; // for unauthenticated RSVP callers
+}
+
+message ListPersonsRequest {
+  string event_token = 1; // for unauthenticated RSVP callers
+}
+
+message ListPersonsResponse {
+  repeated Person persons = 1;
+}
+
+message CreatePersonRequest {
+  string     name  = 1;
+  PersonType type  = 2;
+  string     phone = 3;
+  string     email = 4;
+}
+
+// ── Household RPCs ────────────────────────────────────────────────────────────
+
+message CreateHouseholdRequest {
+  string name = 1;
+}
+
+message AddHouseholdMemberRequest {
+  string     household_id = 1;
+  string     person_id    = 2;
+  MemberRole role         = 3;
+}
+
+// ── Claim RPCs ────────────────────────────────────────────────────────────────
+
+message ClaimHouseholdRequest {
+  string claim_token = 1;
+}
+
+message ClaimHouseholdResponse {}
+
+// ── Service ───────────────────────────────────────────────────────────────────
+
+// InviteService manages event invitations, RSVPs, and household memberships.
+service InviteService {
+  // Event management (host only)
+  rpc CreateEvent(CreateEventRequest) returns (Event);
+  rpc GetEvent(GetEventRequest)       returns (Event);
+
+  // Guest list management (host only)
+  rpc AddInvitee(AddInviteeRequest)                   returns (Invitee);
+  rpc AddHouseholdInvitees(AddHouseholdInviteesRequest) returns (AddHouseholdInviteesResponse);
+  rpc RemoveInvitee(RemoveInviteeRequest)             returns (RemoveInviteeResponse);
+  rpc ListInvitees(ListInviteesRequest)               returns (ListInviteesResponse);
+
+  // RSVP flow
+  rpc SubmitRSVP(SubmitRSVPRequest)         returns (SubmitRSVPResponse);
+  rpc ListHouseholds(ListHouseholdsRequest) returns (ListHouseholdsResponse);
+
+  // Person / household (partial auth — see handler)
+  rpc GetPerson(GetPersonRequest)                 returns (Person);
+  rpc ListPersons(ListPersonsRequest)             returns (ListPersonsResponse);
+  rpc CreatePerson(CreatePersonRequest)           returns (Person);
+  rpc CreateHousehold(CreateHouseholdRequest)     returns (Household);
+  rpc AddHouseholdMember(AddHouseholdMemberRequest) returns (HouseholdMember);
+
+  // Claim (authenticated)
+  rpc ClaimHousehold(ClaimHouseholdRequest) returns (ClaimHouseholdResponse);
+}
