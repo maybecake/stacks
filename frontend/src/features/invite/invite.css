@@ -1,0 +1,195 @@
+.invite-manager {
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.invite-manager__title {
+  font-size: var(--font-size-xl);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.invite-manager__status {
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.invite-manager__status--loading {
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.invite-manager__error {
+  color: var(--color-error, #c0392b);
+  margin: 0;
+  font-size: var(--font-size-sm);
+}
+
+.invite-manager__empty {
+  color: var(--text-secondary);
+  font-style: italic;
+  margin: 0;
+}
+
+/* Left panel: event creation form or detail view */
+.invite-manager__create-form-panel,
+.invite-manager__event-detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--card-padding);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius);
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.invite-manager__section-title {
+  font-size: var(--font-size-lg);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.invite-manager__subsection-title {
+  font-size: var(--font-size-md);
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-sm);
+  font-weight: 600;
+}
+
+/* Event creation form */
+.invite-manager__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.invite-manager__label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs, 4px);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.invite-manager__checkbox-label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.invite-manager__input {
+  padding: var(--spacing-xs, 4px) var(--spacing-sm);
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: var(--font-size-md);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.invite-manager__input:focus {
+  outline: 2px solid var(--color-accent, #3498db);
+  outline-offset: 1px;
+}
+
+.invite-manager__textarea {
+  resize: vertical;
+  min-height: 72px;
+}
+
+/* Event detail view */
+.invite-manager__detail-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  margin: 0;
+  padding: 0;
+}
+
+.invite-manager__detail-row {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-sm);
+}
+
+.invite-manager__detail-label {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  font-weight: 500;
+  min-width: 140px;
+}
+
+.invite-manager__detail-value {
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* Right panel: guest list */
+.invite-manager__guest-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--card-padding);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius);
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.invite-manager__guest-panel--empty {
+  justify-content: center;
+  align-items: center;
+}
+
+.invite-manager__invitee-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs, 4px);
+}
+
+.invite-manager__invitee-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-xs, 4px) var(--spacing-sm);
+  border-radius: var(--border-radius);
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border);
+}
+
+.invite-manager__invitee-name {
+  font-size: var(--font-size-md);
+  color: var(--text-primary);
+}
+
+.invite-manager__invitee-type {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  text-transform: capitalize;
+}
+
+/* Add guest form */
+.invite-manager__add-guest-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--border);
+  margin-top: auto;
+}

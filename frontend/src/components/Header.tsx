@@ -10,6 +10,7 @@ const NAV_LINKS = [
   { to: "/samples", label: "Samples" },
   { to: "/learner", label: "Learner" },
   { to: "/greetings", label: "Greetings" },
+  { to: "/invite", label: "Invite" },
 ] as const;
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>

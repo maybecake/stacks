@@ -1,6 +1,6 @@
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { Greetings, Home, Learner, Samples } from "@features/index";
+import { Greetings, Home, InviteManager, Learner, Samples } from "@features/index";
 import { Header } from "@components/Header";
 
 function App() {
@@ -15,6 +15,7 @@ function App() {
             <Route path="/samples/:count" element={<Samples />} />
             <Route path="/learner" element={<Learner />} />
             <Route path="/greetings" element={<Greetings />} />
+            <Route path="/invite" element={<InviteManager />} />
           </Routes>
         </main>
       </div>
