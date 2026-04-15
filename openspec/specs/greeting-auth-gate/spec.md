@@ -37,3 +37,18 @@ While Clerk resolves the session on initial load, greeting cards SHALL show a st
 #### Scenario: Clerk session loading
 - **WHEN** the Clerk SDK has not yet resolved the session (`isLoaded === false`)
 - **THEN** HelloCard, YoCard, and SupCard SHALL render a neutral loading state (e.g., disabled form or skeleton) rather than the sign-in prompt
+
+### Requirement: InviteManager requires authentication
+The `InviteManager` component at `/invite` SHALL check for an active Clerk session before rendering invite management content. Unauthenticated users SHALL see a sign-in prompt.
+
+#### Scenario: Unauthenticated user visits /invite
+- **WHEN** a user without an active Clerk session navigates to `/invite`
+- **THEN** `InviteManager` SHALL display a sign-in prompt and SHALL NOT render event or guest list content
+
+#### Scenario: Authenticated user visits /invite
+- **WHEN** a user with an active Clerk session navigates to `/invite`
+- **THEN** `InviteManager` SHALL render the invite management UI
+
+#### Scenario: Clerk session loading on /invite
+- **WHEN** the Clerk SDK has not yet resolved the session (`isLoaded === false`)
+- **THEN** `InviteManager` SHALL show a neutral loading state rather than flashing between signed-out and signed-in UI
