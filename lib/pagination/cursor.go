@@ -6,6 +6,24 @@ import (
 	"fmt"
 )
 
+const (
+	DefaultPageSize = 50
+	MaxPageSize     = 1000
+)
+
+// EffectivePageSize returns the page size to use for a request.
+// If requested is 0 or negative, DefaultPageSize is used.
+// If requested exceeds MaxPageSize, MaxPageSize is used.
+func EffectivePageSize(requested int32) int {
+	if requested <= 0 {
+		return DefaultPageSize
+	}
+	if int(requested) > MaxPageSize {
+		return MaxPageSize
+	}
+	return int(requested)
+}
+
 type cursorPayload struct {
 	Offset int `json:"offset"`
 }

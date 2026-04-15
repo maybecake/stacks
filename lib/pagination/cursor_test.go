@@ -39,3 +39,24 @@ func TestDecodeCursor_MalformedToken(t *testing.T) {
 		}
 	}
 }
+
+func TestEffectivePageSize(t *testing.T) {
+	cases := []struct {
+		input int32
+		want  int
+	}{
+		{0, pagination.DefaultPageSize},
+		{-1, pagination.DefaultPageSize},
+		{10, 10},
+		{50, 50},
+		{1000, 1000},
+		{1001, pagination.MaxPageSize},
+		{9999, pagination.MaxPageSize},
+	}
+	for _, c := range cases {
+		got := pagination.EffectivePageSize(c.input)
+		if got != c.want {
+			t.Errorf("EffectivePageSize(%d) = %d, want %d", c.input, got, c.want)
+		}
+	}
+}
