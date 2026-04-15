@@ -134,11 +134,14 @@ message RemoveInviteeRequest {
 message RemoveInviteeResponse {}
 
 message ListInviteesRequest {
-  string event_id = 1;
+  string event_id   = 1;
+  int32  page_size  = 2;
+  string page_token = 3;
 }
 
 message ListInviteesResponse {
-  repeated InviteeWithStatus invitees = 1;
+  repeated InviteeWithStatus invitees        = 1;
+  string                     next_page_token = 2;
 }
 
 // ── RSVP RPCs ─────────────────────────────────────────────────────────────────
@@ -158,11 +161,14 @@ message SubmitRSVPResponse {
 }
 
 message ListHouseholdsRequest {
-  string event_id = 1;
+  string event_id   = 1;
+  int32  page_size  = 2;
+  string page_token = 3;
 }
 
 message ListHouseholdsResponse {
-  repeated HouseholdGroup households = 1;
+  repeated HouseholdGroup households      = 1;
+  string                  next_page_token = 2;
 }
 
 // ── Person RPCs ───────────────────────────────────────────────────────────────
@@ -174,10 +180,13 @@ message GetPersonRequest {
 
 message ListPersonsRequest {
   string event_token = 1; // for unauthenticated RSVP callers
+  int32  page_size   = 2;
+  string page_token  = 3;
 }
 
 message ListPersonsResponse {
-  repeated Person persons = 1;
+  repeated Person persons         = 1;
+  string          next_page_token = 2;
 }
 
 message CreatePersonRequest {
@@ -199,6 +208,18 @@ message AddHouseholdMemberRequest {
   MemberRole role         = 3;
 }
 
+// ── Event list RPCs ───────────────────────────────────────────────────────────
+
+message ListEventsRequest {
+  int32  page_size  = 1;
+  string page_token = 2;
+}
+
+message ListEventsResponse {
+  repeated Event events          = 1;
+  string         next_page_token = 2;
+}
+
 // ── Claim RPCs ────────────────────────────────────────────────────────────────
 
 message ClaimHouseholdRequest {
@@ -212,8 +233,9 @@ message ClaimHouseholdResponse {}
 // InviteService manages event invitations, RSVPs, and household memberships.
 service InviteService {
   // Event management (host only)
-  rpc CreateEvent(CreateEventRequest) returns (Event);
-  rpc GetEvent(GetEventRequest)       returns (Event);
+  rpc CreateEvent(CreateEventRequest)   returns (Event);
+  rpc GetEvent(GetEventRequest)         returns (Event);
+  rpc ListEvents(ListEventsRequest)     returns (ListEventsResponse);
 
   // Guest list management (host only)
   rpc AddInvitee(AddInviteeRequest)                   returns (Invitee);

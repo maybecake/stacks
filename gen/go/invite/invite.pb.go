@@ -1181,6 +1181,8 @@ func (*RemoveInviteeResponse) Descriptor() ([]byte, []int) {
 type ListInviteesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	EventId       string                 `protobuf:"bytes,1,opt,name=event_id,json=eventId,proto3" json:"event_id,omitempty"`
+	PageSize      int32                  `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	PageToken     string                 `protobuf:"bytes,3,opt,name=page_token,json=pageToken,proto3" json:"page_token,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1222,9 +1224,24 @@ func (x *ListInviteesRequest) GetEventId() string {
 	return ""
 }
 
+func (x *ListInviteesRequest) GetPageSize() int32 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
+func (x *ListInviteesRequest) GetPageToken() string {
+	if x != nil {
+		return x.PageToken
+	}
+	return ""
+}
+
 type ListInviteesResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Invitees      []*InviteeWithStatus   `protobuf:"bytes,1,rep,name=invitees,proto3" json:"invitees,omitempty"`
+	NextPageToken string                 `protobuf:"bytes,2,opt,name=next_page_token,json=nextPageToken,proto3" json:"next_page_token,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1264,6 +1281,13 @@ func (x *ListInviteesResponse) GetInvitees() []*InviteeWithStatus {
 		return x.Invitees
 	}
 	return nil
+}
+
+func (x *ListInviteesResponse) GetNextPageToken() string {
+	if x != nil {
+		return x.NextPageToken
+	}
+	return ""
 }
 
 type SubmitRSVPRequest struct {
@@ -1405,6 +1429,8 @@ func (x *SubmitRSVPResponse) GetClaimToken() string {
 type ListHouseholdsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	EventId       string                 `protobuf:"bytes,1,opt,name=event_id,json=eventId,proto3" json:"event_id,omitempty"`
+	PageSize      int32                  `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	PageToken     string                 `protobuf:"bytes,3,opt,name=page_token,json=pageToken,proto3" json:"page_token,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1446,9 +1472,24 @@ func (x *ListHouseholdsRequest) GetEventId() string {
 	return ""
 }
 
+func (x *ListHouseholdsRequest) GetPageSize() int32 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
+func (x *ListHouseholdsRequest) GetPageToken() string {
+	if x != nil {
+		return x.PageToken
+	}
+	return ""
+}
+
 type ListHouseholdsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Households    []*HouseholdGroup      `protobuf:"bytes,1,rep,name=households,proto3" json:"households,omitempty"`
+	NextPageToken string                 `protobuf:"bytes,2,opt,name=next_page_token,json=nextPageToken,proto3" json:"next_page_token,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1488,6 +1529,13 @@ func (x *ListHouseholdsResponse) GetHouseholds() []*HouseholdGroup {
 		return x.Households
 	}
 	return nil
+}
+
+func (x *ListHouseholdsResponse) GetNextPageToken() string {
+	if x != nil {
+		return x.NextPageToken
+	}
+	return ""
 }
 
 type GetPersonRequest struct {
@@ -1545,6 +1593,8 @@ func (x *GetPersonRequest) GetEventToken() string {
 type ListPersonsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	EventToken    string                 `protobuf:"bytes,1,opt,name=event_token,json=eventToken,proto3" json:"event_token,omitempty"` // for unauthenticated RSVP callers
+	PageSize      int32                  `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	PageToken     string                 `protobuf:"bytes,3,opt,name=page_token,json=pageToken,proto3" json:"page_token,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1586,9 +1636,24 @@ func (x *ListPersonsRequest) GetEventToken() string {
 	return ""
 }
 
+func (x *ListPersonsRequest) GetPageSize() int32 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
+func (x *ListPersonsRequest) GetPageToken() string {
+	if x != nil {
+		return x.PageToken
+	}
+	return ""
+}
+
 type ListPersonsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Persons       []*Person              `protobuf:"bytes,1,rep,name=persons,proto3" json:"persons,omitempty"`
+	NextPageToken string                 `protobuf:"bytes,2,opt,name=next_page_token,json=nextPageToken,proto3" json:"next_page_token,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1628,6 +1693,13 @@ func (x *ListPersonsResponse) GetPersons() []*Person {
 		return x.Persons
 	}
 	return nil
+}
+
+func (x *ListPersonsResponse) GetNextPageToken() string {
+	if x != nil {
+		return x.NextPageToken
+	}
+	return ""
 }
 
 type CreatePersonRequest struct {
@@ -1802,6 +1874,110 @@ func (x *AddHouseholdMemberRequest) GetRole() MemberRole {
 	return MemberRole_MEMBER_ROLE_UNSPECIFIED
 }
 
+type ListEventsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PageSize      int32                  `protobuf:"varint,1,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	PageToken     string                 `protobuf:"bytes,2,opt,name=page_token,json=pageToken,proto3" json:"page_token,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListEventsRequest) Reset() {
+	*x = ListEventsRequest{}
+	mi := &file_invite_invite_proto_msgTypes[28]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListEventsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListEventsRequest) ProtoMessage() {}
+
+func (x *ListEventsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_invite_invite_proto_msgTypes[28]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListEventsRequest.ProtoReflect.Descriptor instead.
+func (*ListEventsRequest) Descriptor() ([]byte, []int) {
+	return file_invite_invite_proto_rawDescGZIP(), []int{28}
+}
+
+func (x *ListEventsRequest) GetPageSize() int32 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
+func (x *ListEventsRequest) GetPageToken() string {
+	if x != nil {
+		return x.PageToken
+	}
+	return ""
+}
+
+type ListEventsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Events        []*Event               `protobuf:"bytes,1,rep,name=events,proto3" json:"events,omitempty"`
+	NextPageToken string                 `protobuf:"bytes,2,opt,name=next_page_token,json=nextPageToken,proto3" json:"next_page_token,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListEventsResponse) Reset() {
+	*x = ListEventsResponse{}
+	mi := &file_invite_invite_proto_msgTypes[29]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListEventsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListEventsResponse) ProtoMessage() {}
+
+func (x *ListEventsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_invite_invite_proto_msgTypes[29]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListEventsResponse.ProtoReflect.Descriptor instead.
+func (*ListEventsResponse) Descriptor() ([]byte, []int) {
+	return file_invite_invite_proto_rawDescGZIP(), []int{29}
+}
+
+func (x *ListEventsResponse) GetEvents() []*Event {
+	if x != nil {
+		return x.Events
+	}
+	return nil
+}
+
+func (x *ListEventsResponse) GetNextPageToken() string {
+	if x != nil {
+		return x.NextPageToken
+	}
+	return ""
+}
+
 type ClaimHouseholdRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ClaimToken    string                 `protobuf:"bytes,1,opt,name=claim_token,json=claimToken,proto3" json:"claim_token,omitempty"`
@@ -1811,7 +1987,7 @@ type ClaimHouseholdRequest struct {
 
 func (x *ClaimHouseholdRequest) Reset() {
 	*x = ClaimHouseholdRequest{}
-	mi := &file_invite_invite_proto_msgTypes[28]
+	mi := &file_invite_invite_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1823,7 +1999,7 @@ func (x *ClaimHouseholdRequest) String() string {
 func (*ClaimHouseholdRequest) ProtoMessage() {}
 
 func (x *ClaimHouseholdRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_invite_invite_proto_msgTypes[28]
+	mi := &file_invite_invite_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1836,7 +2012,7 @@ func (x *ClaimHouseholdRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClaimHouseholdRequest.ProtoReflect.Descriptor instead.
 func (*ClaimHouseholdRequest) Descriptor() ([]byte, []int) {
-	return file_invite_invite_proto_rawDescGZIP(), []int{28}
+	return file_invite_invite_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *ClaimHouseholdRequest) GetClaimToken() string {
@@ -1854,7 +2030,7 @@ type ClaimHouseholdResponse struct {
 
 func (x *ClaimHouseholdResponse) Reset() {
 	*x = ClaimHouseholdResponse{}
-	mi := &file_invite_invite_proto_msgTypes[29]
+	mi := &file_invite_invite_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1866,7 +2042,7 @@ func (x *ClaimHouseholdResponse) String() string {
 func (*ClaimHouseholdResponse) ProtoMessage() {}
 
 func (x *ClaimHouseholdResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_invite_invite_proto_msgTypes[29]
+	mi := &file_invite_invite_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1879,7 +2055,7 @@ func (x *ClaimHouseholdResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClaimHouseholdResponse.ProtoReflect.Descriptor instead.
 func (*ClaimHouseholdResponse) Descriptor() ([]byte, []int) {
-	return file_invite_invite_proto_rawDescGZIP(), []int{29}
+	return file_invite_invite_proto_rawDescGZIP(), []int{31}
 }
 
 var File_invite_invite_proto protoreflect.FileDescriptor
@@ -1960,11 +2136,15 @@ const file_invite_invite_proto_rawDesc = "" +
 	"\x14RemoveInviteeRequest\x12\x1d\n" +
 	"\n" +
 	"invitee_id\x18\x01 \x01(\tR\tinviteeId\"\x17\n" +
-	"\x15RemoveInviteeResponse\"0\n" +
+	"\x15RemoveInviteeResponse\"l\n" +
 	"\x13ListInviteesRequest\x12\x19\n" +
-	"\bevent_id\x18\x01 \x01(\tR\aeventId\"M\n" +
+	"\bevent_id\x18\x01 \x01(\tR\aeventId\x12\x1b\n" +
+	"\tpage_size\x18\x02 \x01(\x05R\bpageSize\x12\x1d\n" +
+	"\n" +
+	"page_token\x18\x03 \x01(\tR\tpageToken\"u\n" +
 	"\x14ListInviteesResponse\x125\n" +
-	"\binvitees\x18\x01 \x03(\v2\x19.invite.InviteeWithStatusR\binvitees\"\x9b\x02\n" +
+	"\binvitees\x18\x01 \x03(\v2\x19.invite.InviteeWithStatusR\binvitees\x12&\n" +
+	"\x0fnext_page_token\x18\x02 \x01(\tR\rnextPageToken\"\x9b\x02\n" +
 	"\x11SubmitRSVPRequest\x12\x19\n" +
 	"\bevent_id\x18\x01 \x01(\tR\aeventId\x12!\n" +
 	"\fhousehold_id\x18\x02 \x01(\tR\vhouseholdId\x12*\n" +
@@ -1975,22 +2155,30 @@ const file_invite_invite_proto_rawDesc = "" +
 	"\x12SubmitRSVPResponse\x12 \n" +
 	"\x04rsvp\x18\x01 \x01(\v2\f.invite.RSVPR\x04rsvp\x12\x1f\n" +
 	"\vclaim_token\x18\x02 \x01(\tR\n" +
-	"claimToken\"2\n" +
+	"claimToken\"n\n" +
 	"\x15ListHouseholdsRequest\x12\x19\n" +
-	"\bevent_id\x18\x01 \x01(\tR\aeventId\"P\n" +
+	"\bevent_id\x18\x01 \x01(\tR\aeventId\x12\x1b\n" +
+	"\tpage_size\x18\x02 \x01(\x05R\bpageSize\x12\x1d\n" +
+	"\n" +
+	"page_token\x18\x03 \x01(\tR\tpageToken\"x\n" +
 	"\x16ListHouseholdsResponse\x126\n" +
 	"\n" +
 	"households\x18\x01 \x03(\v2\x16.invite.HouseholdGroupR\n" +
-	"households\"P\n" +
+	"households\x12&\n" +
+	"\x0fnext_page_token\x18\x02 \x01(\tR\rnextPageToken\"P\n" +
 	"\x10GetPersonRequest\x12\x1b\n" +
 	"\tperson_id\x18\x01 \x01(\tR\bpersonId\x12\x1f\n" +
 	"\vevent_token\x18\x02 \x01(\tR\n" +
-	"eventToken\"5\n" +
+	"eventToken\"q\n" +
 	"\x12ListPersonsRequest\x12\x1f\n" +
 	"\vevent_token\x18\x01 \x01(\tR\n" +
-	"eventToken\"?\n" +
+	"eventToken\x12\x1b\n" +
+	"\tpage_size\x18\x02 \x01(\x05R\bpageSize\x12\x1d\n" +
+	"\n" +
+	"page_token\x18\x03 \x01(\tR\tpageToken\"g\n" +
 	"\x13ListPersonsResponse\x12(\n" +
-	"\apersons\x18\x01 \x03(\v2\x0e.invite.PersonR\apersons\"}\n" +
+	"\apersons\x18\x01 \x03(\v2\x0e.invite.PersonR\apersons\x12&\n" +
+	"\x0fnext_page_token\x18\x02 \x01(\tR\rnextPageToken\"}\n" +
 	"\x13CreatePersonRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12&\n" +
 	"\x04type\x18\x02 \x01(\x0e2\x12.invite.PersonTypeR\x04type\x12\x14\n" +
@@ -2001,7 +2189,14 @@ const file_invite_invite_proto_rawDesc = "" +
 	"\x19AddHouseholdMemberRequest\x12!\n" +
 	"\fhousehold_id\x18\x01 \x01(\tR\vhouseholdId\x12\x1b\n" +
 	"\tperson_id\x18\x02 \x01(\tR\bpersonId\x12&\n" +
-	"\x04role\x18\x03 \x01(\x0e2\x12.invite.MemberRoleR\x04role\"8\n" +
+	"\x04role\x18\x03 \x01(\x0e2\x12.invite.MemberRoleR\x04role\"O\n" +
+	"\x11ListEventsRequest\x12\x1b\n" +
+	"\tpage_size\x18\x01 \x01(\x05R\bpageSize\x12\x1d\n" +
+	"\n" +
+	"page_token\x18\x02 \x01(\tR\tpageToken\"c\n" +
+	"\x12ListEventsResponse\x12%\n" +
+	"\x06events\x18\x01 \x03(\v2\r.invite.EventR\x06events\x12&\n" +
+	"\x0fnext_page_token\x18\x02 \x01(\tR\rnextPageToken\"8\n" +
 	"\x15ClaimHouseholdRequest\x12\x1f\n" +
 	"\vclaim_token\x18\x01 \x01(\tR\n" +
 	"claimToken\"\x18\n" +
@@ -2020,10 +2215,12 @@ const file_invite_invite_proto_rawDesc = "" +
 	"RSVPStatus\x12\x1b\n" +
 	"\x17RSVP_STATUS_UNSPECIFIED\x10\x00\x12\x19\n" +
 	"\x15RSVP_STATUS_CONFIRMED\x10\x01\x12\x18\n" +
-	"\x14RSVP_STATUS_DECLINED\x10\x022\xee\a\n" +
+	"\x14RSVP_STATUS_DECLINED\x10\x022\xb3\b\n" +
 	"\rInviteService\x128\n" +
 	"\vCreateEvent\x12\x1a.invite.CreateEventRequest\x1a\r.invite.Event\x122\n" +
-	"\bGetEvent\x12\x17.invite.GetEventRequest\x1a\r.invite.Event\x128\n" +
+	"\bGetEvent\x12\x17.invite.GetEventRequest\x1a\r.invite.Event\x12C\n" +
+	"\n" +
+	"ListEvents\x12\x19.invite.ListEventsRequest\x1a\x1a.invite.ListEventsResponse\x128\n" +
 	"\n" +
 	"AddInvitee\x12\x19.invite.AddInviteeRequest\x1a\x0f.invite.Invitee\x12a\n" +
 	"\x14AddHouseholdInvitees\x12#.invite.AddHouseholdInviteesRequest\x1a$.invite.AddHouseholdInviteesResponse\x12L\n" +
@@ -2052,7 +2249,7 @@ func file_invite_invite_proto_rawDescGZIP() []byte {
 }
 
 var file_invite_invite_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
-var file_invite_invite_proto_msgTypes = make([]protoimpl.MessageInfo, 30)
+var file_invite_invite_proto_msgTypes = make([]protoimpl.MessageInfo, 32)
 var file_invite_invite_proto_goTypes = []any{
 	(PersonType)(0),                      // 0: invite.PersonType
 	(MemberRole)(0),                      // 1: invite.MemberRole
@@ -2085,8 +2282,10 @@ var file_invite_invite_proto_goTypes = []any{
 	(*CreatePersonRequest)(nil),          // 28: invite.CreatePersonRequest
 	(*CreateHouseholdRequest)(nil),       // 29: invite.CreateHouseholdRequest
 	(*AddHouseholdMemberRequest)(nil),    // 30: invite.AddHouseholdMemberRequest
-	(*ClaimHouseholdRequest)(nil),        // 31: invite.ClaimHouseholdRequest
-	(*ClaimHouseholdResponse)(nil),       // 32: invite.ClaimHouseholdResponse
+	(*ListEventsRequest)(nil),            // 31: invite.ListEventsRequest
+	(*ListEventsResponse)(nil),           // 32: invite.ListEventsResponse
+	(*ClaimHouseholdRequest)(nil),        // 33: invite.ClaimHouseholdRequest
+	(*ClaimHouseholdResponse)(nil),       // 34: invite.ClaimHouseholdResponse
 }
 var file_invite_invite_proto_depIdxs = []int32{
 	0,  // 0: invite.Person.type:type_name -> invite.PersonType
@@ -2106,39 +2305,42 @@ var file_invite_invite_proto_depIdxs = []int32{
 	3,  // 14: invite.ListPersonsResponse.persons:type_name -> invite.Person
 	0,  // 15: invite.CreatePersonRequest.type:type_name -> invite.PersonType
 	1,  // 16: invite.AddHouseholdMemberRequest.role:type_name -> invite.MemberRole
-	12, // 17: invite.InviteService.CreateEvent:input_type -> invite.CreateEventRequest
-	13, // 18: invite.InviteService.GetEvent:input_type -> invite.GetEventRequest
-	14, // 19: invite.InviteService.AddInvitee:input_type -> invite.AddInviteeRequest
-	15, // 20: invite.InviteService.AddHouseholdInvitees:input_type -> invite.AddHouseholdInviteesRequest
-	17, // 21: invite.InviteService.RemoveInvitee:input_type -> invite.RemoveInviteeRequest
-	19, // 22: invite.InviteService.ListInvitees:input_type -> invite.ListInviteesRequest
-	21, // 23: invite.InviteService.SubmitRSVP:input_type -> invite.SubmitRSVPRequest
-	23, // 24: invite.InviteService.ListHouseholds:input_type -> invite.ListHouseholdsRequest
-	25, // 25: invite.InviteService.GetPerson:input_type -> invite.GetPersonRequest
-	26, // 26: invite.InviteService.ListPersons:input_type -> invite.ListPersonsRequest
-	28, // 27: invite.InviteService.CreatePerson:input_type -> invite.CreatePersonRequest
-	29, // 28: invite.InviteService.CreateHousehold:input_type -> invite.CreateHouseholdRequest
-	30, // 29: invite.InviteService.AddHouseholdMember:input_type -> invite.AddHouseholdMemberRequest
-	31, // 30: invite.InviteService.ClaimHousehold:input_type -> invite.ClaimHouseholdRequest
-	6,  // 31: invite.InviteService.CreateEvent:output_type -> invite.Event
-	6,  // 32: invite.InviteService.GetEvent:output_type -> invite.Event
-	7,  // 33: invite.InviteService.AddInvitee:output_type -> invite.Invitee
-	16, // 34: invite.InviteService.AddHouseholdInvitees:output_type -> invite.AddHouseholdInviteesResponse
-	18, // 35: invite.InviteService.RemoveInvitee:output_type -> invite.RemoveInviteeResponse
-	20, // 36: invite.InviteService.ListInvitees:output_type -> invite.ListInviteesResponse
-	22, // 37: invite.InviteService.SubmitRSVP:output_type -> invite.SubmitRSVPResponse
-	24, // 38: invite.InviteService.ListHouseholds:output_type -> invite.ListHouseholdsResponse
-	3,  // 39: invite.InviteService.GetPerson:output_type -> invite.Person
-	27, // 40: invite.InviteService.ListPersons:output_type -> invite.ListPersonsResponse
-	3,  // 41: invite.InviteService.CreatePerson:output_type -> invite.Person
-	4,  // 42: invite.InviteService.CreateHousehold:output_type -> invite.Household
-	5,  // 43: invite.InviteService.AddHouseholdMember:output_type -> invite.HouseholdMember
-	32, // 44: invite.InviteService.ClaimHousehold:output_type -> invite.ClaimHouseholdResponse
-	31, // [31:45] is the sub-list for method output_type
-	17, // [17:31] is the sub-list for method input_type
-	17, // [17:17] is the sub-list for extension type_name
-	17, // [17:17] is the sub-list for extension extendee
-	0,  // [0:17] is the sub-list for field type_name
+	6,  // 17: invite.ListEventsResponse.events:type_name -> invite.Event
+	12, // 18: invite.InviteService.CreateEvent:input_type -> invite.CreateEventRequest
+	13, // 19: invite.InviteService.GetEvent:input_type -> invite.GetEventRequest
+	31, // 20: invite.InviteService.ListEvents:input_type -> invite.ListEventsRequest
+	14, // 21: invite.InviteService.AddInvitee:input_type -> invite.AddInviteeRequest
+	15, // 22: invite.InviteService.AddHouseholdInvitees:input_type -> invite.AddHouseholdInviteesRequest
+	17, // 23: invite.InviteService.RemoveInvitee:input_type -> invite.RemoveInviteeRequest
+	19, // 24: invite.InviteService.ListInvitees:input_type -> invite.ListInviteesRequest
+	21, // 25: invite.InviteService.SubmitRSVP:input_type -> invite.SubmitRSVPRequest
+	23, // 26: invite.InviteService.ListHouseholds:input_type -> invite.ListHouseholdsRequest
+	25, // 27: invite.InviteService.GetPerson:input_type -> invite.GetPersonRequest
+	26, // 28: invite.InviteService.ListPersons:input_type -> invite.ListPersonsRequest
+	28, // 29: invite.InviteService.CreatePerson:input_type -> invite.CreatePersonRequest
+	29, // 30: invite.InviteService.CreateHousehold:input_type -> invite.CreateHouseholdRequest
+	30, // 31: invite.InviteService.AddHouseholdMember:input_type -> invite.AddHouseholdMemberRequest
+	33, // 32: invite.InviteService.ClaimHousehold:input_type -> invite.ClaimHouseholdRequest
+	6,  // 33: invite.InviteService.CreateEvent:output_type -> invite.Event
+	6,  // 34: invite.InviteService.GetEvent:output_type -> invite.Event
+	32, // 35: invite.InviteService.ListEvents:output_type -> invite.ListEventsResponse
+	7,  // 36: invite.InviteService.AddInvitee:output_type -> invite.Invitee
+	16, // 37: invite.InviteService.AddHouseholdInvitees:output_type -> invite.AddHouseholdInviteesResponse
+	18, // 38: invite.InviteService.RemoveInvitee:output_type -> invite.RemoveInviteeResponse
+	20, // 39: invite.InviteService.ListInvitees:output_type -> invite.ListInviteesResponse
+	22, // 40: invite.InviteService.SubmitRSVP:output_type -> invite.SubmitRSVPResponse
+	24, // 41: invite.InviteService.ListHouseholds:output_type -> invite.ListHouseholdsResponse
+	3,  // 42: invite.InviteService.GetPerson:output_type -> invite.Person
+	27, // 43: invite.InviteService.ListPersons:output_type -> invite.ListPersonsResponse
+	3,  // 44: invite.InviteService.CreatePerson:output_type -> invite.Person
+	4,  // 45: invite.InviteService.CreateHousehold:output_type -> invite.Household
+	5,  // 46: invite.InviteService.AddHouseholdMember:output_type -> invite.HouseholdMember
+	34, // 47: invite.InviteService.ClaimHousehold:output_type -> invite.ClaimHouseholdResponse
+	33, // [33:48] is the sub-list for method output_type
+	18, // [18:33] is the sub-list for method input_type
+	18, // [18:18] is the sub-list for extension type_name
+	18, // [18:18] is the sub-list for extension extendee
+	0,  // [0:18] is the sub-list for field type_name
 }
 
 func init() { file_invite_invite_proto_init() }
@@ -2152,7 +2354,7 @@ func file_invite_invite_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_invite_invite_proto_rawDesc), len(file_invite_invite_proto_rawDesc)),
 			NumEnums:      3,
-			NumMessages:   30,
+			NumMessages:   32,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

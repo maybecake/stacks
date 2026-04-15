@@ -469,6 +469,16 @@ export declare type ListInviteesRequest = Message<"invite.ListInviteesRequest"> 
    * @generated from field: string event_id = 1;
    */
   eventId: string;
+
+  /**
+   * @generated from field: int32 page_size = 2;
+   */
+  pageSize: number;
+
+  /**
+   * @generated from field: string page_token = 3;
+   */
+  pageToken: string;
 };
 
 /**
@@ -485,6 +495,11 @@ export declare type ListInviteesResponse = Message<"invite.ListInviteesResponse"
    * @generated from field: repeated invite.InviteeWithStatus invitees = 1;
    */
   invitees: InviteeWithStatus[];
+
+  /**
+   * @generated from field: string next_page_token = 2;
+   */
+  nextPageToken: string;
 };
 
 /**
@@ -565,6 +580,16 @@ export declare type ListHouseholdsRequest = Message<"invite.ListHouseholdsReques
    * @generated from field: string event_id = 1;
    */
   eventId: string;
+
+  /**
+   * @generated from field: int32 page_size = 2;
+   */
+  pageSize: number;
+
+  /**
+   * @generated from field: string page_token = 3;
+   */
+  pageToken: string;
 };
 
 /**
@@ -581,6 +606,11 @@ export declare type ListHouseholdsResponse = Message<"invite.ListHouseholdsRespo
    * @generated from field: repeated invite.HouseholdGroup households = 1;
    */
   households: HouseholdGroup[];
+
+  /**
+   * @generated from field: string next_page_token = 2;
+   */
+  nextPageToken: string;
 };
 
 /**
@@ -622,6 +652,16 @@ export declare type ListPersonsRequest = Message<"invite.ListPersonsRequest"> & 
    * @generated from field: string event_token = 1;
    */
   eventToken: string;
+
+  /**
+   * @generated from field: int32 page_size = 2;
+   */
+  pageSize: number;
+
+  /**
+   * @generated from field: string page_token = 3;
+   */
+  pageToken: string;
 };
 
 /**
@@ -638,6 +678,11 @@ export declare type ListPersonsResponse = Message<"invite.ListPersonsResponse"> 
    * @generated from field: repeated invite.Person persons = 1;
    */
   persons: Person[];
+
+  /**
+   * @generated from field: string next_page_token = 2;
+   */
+  nextPageToken: string;
 };
 
 /**
@@ -718,6 +763,48 @@ export declare type AddHouseholdMemberRequest = Message<"invite.AddHouseholdMemb
  * Use `create(AddHouseholdMemberRequestSchema)` to create a new message.
  */
 export declare const AddHouseholdMemberRequestSchema: GenMessage<AddHouseholdMemberRequest>;
+
+/**
+ * @generated from message invite.ListEventsRequest
+ */
+export declare type ListEventsRequest = Message<"invite.ListEventsRequest"> & {
+  /**
+   * @generated from field: int32 page_size = 1;
+   */
+  pageSize: number;
+
+  /**
+   * @generated from field: string page_token = 2;
+   */
+  pageToken: string;
+};
+
+/**
+ * Describes the message invite.ListEventsRequest.
+ * Use `create(ListEventsRequestSchema)` to create a new message.
+ */
+export declare const ListEventsRequestSchema: GenMessage<ListEventsRequest>;
+
+/**
+ * @generated from message invite.ListEventsResponse
+ */
+export declare type ListEventsResponse = Message<"invite.ListEventsResponse"> & {
+  /**
+   * @generated from field: repeated invite.Event events = 1;
+   */
+  events: Event[];
+
+  /**
+   * @generated from field: string next_page_token = 2;
+   */
+  nextPageToken: string;
+};
+
+/**
+ * Describes the message invite.ListEventsResponse.
+ * Use `create(ListEventsResponseSchema)` to create a new message.
+ */
+export declare const ListEventsResponseSchema: GenMessage<ListEventsResponse>;
 
 /**
  * @generated from message invite.ClaimHouseholdRequest
@@ -823,6 +910,8 @@ export enum RSVPStatus {
 export declare const RSVPStatusSchema: GenEnum<RSVPStatus>;
 
 /**
+ * InviteService manages event invitations, RSVPs, and household memberships.
+ *
  * @generated from service invite.InviteService
  */
 export declare const InviteService: GenService<{
@@ -843,6 +932,14 @@ export declare const InviteService: GenService<{
     methodKind: "unary";
     input: typeof GetEventRequestSchema;
     output: typeof EventSchema;
+  },
+  /**
+   * @generated from rpc invite.InviteService.ListEvents
+   */
+  listEvents: {
+    methodKind: "unary";
+    input: typeof ListEventsRequestSchema;
+    output: typeof ListEventsResponseSchema;
   },
   /**
    * Guest list management (host only)

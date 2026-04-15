@@ -38,6 +38,9 @@ const (
 	InviteServiceCreateEventProcedure = "/invite.InviteService/CreateEvent"
 	// InviteServiceGetEventProcedure is the fully-qualified name of the InviteService's GetEvent RPC.
 	InviteServiceGetEventProcedure = "/invite.InviteService/GetEvent"
+	// InviteServiceListEventsProcedure is the fully-qualified name of the InviteService's ListEvents
+	// RPC.
+	InviteServiceListEventsProcedure = "/invite.InviteService/ListEvents"
 	// InviteServiceAddInviteeProcedure is the fully-qualified name of the InviteService's AddInvitee
 	// RPC.
 	InviteServiceAddInviteeProcedure = "/invite.InviteService/AddInvitee"
@@ -80,6 +83,7 @@ type InviteServiceClient interface {
 	// Event management (host only)
 	CreateEvent(context.Context, *connect.Request[invite.CreateEventRequest]) (*connect.Response[invite.Event], error)
 	GetEvent(context.Context, *connect.Request[invite.GetEventRequest]) (*connect.Response[invite.Event], error)
+	ListEvents(context.Context, *connect.Request[invite.ListEventsRequest]) (*connect.Response[invite.ListEventsResponse], error)
 	// Guest list management (host only)
 	AddInvitee(context.Context, *connect.Request[invite.AddInviteeRequest]) (*connect.Response[invite.Invitee], error)
 	AddHouseholdInvitees(context.Context, *connect.Request[invite.AddHouseholdInviteesRequest]) (*connect.Response[invite.AddHouseholdInviteesResponse], error)
@@ -119,6 +123,12 @@ func NewInviteServiceClient(httpClient connect.HTTPClient, baseURL string, opts 
 			httpClient,
 			baseURL+InviteServiceGetEventProcedure,
 			connect.WithSchema(inviteServiceMethods.ByName("GetEvent")),
+			connect.WithClientOptions(opts...),
+		),
+		listEvents: connect.NewClient[invite.ListEventsRequest, invite.ListEventsResponse](
+			httpClient,
+			baseURL+InviteServiceListEventsProcedure,
+			connect.WithSchema(inviteServiceMethods.ByName("ListEvents")),
 			connect.WithClientOptions(opts...),
 		),
 		addInvitee: connect.NewClient[invite.AddInviteeRequest, invite.Invitee](
@@ -200,6 +210,7 @@ func NewInviteServiceClient(httpClient connect.HTTPClient, baseURL string, opts 
 type inviteServiceClient struct {
 	createEvent          *connect.Client[invite.CreateEventRequest, invite.Event]
 	getEvent             *connect.Client[invite.GetEventRequest, invite.Event]
+	listEvents           *connect.Client[invite.ListEventsRequest, invite.ListEventsResponse]
 	addInvitee           *connect.Client[invite.AddInviteeRequest, invite.Invitee]
 	addHouseholdInvitees *connect.Client[invite.AddHouseholdInviteesRequest, invite.AddHouseholdInviteesResponse]
 	removeInvitee        *connect.Client[invite.RemoveInviteeRequest, invite.RemoveInviteeResponse]
@@ -222,6 +233,11 @@ func (c *inviteServiceClient) CreateEvent(ctx context.Context, req *connect.Requ
 // GetEvent calls invite.InviteService.GetEvent.
 func (c *inviteServiceClient) GetEvent(ctx context.Context, req *connect.Request[invite.GetEventRequest]) (*connect.Response[invite.Event], error) {
 	return c.getEvent.CallUnary(ctx, req)
+}
+
+// ListEvents calls invite.InviteService.ListEvents.
+func (c *inviteServiceClient) ListEvents(ctx context.Context, req *connect.Request[invite.ListEventsRequest]) (*connect.Response[invite.ListEventsResponse], error) {
+	return c.listEvents.CallUnary(ctx, req)
 }
 
 // AddInvitee calls invite.InviteService.AddInvitee.
@@ -289,6 +305,7 @@ type InviteServiceHandler interface {
 	// Event management (host only)
 	CreateEvent(context.Context, *connect.Request[invite.CreateEventRequest]) (*connect.Response[invite.Event], error)
 	GetEvent(context.Context, *connect.Request[invite.GetEventRequest]) (*connect.Response[invite.Event], error)
+	ListEvents(context.Context, *connect.Request[invite.ListEventsRequest]) (*connect.Response[invite.ListEventsResponse], error)
 	// Guest list management (host only)
 	AddInvitee(context.Context, *connect.Request[invite.AddInviteeRequest]) (*connect.Response[invite.Invitee], error)
 	AddHouseholdInvitees(context.Context, *connect.Request[invite.AddHouseholdInviteesRequest]) (*connect.Response[invite.AddHouseholdInviteesResponse], error)
@@ -324,6 +341,12 @@ func NewInviteServiceHandler(svc InviteServiceHandler, opts ...connect.HandlerOp
 		InviteServiceGetEventProcedure,
 		svc.GetEvent,
 		connect.WithSchema(inviteServiceMethods.ByName("GetEvent")),
+		connect.WithHandlerOptions(opts...),
+	)
+	inviteServiceListEventsHandler := connect.NewUnaryHandler(
+		InviteServiceListEventsProcedure,
+		svc.ListEvents,
+		connect.WithSchema(inviteServiceMethods.ByName("ListEvents")),
 		connect.WithHandlerOptions(opts...),
 	)
 	inviteServiceAddInviteeHandler := connect.NewUnaryHandler(
@@ -404,6 +427,8 @@ func NewInviteServiceHandler(svc InviteServiceHandler, opts ...connect.HandlerOp
 			inviteServiceCreateEventHandler.ServeHTTP(w, r)
 		case InviteServiceGetEventProcedure:
 			inviteServiceGetEventHandler.ServeHTTP(w, r)
+		case InviteServiceListEventsProcedure:
+			inviteServiceListEventsHandler.ServeHTTP(w, r)
 		case InviteServiceAddInviteeProcedure:
 			inviteServiceAddInviteeHandler.ServeHTTP(w, r)
 		case InviteServiceAddHouseholdInviteesProcedure:
@@ -443,6 +468,10 @@ func (UnimplementedInviteServiceHandler) CreateEvent(context.Context, *connect.R
 
 func (UnimplementedInviteServiceHandler) GetEvent(context.Context, *connect.Request[invite.GetEventRequest]) (*connect.Response[invite.Event], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("invite.InviteService.GetEvent is not implemented"))
+}
+
+func (UnimplementedInviteServiceHandler) ListEvents(context.Context, *connect.Request[invite.ListEventsRequest]) (*connect.Response[invite.ListEventsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("invite.InviteService.ListEvents is not implemented"))
 }
 
 func (UnimplementedInviteServiceHandler) AddInvitee(context.Context, *connect.Request[invite.AddInviteeRequest]) (*connect.Response[invite.Invitee], error) {
