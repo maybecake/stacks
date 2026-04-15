@@ -18,6 +18,7 @@ import (
 	"github.com/maybecake/stacks/gen/go/invite/inviteconnect"
 	"github.com/maybecake/stacks/lib/adapters/postgres"
 	"github.com/maybecake/stacks/lib/domain"
+	"github.com/maybecake/stacks/lib/pagination"
 	"os"
 )
 
@@ -306,7 +307,12 @@ func (s *InviteServer) ListInvitees(ctx context.Context, req *connect.Request[in
 	if err := requireInviteAuth(req.Header().Get("Authorization")); err != nil {
 		return nil, err
 	}
-	items, err := s.svc.ListInvitees(ctx, req.Msg.EventId)
+	limit := pagination.EffectivePageSize(req.Msg.PageSize)
+	offset, err := pagination.DecodeCursor(req.Msg.PageToken)
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInvalidArgument, err)
+	}
+	items, err := s.svc.ListInvitees(ctx, req.Msg.EventId, limit, offset)
 	if err != nil {
 		return nil, domainErr(err)
 	}
@@ -318,7 +324,11 @@ func (s *InviteServer) ListInvitees(ctx context.Context, req *connect.Request[in
 			RsvpStatus: rsvpStatusToProto(it.RSVPStatus),
 		}
 	}
-	return connect.NewResponse(&invitev1.ListInviteesResponse{Invitees: pbItems}), nil
+	var nextToken string
+	if len(items) == limit {
+		nextToken = pagination.EncodeCursor(offset + limit)
+	}
+	return connect.NewResponse(&invitev1.ListInviteesResponse{Invitees: pbItems, NextPageToken: nextToken}), nil
 }
 
 // ── RSVP RPCs ─────────────────────────────────────────────────────────────────
@@ -346,7 +356,12 @@ func (s *InviteServer) ListHouseholds(ctx context.Context, req *connect.Request[
 	if err := requireInviteAuth(req.Header().Get("Authorization")); err != nil {
 		return nil, err
 	}
-	groups, err := s.svc.ListHouseholds(ctx, req.Msg.EventId)
+	limit := pagination.EffectivePageSize(req.Msg.PageSize)
+	offset, err := pagination.DecodeCursor(req.Msg.PageToken)
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInvalidArgument, err)
+	}
+	groups, err := s.svc.ListHouseholds(ctx, req.Msg.EventId, limit, offset)
 	if err != nil {
 		return nil, domainErr(err)
 	}
@@ -364,7 +379,11 @@ func (s *InviteServer) ListHouseholds(ctx context.Context, req *connect.Request[
 			EmergencyContactPhone: g.EmergencyContactPhone,
 		}
 	}
-	return connect.NewResponse(&invitev1.ListHouseholdsResponse{Households: pbGroups}), nil
+	var nextToken string
+	if len(groups) == limit {
+		nextToken = pagination.EncodeCursor(offset + limit)
+	}
+	return connect.NewResponse(&invitev1.ListHouseholdsResponse{Households: pbGroups, NextPageToken: nextToken}), nil
 }
 
 // ── Person RPCs (partial auth) ────────────────────────────────────────────────
@@ -380,7 +399,12 @@ func (s *InviteServer) GetPerson(ctx context.Context, req *connect.Request[invit
 
 func (s *InviteServer) ListPersons(ctx context.Context, req *connect.Request[invitev1.ListPersonsRequest]) (*connect.Response[invitev1.ListPersonsResponse], error) {
 	callerUserID, _ := tryGetCallerUserID(req.Header().Get("Authorization"))
-	persons, err := s.svc.ListPersons(ctx, callerUserID, req.Msg.EventToken)
+	limit := pagination.EffectivePageSize(req.Msg.PageSize)
+	offset, err := pagination.DecodeCursor(req.Msg.PageToken)
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInvalidArgument, err)
+	}
+	persons, err := s.svc.ListPersons(ctx, callerUserID, req.Msg.EventToken, limit, offset)
 	if err != nil {
 		return nil, domainErr(err)
 	}
@@ -388,7 +412,36 @@ func (s *InviteServer) ListPersons(ctx context.Context, req *connect.Request[inv
 	for i, p := range persons {
 		pbPersons[i] = pbPerson(*p)
 	}
-	return connect.NewResponse(&invitev1.ListPersonsResponse{Persons: pbPersons}), nil
+	var nextToken string
+	if len(persons) == limit {
+		nextToken = pagination.EncodeCursor(offset + limit)
+	}
+	return connect.NewResponse(&invitev1.ListPersonsResponse{Persons: pbPersons, NextPageToken: nextToken}), nil
+}
+
+func (s *InviteServer) ListEvents(ctx context.Context, req *connect.Request[invitev1.ListEventsRequest]) (*connect.Response[invitev1.ListEventsResponse], error) {
+	userID, err := getCallerUserID(req.Header().Get("Authorization"))
+	if err != nil {
+		return nil, err
+	}
+	limit := pagination.EffectivePageSize(req.Msg.PageSize)
+	offset, decodeErr := pagination.DecodeCursor(req.Msg.PageToken)
+	if decodeErr != nil {
+		return nil, connect.NewError(connect.CodeInvalidArgument, decodeErr)
+	}
+	events, err := s.svc.ListEvents(ctx, userID, limit, offset)
+	if err != nil {
+		return nil, domainErr(err)
+	}
+	pbEvents := make([]*invitev1.Event, len(events))
+	for i, e := range events {
+		pbEvents[i] = pbEvent(*e)
+	}
+	var nextToken string
+	if len(events) == limit {
+		nextToken = pagination.EncodeCursor(offset + limit)
+	}
+	return connect.NewResponse(&invitev1.ListEventsResponse{Events: pbEvents, NextPageToken: nextToken}), nil
 }
 
 func (s *InviteServer) CreatePerson(ctx context.Context, req *connect.Request[invitev1.CreatePersonRequest]) (*connect.Response[invitev1.Person], error) {

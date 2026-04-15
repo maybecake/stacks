@@ -5,6 +5,12 @@ INSERT INTO invite__events (host_user_id, name, venue, description, datetime, ca
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 RETURNING *;
 
+-- name: ListEventsForHost :many
+SELECT * FROM invite__events
+WHERE host_user_id = $1
+ORDER BY name
+LIMIT $2 OFFSET $3;
+
 -- name: GetEventByPublicToken :one
 SELECT * FROM invite__events WHERE public_token = $1 LIMIT 1;
 
@@ -27,7 +33,8 @@ FROM persons p
 JOIN household_members hm ON hm.person_id = p.id
 JOIN user_households uh ON uh.household_id = hm.household_id
 WHERE uh.user_id = $1
-ORDER BY p.name;
+ORDER BY p.name
+LIMIT $2 OFFSET $3;
 
 -- name: ListPersonsForHost :many
 SELECT DISTINCT p.*
@@ -35,7 +42,8 @@ FROM persons p
 JOIN invite__invitees ii ON ii.person_id = p.id
 JOIN invite__events e ON e.id = ii.event_id
 WHERE e.host_user_id = $1
-ORDER BY p.name;
+ORDER BY p.name
+LIMIT $2 OFFSET $3;
 
 -- name: ListPersonsForEvent :many
 SELECT DISTINCT p.*
@@ -43,7 +51,8 @@ FROM persons p
 JOIN invite__invitees ii ON ii.person_id = p.id
 JOIN invite__events e ON e.id = ii.event_id
 WHERE e.public_token = $1
-ORDER BY p.name;
+ORDER BY p.name
+LIMIT $2 OFFSET $3;
 
 -- name: PersonIsAccessibleToOwner :one
 SELECT COUNT(*) > 0 AS accessible
@@ -112,7 +121,8 @@ FROM invite__invitees ii
 JOIN persons p ON p.id = ii.person_id
 LEFT JOIN invite__rsvps r ON r.event_id = ii.event_id AND r.household_id = ii.household_id
 WHERE ii.event_id = $1
-ORDER BY p.name;
+ORDER BY p.name
+LIMIT $2 OFFSET $3;
 
 -- name: InviteeHouseholdHasConfirmedRSVP :one
 SELECT COUNT(*) > 0 AS has_rsvp
@@ -160,7 +170,8 @@ JOIN households h ON h.id = r.household_id
 JOIN invite__rsvp_attendees ra ON ra.rsvp_id = r.id
 JOIN persons p ON p.id = ra.person_id
 WHERE r.event_id = $1 AND r.status = 'confirmed'
-ORDER BY h.name, p.name;
+ORDER BY h.name, p.name
+LIMIT $2 OFFSET $3;
 
 -- ── Claims ────────────────────────────────────────────────────────────────────
 

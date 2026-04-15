@@ -65,8 +65,12 @@ func (s *InviteService) RemoveInvitee(ctx context.Context, inviteeID string) err
 	return s.store.RemoveInvitee(ctx, inviteeID)
 }
 
-func (s *InviteService) ListInvitees(ctx context.Context, eventID string) ([]*InviteeWithStatus, error) {
-	return s.store.ListInvitees(ctx, eventID)
+func (s *InviteService) ListInvitees(ctx context.Context, eventID string, limit, offset int) ([]*InviteeWithStatus, error) {
+	return s.store.ListInvitees(ctx, eventID, limit, offset)
+}
+
+func (s *InviteService) ListEvents(ctx context.Context, hostUserID string, limit, offset int) ([]*Event, error) {
+	return s.store.ListEvents(ctx, hostUserID, limit, offset)
 }
 
 // ── RSVP ──────────────────────────────────────────────────────────────────────
@@ -117,8 +121,8 @@ func (s *InviteService) SubmitRSVP(ctx context.Context, p SubmitRSVPParams) (*RS
 	return rsvp, claimToken, nil
 }
 
-func (s *InviteService) ListHouseholds(ctx context.Context, eventID string) ([]*HouseholdGroup, error) {
-	return s.store.ListHouseholds(ctx, eventID)
+func (s *InviteService) ListHouseholds(ctx context.Context, eventID string, limit, offset int) ([]*HouseholdGroup, error) {
+	return s.store.ListHouseholds(ctx, eventID, limit, offset)
 }
 
 // ── Persons ───────────────────────────────────────────────────────────────────
@@ -144,8 +148,8 @@ func (s *InviteService) GetPerson(ctx context.Context, personID, callerUserID, e
 	return p, nil
 }
 
-func (s *InviteService) ListPersons(ctx context.Context, callerUserID, eventToken string) ([]*Person, error) {
-	return s.store.ListPersonsForCaller(ctx, callerUserID, eventToken)
+func (s *InviteService) ListPersons(ctx context.Context, callerUserID, eventToken string, limit, offset int) ([]*Person, error) {
+	return s.store.ListPersonsForCaller(ctx, callerUserID, eventToken, limit, offset)
 }
 
 func (s *InviteService) CreatePerson(ctx context.Context, name string, t PersonType, phone, email string) (*Person, error) {

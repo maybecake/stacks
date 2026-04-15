@@ -160,6 +160,24 @@ func (s *PostgresInviteStore) GetEventByID(ctx context.Context, eventID string) 
 	return &e, nil
 }
 
+func (s *PostgresInviteStore) ListEvents(ctx context.Context, hostUserID string, limit, offset int) ([]*domain.Event, error) {
+	q := pgdb.New(s.db)
+	rows, err := q.ListEventsForHost(ctx, pgdb.ListEventsForHostParams{
+		HostUserID: hostUserID,
+		Limit:      int32(limit),
+		Offset:     int32(offset),
+	})
+	if err != nil {
+		return nil, err
+	}
+	result := make([]*domain.Event, len(rows))
+	for i, r := range rows {
+		e := domainEvent(r)
+		result[i] = &e
+	}
+	return result, nil
+}
+
 // ── Persons ───────────────────────────────────────────────────────────────────
 
 func (s *PostgresInviteStore) CreatePerson(ctx context.Context, name string, t domain.PersonType, phone, email string) (*domain.Person, error) {
@@ -238,7 +256,7 @@ func (s *PostgresInviteStore) IsPersonAccessible(ctx context.Context, personID, 
 	return false, nil
 }
 
-func (s *PostgresInviteStore) ListPersonsForCaller(ctx context.Context, callerUserID, eventToken string) ([]*domain.Person, error) {
+func (s *PostgresInviteStore) ListPersonsForCaller(ctx context.Context, callerUserID, eventToken string, limit, offset int) ([]*domain.Person, error) {
 	q := pgdb.New(s.db)
 	seen := map[uuid.UUID]bool{}
 	var result []*domain.Person
@@ -254,13 +272,21 @@ func (s *PostgresInviteStore) ListPersonsForCaller(ctx context.Context, callerUs
 	}
 
 	if callerUserID != "" {
-		rows, err := q.ListPersonsForOwner(ctx, callerUserID)
+		rows, err := q.ListPersonsForOwner(ctx, pgdb.ListPersonsForOwnerParams{
+			UserID: callerUserID,
+			Limit:  int32(limit),
+			Offset: int32(offset),
+		})
 		if err != nil {
 			return nil, err
 		}
 		addRows(rows)
 
-		rows, err = q.ListPersonsForHost(ctx, callerUserID)
+		rows, err = q.ListPersonsForHost(ctx, pgdb.ListPersonsForHostParams{
+			HostUserID: callerUserID,
+			Limit:      int32(limit),
+			Offset:     int32(offset),
+		})
 		if err != nil {
 			return nil, err
 		}
@@ -272,7 +298,11 @@ func (s *PostgresInviteStore) ListPersonsForCaller(ctx context.Context, callerUs
 		if err != nil {
 			return nil, err
 		}
-		rows, err := q.ListPersonsForEvent(ctx, tok)
+		rows, err := q.ListPersonsForEvent(ctx, pgdb.ListPersonsForEventParams{
+			PublicToken: tok,
+			Limit:       int32(limit),
+			Offset:      int32(offset),
+		})
 		if err != nil {
 			return nil, err
 		}
@@ -443,13 +473,17 @@ func (s *PostgresInviteStore) RemoveInvitee(ctx context.Context, inviteeID strin
 	return q.DeleteInvitee(ctx, id)
 }
 
-func (s *PostgresInviteStore) ListInvitees(ctx context.Context, eventID string) ([]*domain.InviteeWithStatus, error) {
+func (s *PostgresInviteStore) ListInvitees(ctx context.Context, eventID string, limit, offset int) ([]*domain.InviteeWithStatus, error) {
 	eid, err := mustParseUUID(eventID)
 	if err != nil {
 		return nil, err
 	}
 	q := pgdb.New(s.db)
-	rows, err := q.ListInviteesWithStatus(ctx, eid)
+	rows, err := q.ListInviteesWithStatus(ctx, pgdb.ListInviteesWithStatusParams{
+		EventID: eid,
+		Limit:   int32(limit),
+		Offset:  int32(offset),
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -562,13 +596,17 @@ func (s *PostgresInviteStore) ConfirmedAttendeeCount(ctx context.Context, eventI
 	return int(count), err
 }
 
-func (s *PostgresInviteStore) ListHouseholds(ctx context.Context, eventID string) ([]*domain.HouseholdGroup, error) {
+func (s *PostgresInviteStore) ListHouseholds(ctx context.Context, eventID string, limit, offset int) ([]*domain.HouseholdGroup, error) {
 	eid, err := mustParseUUID(eventID)
 	if err != nil {
 		return nil, err
 	}
 	q := pgdb.New(s.db)
-	rows, err := q.ListHouseholdGroups(ctx, eid)
+	rows, err := q.ListHouseholdGroups(ctx, pgdb.ListHouseholdGroupsParams{
+		EventID: eid,
+		Limit:   int32(limit),
+		Offset:  int32(offset),
+	})
 	if err != nil {
 		return nil, err
 	}

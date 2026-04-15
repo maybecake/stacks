@@ -438,6 +438,54 @@ func (q *Queries) InviteeHouseholdHasConfirmedRSVP(ctx context.Context, id uuid.
 	return has_rsvp, err
 }
 
+const listEventsForHost = `-- name: ListEventsForHost :many
+SELECT id, public_token, host_user_id, name, venue, description, datetime, capacity, allow_siblings, require_parent_stay, created_at FROM invite__events
+WHERE host_user_id = $1
+ORDER BY name
+LIMIT $2 OFFSET $3
+`
+
+type ListEventsForHostParams struct {
+	HostUserID string `json:"host_user_id"`
+	Limit      int32  `json:"limit"`
+	Offset     int32  `json:"offset"`
+}
+
+func (q *Queries) ListEventsForHost(ctx context.Context, arg ListEventsForHostParams) ([]InviteEvent, error) {
+	rows, err := q.db.QueryContext(ctx, listEventsForHost, arg.HostUserID, arg.Limit, arg.Offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []InviteEvent
+	for rows.Next() {
+		var i InviteEvent
+		if err := rows.Scan(
+			&i.ID,
+			&i.PublicToken,
+			&i.HostUserID,
+			&i.Name,
+			&i.Venue,
+			&i.Description,
+			&i.Datetime,
+			&i.Capacity,
+			&i.AllowSiblings,
+			&i.RequireParentStay,
+			&i.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listHouseholdGroups = `-- name: ListHouseholdGroups :many
 SELECT
     h.id                        AS household_id,
@@ -458,7 +506,14 @@ JOIN invite__rsvp_attendees ra ON ra.rsvp_id = r.id
 JOIN persons p ON p.id = ra.person_id
 WHERE r.event_id = $1 AND r.status = 'confirmed'
 ORDER BY h.name, p.name
+LIMIT $2 OFFSET $3
 `
+
+type ListHouseholdGroupsParams struct {
+	EventID uuid.UUID `json:"event_id"`
+	Limit   int32     `json:"limit"`
+	Offset  int32     `json:"offset"`
+}
 
 type ListHouseholdGroupsRow struct {
 	HouseholdID           uuid.UUID      `json:"household_id"`
@@ -475,8 +530,8 @@ type ListHouseholdGroupsRow struct {
 	PersonEmail           sql.NullString `json:"person_email"`
 }
 
-func (q *Queries) ListHouseholdGroups(ctx context.Context, eventID uuid.UUID) ([]ListHouseholdGroupsRow, error) {
-	rows, err := q.db.QueryContext(ctx, listHouseholdGroups, eventID)
+func (q *Queries) ListHouseholdGroups(ctx context.Context, arg ListHouseholdGroupsParams) ([]ListHouseholdGroupsRow, error) {
+	rows, err := q.db.QueryContext(ctx, listHouseholdGroups, arg.EventID, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
@@ -527,7 +582,14 @@ JOIN persons p ON p.id = ii.person_id
 LEFT JOIN invite__rsvps r ON r.event_id = ii.event_id AND r.household_id = ii.household_id
 WHERE ii.event_id = $1
 ORDER BY p.name
+LIMIT $2 OFFSET $3
 `
+
+type ListInviteesWithStatusParams struct {
+	EventID uuid.UUID `json:"event_id"`
+	Limit   int32     `json:"limit"`
+	Offset  int32     `json:"offset"`
+}
 
 type ListInviteesWithStatusRow struct {
 	InviteeID   uuid.UUID      `json:"invitee_id"`
@@ -541,8 +603,8 @@ type ListInviteesWithStatusRow struct {
 	RsvpStatus  string         `json:"rsvp_status"`
 }
 
-func (q *Queries) ListInviteesWithStatus(ctx context.Context, eventID uuid.UUID) ([]ListInviteesWithStatusRow, error) {
-	rows, err := q.db.QueryContext(ctx, listInviteesWithStatus, eventID)
+func (q *Queries) ListInviteesWithStatus(ctx context.Context, arg ListInviteesWithStatusParams) ([]ListInviteesWithStatusRow, error) {
+	rows, err := q.db.QueryContext(ctx, listInviteesWithStatus, arg.EventID, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
@@ -581,10 +643,17 @@ JOIN invite__invitees ii ON ii.person_id = p.id
 JOIN invite__events e ON e.id = ii.event_id
 WHERE e.public_token = $1
 ORDER BY p.name
+LIMIT $2 OFFSET $3
 `
 
-func (q *Queries) ListPersonsForEvent(ctx context.Context, publicToken uuid.UUID) ([]Person, error) {
-	rows, err := q.db.QueryContext(ctx, listPersonsForEvent, publicToken)
+type ListPersonsForEventParams struct {
+	PublicToken uuid.UUID `json:"public_token"`
+	Limit       int32     `json:"limit"`
+	Offset      int32     `json:"offset"`
+}
+
+func (q *Queries) ListPersonsForEvent(ctx context.Context, arg ListPersonsForEventParams) ([]Person, error) {
+	rows, err := q.db.QueryContext(ctx, listPersonsForEvent, arg.PublicToken, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
@@ -620,10 +689,17 @@ JOIN invite__invitees ii ON ii.person_id = p.id
 JOIN invite__events e ON e.id = ii.event_id
 WHERE e.host_user_id = $1
 ORDER BY p.name
+LIMIT $2 OFFSET $3
 `
 
-func (q *Queries) ListPersonsForHost(ctx context.Context, hostUserID string) ([]Person, error) {
-	rows, err := q.db.QueryContext(ctx, listPersonsForHost, hostUserID)
+type ListPersonsForHostParams struct {
+	HostUserID string `json:"host_user_id"`
+	Limit      int32  `json:"limit"`
+	Offset     int32  `json:"offset"`
+}
+
+func (q *Queries) ListPersonsForHost(ctx context.Context, arg ListPersonsForHostParams) ([]Person, error) {
+	rows, err := q.db.QueryContext(ctx, listPersonsForHost, arg.HostUserID, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
@@ -659,10 +735,17 @@ JOIN household_members hm ON hm.person_id = p.id
 JOIN user_households uh ON uh.household_id = hm.household_id
 WHERE uh.user_id = $1
 ORDER BY p.name
+LIMIT $2 OFFSET $3
 `
 
-func (q *Queries) ListPersonsForOwner(ctx context.Context, userID string) ([]Person, error) {
-	rows, err := q.db.QueryContext(ctx, listPersonsForOwner, userID)
+type ListPersonsForOwnerParams struct {
+	UserID string `json:"user_id"`
+	Limit  int32  `json:"limit"`
+	Offset int32  `json:"offset"`
+}
+
+func (q *Queries) ListPersonsForOwner(ctx context.Context, arg ListPersonsForOwnerParams) ([]Person, error) {
+	rows, err := q.db.QueryContext(ctx, listPersonsForOwner, arg.UserID, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}

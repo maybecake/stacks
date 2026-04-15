@@ -145,12 +145,15 @@ type InviteStore interface {
 	GetEventByPublicToken(ctx context.Context, publicToken string) (*Event, error)
 	GetEventByID(ctx context.Context, eventID string) (*Event, error)
 
+	// Events
+	ListEvents(ctx context.Context, hostUserID string, limit, offset int) ([]*Event, error)
+
 	// Invitees
 	AddInvitee(ctx context.Context, eventID, personID string) (*Invitee, error)
 	// AddHouseholdInvitees adds one invitee row per child member of the household.
 	AddHouseholdInvitees(ctx context.Context, eventID, householdID string) ([]*Invitee, error)
 	RemoveInvitee(ctx context.Context, inviteeID string) error
-	ListInvitees(ctx context.Context, eventID string) ([]*InviteeWithStatus, error)
+	ListInvitees(ctx context.Context, eventID string, limit, offset int) ([]*InviteeWithStatus, error)
 	// HouseholdHasConfirmedRSVP returns true when the invitee's household has a confirmed RSVP.
 	InviteeHouseholdHasConfirmedRSVP(ctx context.Context, inviteeID string) (bool, error)
 
@@ -161,13 +164,13 @@ type InviteStore interface {
 	SubmitRSVP(ctx context.Context, p SubmitRSVPParams) (*RSVP, string, error)
 	// ConfirmedAttendeeCount returns the total number of rsvp_attendees across confirmed RSVPs.
 	ConfirmedAttendeeCount(ctx context.Context, eventID string) (int, error)
-	ListHouseholds(ctx context.Context, eventID string) ([]*HouseholdGroup, error)
+	ListHouseholds(ctx context.Context, eventID string, limit, offset int) ([]*HouseholdGroup, error)
 
 	// Persons
 	GetPerson(ctx context.Context, personID string) (*Person, error)
 	// IsPersonAccessible checks if callerUserID or eventToken grants access to personID.
 	IsPersonAccessible(ctx context.Context, personID, callerUserID, eventToken string) (bool, error)
-	ListPersonsForCaller(ctx context.Context, callerUserID, eventToken string) ([]*Person, error)
+	ListPersonsForCaller(ctx context.Context, callerUserID, eventToken string, limit, offset int) ([]*Person, error)
 	CreatePerson(ctx context.Context, name string, t PersonType, phone, email string) (*Person, error)
 
 	// Households
