@@ -9,8 +9,10 @@ import { Key } from '../actors/Key';
 import { Door } from '../actors/Door';
 import { Cannon } from '../actors/Cannon';
 import { Cannonball } from '../actors/Cannonball';
+import { MovingPlatform } from '../actors/MovingPlatform';
 import { GameEventBus } from '../engine/GameEventBus';
 import { GameState } from '../engine/GameState';
+import { Sounds } from '../engine/Sounds';
 
 const DEATH_Y = GAME_HEIGHT + TILE_SIZE * 2;
 const GRAVITY_INTERVAL_MS = 200; // check block gravity every N ms
@@ -30,6 +32,7 @@ export class LevelScene extends Scene {
   private _complete = false;
   private _cannons: Cannon[] = [];
   private _cannonballs: Cannonball[] = [];
+  private _movingPlatforms: MovingPlatform[] = [];
 
   constructor(levelIndex: number) {
     super();
@@ -54,6 +57,7 @@ export class LevelScene extends Scene {
     this._doors = [];
     this._cannons = [];
     this._cannonballs = [];
+    this._movingPlatforms = [];
     this._hatsCollected = 0;
     this._doorReached = false;
     this._complete = false;
@@ -118,6 +122,18 @@ export class LevelScene extends Scene {
           this.add(cannon);
           break;
         }
+        case 'moving-platform': {
+          const platform = new MovingPlatform(
+            ent.tileX,
+            ent.tileY,
+            ent.rangeLeft ?? ent.tileX,
+            ent.rangeRight ?? ent.tileX,
+            ent.speed,
+          );
+          this._movingPlatforms.push(platform);
+          this.add(platform);
+          break;
+        }
       }
     }
 
@@ -145,8 +161,22 @@ export class LevelScene extends Scene {
     this._cannonballs = this._cannonballs.filter((b) => !b.dead);
     for (const ball of this._cannonballs) {
       if (ball.pos.distance(this._player.pos) < TILE_SIZE * 0.85) {
+        Sounds.cannonballHit();
         this._resetLevel(engine);
         return;
+      }
+    }
+
+    // Carry player on moving platforms (platforms are Fixed so won't drag player laterally)
+    for (const platform of this._movingPlatforms) {
+      const platTop = platform.pos.y - platform.height / 2;
+      const playerBottom = this._player.pos.y + (TILE_SIZE - 2) / 2;
+      const onPlatform =
+        Math.abs(playerBottom - platTop) < 6 &&
+        this._player.pos.x >= platform.pos.x - platform.width / 2 - 4 &&
+        this._player.pos.x <= platform.pos.x + platform.width / 2 + 4;
+      if (onPlatform) {
+        this._player.pos.x += platform.velX * (elapsed / 1000);
       }
     }
 
@@ -167,6 +197,7 @@ export class LevelScene extends Scene {
           const dist = door.pos.distance(this._player.pos);
           if (dist < TILE_SIZE * 1.2) {
             door.open();
+            Sounds.openDoor();
             this._doors = this._doors.filter((d) => d !== door);
             this._doorReached = true;
             // consume key
@@ -227,6 +258,7 @@ export class LevelScene extends Scene {
     const index = Math.floor(Math.random() * 8);
     this._hatsCollected++;
     hat.collect();
+    Sounds.collectHat();
     this._player.collectHat(index);
     GameEventBus.emit({
       type: 'hat-collected',
@@ -237,6 +269,7 @@ export class LevelScene extends Scene {
 
   pickUpItem(item: Hat | Key): void {
     (item as Key).pickUp();
+    Sounds.pickUpKey();
     GameEventBus.emit({ type: 'key-picked-up' });
   }
 
@@ -254,6 +287,7 @@ export class LevelScene extends Scene {
 
     if (won) {
       this._complete = true;
+      Sounds.levelComplete();
       const nextIndex = this._levelIndex + 1;
       if (nextIndex < LEVELS.length) {
         // Advance to next level
@@ -269,12 +303,14 @@ export class LevelScene extends Scene {
   }
 
   private _fireCannon(wx: number, wy: number, dir: 'left' | 'right'): void {
+    Sounds.cannonFire();
     const ball = new Cannonball(wx, wy, dir);
     this._cannonballs.push(ball);
     this.add(ball);
   }
 
   private _resetLevel(engine: Engine): void {
+    Sounds.die();
     GameState.restoreSnapshot();
     for (const actor of [...this.actors]) {
       this.remove(actor);

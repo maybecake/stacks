@@ -3,11 +3,13 @@ export { level1 } from './level1';
 export { level2 } from './level2';
 export { level3 } from './level3';
 export { level4 } from './level4';
+export { level5 } from './level5';
 
 import { level1 } from './level1';
 import { level2 } from './level2';
 import { level3 } from './level3';
 import { level4 } from './level4';
+import { level5 } from './level5';
 import type { LevelDef } from './types';
 
-export const LEVELS: LevelDef[] = [level1, level2, level3, level4];
+export const LEVELS: LevelDef[] = [level1, level2, level3, level4, level5];

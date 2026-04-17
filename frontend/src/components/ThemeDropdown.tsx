@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { Theme } from '../themes';
 import { Compactness } from '../themes/compactness';
@@ -6,6 +7,17 @@ import './theme-dropdown.css';
 
 export const ThemeDropdown = () => {
   const { theme, setTheme, compactness, setCompactness } = useTheme();
+  const [themeOpen, setThemeOpen] = useState(false);
+  const [compactnessOpen, setCompactnessOpen] = useState(false);
+
+  useEffect(() => {
+    const closeAll = () => {
+      setThemeOpen(false);
+      setCompactnessOpen(false);
+    };
+    window.addEventListener('orientationchange', closeAll);
+    return () => window.removeEventListener('orientationchange', closeAll);
+  }, []);
 
   const themes: { id: Theme; label: string; icon: string }[] = [
     { id: 'light', label: 'Light Theme', icon: '🌞' },
@@ -25,7 +37,7 @@ export const ThemeDropdown = () => {
 
   return (
     <div className="theme-dropdown">
-      <DropdownMenu.Root>
+      <DropdownMenu.Root open={themeOpen} onOpenChange={setThemeOpen}>
         <DropdownMenu.Trigger className="theme-dropdown-trigger" aria-label="Theme selector">
           <span className="theme-icon" role="img" aria-label={currentTheme?.label}>
             {currentTheme?.icon}
@@ -56,7 +68,7 @@ export const ThemeDropdown = () => {
         </DropdownMenu.Portal>
       </DropdownMenu.Root>
 
-      <DropdownMenu.Root>
+      <DropdownMenu.Root open={compactnessOpen} onOpenChange={setCompactnessOpen}>
         <DropdownMenu.Trigger className="theme-dropdown-trigger" aria-label="Layout compactness selector">
           <span className="theme-icon" role="img" aria-label={currentCompactness?.label}>
             {currentCompactness?.icon}

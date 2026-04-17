@@ -8,6 +8,7 @@ import { PLAYER_SPEED, JUMP_VELOCITY, TILE_SIZE, INTERACT_RANGE, HAT_FRAME_SIZE,
 import { Resources } from '../engine/resources';
 import { GameState } from '../engine/GameState';
 import { VirtualInput } from '../engine/VirtualInput';
+import { Sounds } from '../engine/Sounds';
 
 type Carrying = Hat | Key | null;
 
@@ -91,6 +92,7 @@ export class Player extends Actor {
     if ((kb.wasPressed(Keys.Up) || kb.wasPressed(Keys.W) || kb.wasPressed(Keys.Space) || VirtualInput.wasPressed('jump'))
         && this._wasGrounded) {
       this.vel.y = JUMP_VELOCITY;
+      Sounds.jump();
     }
 
     // --- Interact (pick up / drop) ---

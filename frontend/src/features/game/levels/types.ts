@@ -3,13 +3,19 @@ export type TileType = 'empty' | 'solid';
 export type WinCondition = 'all-hats' | 'all-hats-and-door';
 
 export interface EntityDef {
-  type: 'hat' | 'key' | 'door' | 'push-block' | 'player-spawn' | 'cannon';
+  type: 'hat' | 'key' | 'door' | 'push-block' | 'player-spawn' | 'cannon' | 'moving-platform';
   tileX: number;
   tileY: number;
   /** Used to pair a key with its door. Both must share the same id. */
   id?: string;
   /** Cannon fire direction */
   dir?: 'left' | 'right';
+  /** Moving platform: leftmost tile column for the platform center */
+  rangeLeft?: number;
+  /** Moving platform: rightmost tile column for the platform center */
+  rangeRight?: number;
+  /** Moving platform: horizontal speed in px/s */
+  speed?: number;
 }
 
 export interface LevelDef {
