@@ -7,6 +7,7 @@ import type { LevelScene } from '../scenes/LevelScene';
 import { PLAYER_SPEED, JUMP_VELOCITY, TILE_SIZE, INTERACT_RANGE, HAT_FRAME_SIZE, HAT_SHEET_COLS } from '../config/sprites';
 import { Resources } from '../engine/resources';
 import { GameState } from '../engine/GameState';
+import { VirtualInput } from '../engine/VirtualInput';
 
 type Carrying = Hat | Key | null;
 
@@ -77,8 +78,8 @@ export class Player extends Actor {
 
     // --- Horizontal movement ---
     let moveX = 0;
-    if (kb.isHeld(Keys.Left)  || kb.isHeld(Keys.A)) moveX = -1;
-    if (kb.isHeld(Keys.Right) || kb.isHeld(Keys.D)) moveX =  1;
+    if (kb.isHeld(Keys.Left)  || kb.isHeld(Keys.A) || VirtualInput.isHeld('left'))  moveX = -1;
+    if (kb.isHeld(Keys.Right) || kb.isHeld(Keys.D) || VirtualInput.isHeld('right')) moveX =  1;
 
     if (moveX !== 0) this._facingRight = moveX > 0;
     this.graphics.flipHorizontal = !this._facingRight;
@@ -87,13 +88,13 @@ export class Player extends Actor {
     // --- Jump ---
     // Use _wasGrounded (set before reset this frame) because _isGrounded is populated
     // by precollision events which fire after onPreUpdate, so it's always false here.
-    if ((kb.wasPressed(Keys.Up) || kb.wasPressed(Keys.W) || kb.wasPressed(Keys.Space))
+    if ((kb.wasPressed(Keys.Up) || kb.wasPressed(Keys.W) || kb.wasPressed(Keys.Space) || VirtualInput.wasPressed('jump'))
         && this._wasGrounded) {
       this.vel.y = JUMP_VELOCITY;
     }
 
     // --- Interact (pick up / drop) ---
-    if ((kb.wasPressed(Keys.E) || kb.wasPressed(Keys.F)) && this._interactCooldown <= 0) {
+    if ((kb.wasPressed(Keys.E) || kb.wasPressed(Keys.F) || VirtualInput.wasPressed('interact')) && this._interactCooldown <= 0) {
       this._interactCooldown = 300;
       this._handleInteract();
     }

@@ -1,0 +1,52 @@
+.touch-controls {
+  position: absolute;
+  bottom: 12px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 16px;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.touch-controls__dpad,
+.touch-controls__actions {
+  display: flex;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.touch-btn {
+  pointer-events: all;
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  border: none;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.1s;
+}
+
+.touch-btn:active {
+  background: rgba(255, 100, 0, 0.75);
+}
+
+.touch-btn--jump {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.touch-btn--interact {
+  background: rgba(0, 0, 0, 0.35);
+  font-size: 20px;
+  font-family: monospace;
+}

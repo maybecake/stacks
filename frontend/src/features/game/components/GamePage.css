@@ -34,3 +34,20 @@
   width: 100% !important;
   height: 100% !important;
 }
+
+.game-page__touch-toggle {
+  padding: 8px 20px;
+  border-radius: 8px;
+  border: 2px solid #FF8000;
+  background: transparent;
+  color: #FF8000;
+  font-size: 0.85rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.game-page__touch-toggle[aria-pressed='true'] {
+  background: #FF8000;
+  color: #fff;
+}

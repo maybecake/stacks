@@ -7,7 +7,7 @@ export function createEngine(canvasElementId: string): Engine {
     width: GAME_WIDTH,
     height: GAME_HEIGHT,
     displayMode: DisplayMode.Fixed,
-    backgroundColor: Color.fromHex('#1a1a2e'),
+    backgroundColor: Color.fromHex('#FFFFFF'),
     physics: {
       gravity: vec(0, GRAVITY),
     },

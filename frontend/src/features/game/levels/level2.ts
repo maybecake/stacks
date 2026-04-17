@@ -34,6 +34,7 @@ export const level2: LevelDef = {
     // Key / door
     { type: 'key',  tileX: 2,  tileY: 9, id: 'key1' },
     { type: 'door', tileX: 11, tileY: 9, id: 'key1' },
+    { type: 'cannon', tileX: 19, tileY: 2, dir: 'left' },
   ],
   winCondition: 'all-hats-and-door',
 };

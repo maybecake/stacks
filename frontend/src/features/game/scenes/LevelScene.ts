@@ -1,4 +1,4 @@
-import { Scene, Actor, CollisionType, Color, Engine, Keys, Sprite } from 'excalibur';
+import { Scene, Actor, CollisionType, Color, Engine, Keys } from 'excalibur';
 import type { LevelDef } from '../levels/types';
 import { LEVELS } from '../levels';
 import { TILE_SIZE, GAME_HEIGHT } from '../config/sprites';
@@ -7,9 +7,10 @@ import { PushBlock } from '../actors/PushBlock';
 import { Hat } from '../actors/Hat';
 import { Key } from '../actors/Key';
 import { Door } from '../actors/Door';
+import { Cannon } from '../actors/Cannon';
+import { Cannonball } from '../actors/Cannonball';
 import { GameEventBus } from '../engine/GameEventBus';
 import { GameState } from '../engine/GameState';
-import { Resources } from '../engine/resources';
 
 const DEATH_Y = GAME_HEIGHT + TILE_SIZE * 2;
 const GRAVITY_INTERVAL_MS = 200; // check block gravity every N ms
@@ -27,6 +28,8 @@ export class LevelScene extends Scene {
   private _doorReached = false;
   private _gravityAccum = 0;
   private _complete = false;
+  private _cannons: Cannon[] = [];
+  private _cannonballs: Cannonball[] = [];
 
   constructor(levelIndex: number) {
     super();
@@ -49,6 +52,8 @@ export class LevelScene extends Scene {
     this._hats = [];
     this._keys = [];
     this._doors = [];
+    this._cannons = [];
+    this._cannonballs = [];
     this._hatsCollected = 0;
     this._doorReached = false;
     this._complete = false;
@@ -66,12 +71,8 @@ export class LevelScene extends Scene {
             width: TILE_SIZE,
             height: TILE_SIZE,
             collisionType: CollisionType.Fixed,
-            color: Color.fromHex('#4a4a6a'),
+            color: Color.fromHex('#FF8000'),
           });
-          tile.onInitialize = () => {
-            const s = new Sprite({ image: Resources.block, sourceView: { x: 0, y: 0, width: 32, height: 32 } });
-            tile.graphics.use(s);
-          };
           this.add(tile);
         }
       }
@@ -109,6 +110,14 @@ export class LevelScene extends Scene {
           this.add(door);
           break;
         }
+        case 'cannon': {
+          const stagger = this._cannons.length * 500;
+          const cannon = new Cannon(ent.tileX, ent.tileY, ent.dir ?? 'right', stagger);
+          cannon.onFire = (wx, wy, dir) => this._fireCannon(wx, wy, dir);
+          this._cannons.push(cannon);
+          this.add(cannon);
+          break;
+        }
       }
     }
 
@@ -121,15 +130,24 @@ export class LevelScene extends Scene {
     if (this._complete) return;
 
     // R = reset level
-    if (engine.input.keyboard.wasPressed(Keys.R)) {
+    if (engine.input.keyboard.wasPressed(Keys.R) || engine.input.keyboard.wasPressed(Keys.Enter)) {
       this._resetLevel(engine);
       return;
     }
 
-    // Death zone
+    // Death zone (fell off bottom)
     if (this._player && this._player.pos.y > DEATH_Y) {
       this._resetLevel(engine);
       return;
+    }
+
+    // Cannonball hit detection — manual proximity check (reliable across builds)
+    this._cannonballs = this._cannonballs.filter((b) => !b.dead);
+    for (const ball of this._cannonballs) {
+      if (ball.pos.distance(this._player.pos) < TILE_SIZE * 0.85) {
+        this._resetLevel(engine);
+        return;
+      }
     }
 
     // Block gravity (throttled to avoid jitter)
@@ -158,6 +176,13 @@ export class LevelScene extends Scene {
             break;
           }
         }
+      }
+    }
+
+    // Auto-collect hats on proximity
+    for (const hat of this._hats) {
+      if (!hat.collected && hat.distanceTo(this._player.pos.x, this._player.pos.y) <= TILE_SIZE) {
+        this.collectHat(hat);
       }
     }
 
@@ -241,6 +266,12 @@ export class LevelScene extends Scene {
         void engine.goToScene('victory');
       }
     }
+  }
+
+  private _fireCannon(wx: number, wy: number, dir: 'left' | 'right'): void {
+    const ball = new Cannonball(wx, wy, dir);
+    this._cannonballs.push(ball);
+    this.add(ball);
   }
 
   private _resetLevel(engine: Engine): void {

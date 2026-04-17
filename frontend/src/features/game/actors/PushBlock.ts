@@ -16,14 +16,19 @@ export class PushBlock extends Actor {
       width: TILE_SIZE,
       height: TILE_SIZE,
       collisionType: CollisionType.Fixed,
-      color: Color.fromHex('#787890'),
+      color: Color.fromHex('#FF5500'),
     });
     this.tileX = tileX;
     this.tileY = tileY;
   }
 
   onInitialize(): void {
-    const scaled = new Sprite({ image: Resources.block, sourceView: { x: 0, y: 0, width: 32, height: 32 } });
+    const scaled = new Sprite({
+      image: Resources.block,
+      sourceView: { x: 0, y: 0, width: 32, height: 32 },
+      destSize: { width: TILE_SIZE, height: TILE_SIZE },
+    });
+    scaled.tint = Color.fromHex('#FF5500');
     this.graphics.use(scaled);
   }
 

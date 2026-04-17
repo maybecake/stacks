@@ -20,7 +20,7 @@ export class VictoryScene extends Scene {
         size: 36,
         unit: FontUnit.Px,
         textAlign: TextAlign.Center,
-        color: Color.Yellow,
+        color: Color.fromHex('#CC4400'),
       }),
     });
     this.add(title);
@@ -32,7 +32,7 @@ export class VictoryScene extends Scene {
         size: 22,
         unit: FontUnit.Px,
         textAlign: TextAlign.Center,
-        color: Color.White,
+        color: Color.fromHex('#333333'),
       }),
     });
     this.add(sub);

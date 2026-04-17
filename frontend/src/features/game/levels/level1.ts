@@ -30,6 +30,7 @@ export const level1: LevelDef = {
     { type: 'hat', tileX: 9,  tileY: 1  }, // above high platform (row 2)
     { type: 'hat', tileX: 14, tileY: 4  }, // above mid-right platform (row 5)
     { type: 'hat', tileX: 17, tileY: 6  }, // above low-right platform (row 7)
+    { type: 'cannon', tileX: 19, tileY: 9, dir: 'left' },
   ],
   winCondition: 'all-hats',
 };
