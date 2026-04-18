@@ -15,3 +15,6 @@ rm -rf "$TEMP_GAZELLE"
 
 cd /workspaces/stacks
 pnpm install
+
+cd /workspaces/stacks/frontend
+pnpm install
