@@ -18,3 +18,6 @@ pnpm install
 
 cd /workspaces/stacks/frontend
 pnpm install
+
+cd /workspaces/stacks
+node_modules/.bin/buf generate

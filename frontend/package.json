@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "gen:proto": "buf generate"
+    "gen:proto": "cd .. && buf generate"
   },
   "devDependencies": {
     "@bufbuild/buf": "latest",
