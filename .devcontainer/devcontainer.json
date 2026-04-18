@@ -67,5 +67,5 @@
     "source=stacks-vercel,target=/home/devcontainer/.local/share/com.vercel.cli,type=volume"
   ],
   "postCreateCommand": "bash .devcontainer/post-create.sh",
-  "postStartCommand": "sudo chown -R devcontainer:devcontainer /workspaces/stacks ~/"
+  "postStartCommand": "sudo chown -R devcontainer:devcontainer /workspaces/stacks ~/ 2>/dev/null || true"
 }
