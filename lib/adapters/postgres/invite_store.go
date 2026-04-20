@@ -129,7 +129,7 @@ func (s *PostgresInviteStore) CreateEvent(ctx context.Context, p domain.CreateEv
 func (s *PostgresInviteStore) GetEventByPublicToken(ctx context.Context, publicToken string) (*domain.Event, error) {
 	tok, err := mustParseUUID(publicToken)
 	if err != nil {
-		return nil, err
+		return nil, nil // invalid format → caller treats as not found
 	}
 	q := pgdb.New(s.db)
 	row, err := q.GetEventByPublicToken(ctx, tok)

@@ -79,9 +79,9 @@
 ## 6. Verification
 
 - [x] 6.1 Confirm `Handler` func signature matches Vercel Go runtime (same as `api/yo.go`)
-- [ ] 6.2 Smoke test full host flow: `CreateEvent` → `CreateHousehold` → `AddHouseholdInvitees` → `GetEvent`
-- [ ] 6.3 Smoke test guest flow: `GetEvent` → `SubmitRSVP` (with attendee list) → confirm `household_claims` row created
-- [ ] 6.4 Verify duplicate guard: second `SubmitRSVP` for same household+event returns `AlreadyExists`
-- [ ] 6.5 Verify capacity guard: RSVP that would exceed capacity returns `ResourceExhausted`
-- [ ] 6.6 Verify `ClaimHousehold`: valid token links household to user; second claim attempt returns error
-- [ ] 6.7 Verify unauthenticated calls to host-only RPCs return `Unauthenticated`
+- [x] 6.2 Smoke test full host flow: `CreateEvent` → `CreateHousehold` → `AddHouseholdInvitees` → `GetEvent`
+- [x] 6.3 Smoke test guest flow: `GetEvent` → `SubmitRSVP` (with attendee list) → confirm `household_claims` row created
+- [x] 6.4 Verify duplicate guard: second `SubmitRSVP` for same household+event returns `AlreadyExists`
+- [x] 6.5 Verify capacity guard: RSVP that would exceed capacity returns `ResourceExhausted`
+- [x] 6.6 Verify `ClaimHousehold`: valid token links household to user; second claim attempt returns error
+- [x] 6.7 Verify unauthenticated calls to host-only RPCs return `Unauthenticated`

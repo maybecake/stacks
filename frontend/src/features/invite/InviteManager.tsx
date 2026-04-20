@@ -9,8 +9,11 @@ import {
   ListEventsRequestSchema,
   ListInviteesRequestSchema,
   CreatePersonRequestSchema,
+  CreateHouseholdRequestSchema,
+  AddHouseholdMemberRequestSchema,
   AddInviteeRequestSchema,
   PersonType,
+  MemberRole,
 } from "../../gen/invite/invite_pb.js";
 import type { Event, InviteeWithStatus } from "../../gen/invite/invite_pb.js";
 import { makeAuthInterceptor } from "../../lib/authInterceptor.js";
@@ -128,8 +131,18 @@ export const InviteManager: React.FC = () => {
         interceptors: [makeAuthInterceptor(getToken)],
       });
       const client = createClient(InviteService, transport);
+      const household = await client.createHousehold(
+        create(CreateHouseholdRequestSchema, { name: guestName }),
+      );
       const person = await client.createPerson(
         create(CreatePersonRequestSchema, { name: guestName, type: guestType }),
+      );
+      await client.addHouseholdMember(
+        create(AddHouseholdMemberRequestSchema, {
+          householdId: household.id,
+          personId: person.id,
+          role: guestType === PersonType.CHILD ? MemberRole.CHILD : MemberRole.GUARDIAN,
+        }),
       );
       await client.addInvitee(
         create(AddInviteeRequestSchema, { eventId: event.id, personId: person.id }),
