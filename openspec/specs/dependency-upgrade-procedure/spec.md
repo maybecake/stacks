@@ -1,7 +1,7 @@
 ## ADDED Requirements
 
 ### Requirement: Upgrades execute in defined dependency order
-Each upgrade step SHALL be performed in a defined sequence appropriate to the ecosystem. For Go: `go get -u` then `go mod tidy` then `go build`. For frontend: package update then lint then build. For Python: determine latest stable versions then update `requirements.txt`. No step SHALL be started until the preceding step is verified green.
+Each upgrade step SHALL be performed in a defined sequence appropriate to the ecosystem. For Go: `go get -u` then `go mod tidy` then `go build`. For frontend: upgrades follow the order patch-only packages → TypeScript → ESLint stack → Vite/build tools → React → React Router, with each group passing `pnpm build` and `pnpm lint` before the next begins. For Python: determine latest stable versions then update `requirements.txt`. No step SHALL be started until the preceding step is verified green.
 
 #### Scenario: Go upgrade follows get-tidy-build sequence
 - **WHEN** upgrading Go dependencies
