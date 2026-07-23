@@ -59,11 +59,11 @@ type InviteEvent struct {
 }
 
 type InviteInvitee struct {
-	ID          uuid.UUID `json:"id"`
-	EventID     uuid.UUID `json:"event_id"`
-	PersonID    uuid.UUID `json:"person_id"`
-	HouseholdID uuid.UUID `json:"household_id"`
-	CreatedAt   time.Time `json:"created_at"`
+	ID          uuid.UUID     `json:"id"`
+	EventID     uuid.UUID     `json:"event_id"`
+	PersonID    uuid.UUID     `json:"person_id"`
+	HouseholdID uuid.NullUUID `json:"household_id"`
+	CreatedAt   time.Time     `json:"created_at"`
 }
 
 type InviteRsvp struct {

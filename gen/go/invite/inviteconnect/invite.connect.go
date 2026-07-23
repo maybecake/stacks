@@ -73,6 +73,9 @@ const (
 	// InviteServiceAddHouseholdMemberProcedure is the fully-qualified name of the InviteService's
 	// AddHouseholdMember RPC.
 	InviteServiceAddHouseholdMemberProcedure = "/invite.InviteService/AddHouseholdMember"
+	// InviteServiceRemoveHouseholdMemberProcedure is the fully-qualified name of the InviteService's
+	// RemoveHouseholdMember RPC.
+	InviteServiceRemoveHouseholdMemberProcedure = "/invite.InviteService/RemoveHouseholdMember"
 	// InviteServiceClaimHouseholdProcedure is the fully-qualified name of the InviteService's
 	// ClaimHousehold RPC.
 	InviteServiceClaimHouseholdProcedure = "/invite.InviteService/ClaimHousehold"
@@ -98,6 +101,7 @@ type InviteServiceClient interface {
 	CreatePerson(context.Context, *connect.Request[invite.CreatePersonRequest]) (*connect.Response[invite.Person], error)
 	CreateHousehold(context.Context, *connect.Request[invite.CreateHouseholdRequest]) (*connect.Response[invite.Household], error)
 	AddHouseholdMember(context.Context, *connect.Request[invite.AddHouseholdMemberRequest]) (*connect.Response[invite.HouseholdMember], error)
+	RemoveHouseholdMember(context.Context, *connect.Request[invite.RemoveHouseholdMemberRequest]) (*connect.Response[invite.RemoveHouseholdMemberResponse], error)
 	// Claim (authenticated)
 	ClaimHousehold(context.Context, *connect.Request[invite.ClaimHouseholdRequest]) (*connect.Response[invite.ClaimHouseholdResponse], error)
 }
@@ -197,6 +201,12 @@ func NewInviteServiceClient(httpClient connect.HTTPClient, baseURL string, opts 
 			connect.WithSchema(inviteServiceMethods.ByName("AddHouseholdMember")),
 			connect.WithClientOptions(opts...),
 		),
+		removeHouseholdMember: connect.NewClient[invite.RemoveHouseholdMemberRequest, invite.RemoveHouseholdMemberResponse](
+			httpClient,
+			baseURL+InviteServiceRemoveHouseholdMemberProcedure,
+			connect.WithSchema(inviteServiceMethods.ByName("RemoveHouseholdMember")),
+			connect.WithClientOptions(opts...),
+		),
 		claimHousehold: connect.NewClient[invite.ClaimHouseholdRequest, invite.ClaimHouseholdResponse](
 			httpClient,
 			baseURL+InviteServiceClaimHouseholdProcedure,
@@ -208,21 +218,22 @@ func NewInviteServiceClient(httpClient connect.HTTPClient, baseURL string, opts 
 
 // inviteServiceClient implements InviteServiceClient.
 type inviteServiceClient struct {
-	createEvent          *connect.Client[invite.CreateEventRequest, invite.Event]
-	getEvent             *connect.Client[invite.GetEventRequest, invite.Event]
-	listEvents           *connect.Client[invite.ListEventsRequest, invite.ListEventsResponse]
-	addInvitee           *connect.Client[invite.AddInviteeRequest, invite.Invitee]
-	addHouseholdInvitees *connect.Client[invite.AddHouseholdInviteesRequest, invite.AddHouseholdInviteesResponse]
-	removeInvitee        *connect.Client[invite.RemoveInviteeRequest, invite.RemoveInviteeResponse]
-	listInvitees         *connect.Client[invite.ListInviteesRequest, invite.ListInviteesResponse]
-	submitRSVP           *connect.Client[invite.SubmitRSVPRequest, invite.SubmitRSVPResponse]
-	listHouseholds       *connect.Client[invite.ListHouseholdsRequest, invite.ListHouseholdsResponse]
-	getPerson            *connect.Client[invite.GetPersonRequest, invite.Person]
-	listPersons          *connect.Client[invite.ListPersonsRequest, invite.ListPersonsResponse]
-	createPerson         *connect.Client[invite.CreatePersonRequest, invite.Person]
-	createHousehold      *connect.Client[invite.CreateHouseholdRequest, invite.Household]
-	addHouseholdMember   *connect.Client[invite.AddHouseholdMemberRequest, invite.HouseholdMember]
-	claimHousehold       *connect.Client[invite.ClaimHouseholdRequest, invite.ClaimHouseholdResponse]
+	createEvent           *connect.Client[invite.CreateEventRequest, invite.Event]
+	getEvent              *connect.Client[invite.GetEventRequest, invite.Event]
+	listEvents            *connect.Client[invite.ListEventsRequest, invite.ListEventsResponse]
+	addInvitee            *connect.Client[invite.AddInviteeRequest, invite.Invitee]
+	addHouseholdInvitees  *connect.Client[invite.AddHouseholdInviteesRequest, invite.AddHouseholdInviteesResponse]
+	removeInvitee         *connect.Client[invite.RemoveInviteeRequest, invite.RemoveInviteeResponse]
+	listInvitees          *connect.Client[invite.ListInviteesRequest, invite.ListInviteesResponse]
+	submitRSVP            *connect.Client[invite.SubmitRSVPRequest, invite.SubmitRSVPResponse]
+	listHouseholds        *connect.Client[invite.ListHouseholdsRequest, invite.ListHouseholdsResponse]
+	getPerson             *connect.Client[invite.GetPersonRequest, invite.Person]
+	listPersons           *connect.Client[invite.ListPersonsRequest, invite.ListPersonsResponse]
+	createPerson          *connect.Client[invite.CreatePersonRequest, invite.Person]
+	createHousehold       *connect.Client[invite.CreateHouseholdRequest, invite.Household]
+	addHouseholdMember    *connect.Client[invite.AddHouseholdMemberRequest, invite.HouseholdMember]
+	removeHouseholdMember *connect.Client[invite.RemoveHouseholdMemberRequest, invite.RemoveHouseholdMemberResponse]
+	claimHousehold        *connect.Client[invite.ClaimHouseholdRequest, invite.ClaimHouseholdResponse]
 }
 
 // CreateEvent calls invite.InviteService.CreateEvent.
@@ -295,6 +306,11 @@ func (c *inviteServiceClient) AddHouseholdMember(ctx context.Context, req *conne
 	return c.addHouseholdMember.CallUnary(ctx, req)
 }
 
+// RemoveHouseholdMember calls invite.InviteService.RemoveHouseholdMember.
+func (c *inviteServiceClient) RemoveHouseholdMember(ctx context.Context, req *connect.Request[invite.RemoveHouseholdMemberRequest]) (*connect.Response[invite.RemoveHouseholdMemberResponse], error) {
+	return c.removeHouseholdMember.CallUnary(ctx, req)
+}
+
 // ClaimHousehold calls invite.InviteService.ClaimHousehold.
 func (c *inviteServiceClient) ClaimHousehold(ctx context.Context, req *connect.Request[invite.ClaimHouseholdRequest]) (*connect.Response[invite.ClaimHouseholdResponse], error) {
 	return c.claimHousehold.CallUnary(ctx, req)
@@ -320,6 +336,7 @@ type InviteServiceHandler interface {
 	CreatePerson(context.Context, *connect.Request[invite.CreatePersonRequest]) (*connect.Response[invite.Person], error)
 	CreateHousehold(context.Context, *connect.Request[invite.CreateHouseholdRequest]) (*connect.Response[invite.Household], error)
 	AddHouseholdMember(context.Context, *connect.Request[invite.AddHouseholdMemberRequest]) (*connect.Response[invite.HouseholdMember], error)
+	RemoveHouseholdMember(context.Context, *connect.Request[invite.RemoveHouseholdMemberRequest]) (*connect.Response[invite.RemoveHouseholdMemberResponse], error)
 	// Claim (authenticated)
 	ClaimHousehold(context.Context, *connect.Request[invite.ClaimHouseholdRequest]) (*connect.Response[invite.ClaimHouseholdResponse], error)
 }
@@ -415,6 +432,12 @@ func NewInviteServiceHandler(svc InviteServiceHandler, opts ...connect.HandlerOp
 		connect.WithSchema(inviteServiceMethods.ByName("AddHouseholdMember")),
 		connect.WithHandlerOptions(opts...),
 	)
+	inviteServiceRemoveHouseholdMemberHandler := connect.NewUnaryHandler(
+		InviteServiceRemoveHouseholdMemberProcedure,
+		svc.RemoveHouseholdMember,
+		connect.WithSchema(inviteServiceMethods.ByName("RemoveHouseholdMember")),
+		connect.WithHandlerOptions(opts...),
+	)
 	inviteServiceClaimHouseholdHandler := connect.NewUnaryHandler(
 		InviteServiceClaimHouseholdProcedure,
 		svc.ClaimHousehold,
@@ -451,6 +474,8 @@ func NewInviteServiceHandler(svc InviteServiceHandler, opts ...connect.HandlerOp
 			inviteServiceCreateHouseholdHandler.ServeHTTP(w, r)
 		case InviteServiceAddHouseholdMemberProcedure:
 			inviteServiceAddHouseholdMemberHandler.ServeHTTP(w, r)
+		case InviteServiceRemoveHouseholdMemberProcedure:
+			inviteServiceRemoveHouseholdMemberHandler.ServeHTTP(w, r)
 		case InviteServiceClaimHouseholdProcedure:
 			inviteServiceClaimHouseholdHandler.ServeHTTP(w, r)
 		default:
@@ -516,6 +541,10 @@ func (UnimplementedInviteServiceHandler) CreateHousehold(context.Context, *conne
 
 func (UnimplementedInviteServiceHandler) AddHouseholdMember(context.Context, *connect.Request[invite.AddHouseholdMemberRequest]) (*connect.Response[invite.HouseholdMember], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("invite.InviteService.AddHouseholdMember is not implemented"))
+}
+
+func (UnimplementedInviteServiceHandler) RemoveHouseholdMember(context.Context, *connect.Request[invite.RemoveHouseholdMemberRequest]) (*connect.Response[invite.RemoveHouseholdMemberResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("invite.InviteService.RemoveHouseholdMember is not implemented"))
 }
 
 func (UnimplementedInviteServiceHandler) ClaimHousehold(context.Context, *connect.Request[invite.ClaimHouseholdRequest]) (*connect.Response[invite.ClaimHouseholdResponse], error) {

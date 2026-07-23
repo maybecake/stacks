@@ -318,11 +318,15 @@ func (s *InviteServer) ListInvitees(ctx context.Context, req *connect.Request[in
 	}
 	pbItems := make([]*invitev1.InviteeWithStatus, len(items))
 	for i, it := range items {
-		pbItems[i] = &invitev1.InviteeWithStatus{
+		iws := &invitev1.InviteeWithStatus{
 			Invitee:    pbInvitee(it.Invitee),
 			Person:     pbPerson(it.Person),
 			RsvpStatus: rsvpStatusToProto(it.RSVPStatus),
 		}
+		if it.Household != nil {
+			iws.Household = pbHousehold(*it.Household)
+		}
+		pbItems[i] = iws
 	}
 	var nextToken string
 	if len(items) == limit {
@@ -472,6 +476,16 @@ func (s *InviteServer) AddHouseholdMember(ctx context.Context, req *connect.Requ
 		PersonId:    member.PersonID,
 		Role:        memberRoleToProto(member.Role),
 	}), nil
+}
+
+func (s *InviteServer) RemoveHouseholdMember(ctx context.Context, req *connect.Request[invitev1.RemoveHouseholdMemberRequest]) (*connect.Response[invitev1.RemoveHouseholdMemberResponse], error) {
+	if err := requireInviteAuth(req.Header().Get("Authorization")); err != nil {
+		return nil, err
+	}
+	if err := s.svc.RemoveHouseholdMember(ctx, req.Msg.HouseholdId, req.Msg.PersonId); err != nil {
+		return nil, domainErr(err)
+	}
+	return connect.NewResponse(&invitev1.RemoveHouseholdMemberResponse{}), nil
 }
 
 // ── Claim RPC (authenticated) ─────────────────────────────────────────────────

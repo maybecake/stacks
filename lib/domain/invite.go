@@ -87,9 +87,10 @@ type Invitee struct {
 }
 
 type InviteeWithStatus struct {
-	Invitee    Invitee
-	Person     Person
-	RSVPStatus RSVPStatus
+	Invitee       Invitee
+	Person        Person
+	Household     *Household // nil when person is not yet assigned to a household
+	RSVPStatus    RSVPStatus
 }
 
 type RSVP struct {
@@ -176,6 +177,7 @@ type InviteStore interface {
 	// Households
 	CreateHousehold(ctx context.Context, name string) (*Household, error)
 	AddHouseholdMember(ctx context.Context, householdID, personID string, role MemberRole) (*HouseholdMember, error)
+	RemoveHouseholdMember(ctx context.Context, householdID, personID string) error
 	GetHousehold(ctx context.Context, householdID string) (*Household, error)
 	// HouseholdOwner returns the user_id from user_households, or "" if unclaimed.
 	HouseholdOwner(ctx context.Context, householdID string) (string, error)

@@ -70,6 +70,7 @@ message InviteeWithStatus {
   Invitee    invitee     = 1;
   Person     person      = 2;
   RSVPStatus rsvp_status = 3;
+  Household  household   = 4; // null when person is not yet assigned to a household
 }
 
 message RSVP {
@@ -208,6 +209,13 @@ message AddHouseholdMemberRequest {
   MemberRole role         = 3;
 }
 
+message RemoveHouseholdMemberRequest {
+  string household_id = 1;
+  string person_id    = 2;
+}
+
+message RemoveHouseholdMemberResponse {}
+
 // ── Event list RPCs ───────────────────────────────────────────────────────────
 
 message ListEventsRequest {
@@ -253,6 +261,7 @@ service InviteService {
   rpc CreatePerson(CreatePersonRequest)           returns (Person);
   rpc CreateHousehold(CreateHouseholdRequest)     returns (Household);
   rpc AddHouseholdMember(AddHouseholdMemberRequest) returns (HouseholdMember);
+  rpc RemoveHouseholdMember(RemoveHouseholdMemberRequest) returns (RemoveHouseholdMemberResponse);
 
   // Claim (authenticated)
   rpc ClaimHousehold(ClaimHouseholdRequest) returns (ClaimHouseholdResponse);

@@ -1,7 +1,7 @@
 import { Scene, Actor, CollisionType, Color, Engine, Keys } from 'excalibur';
 import type { LevelDef } from '../levels/types';
 import { LEVELS } from '../levels';
-import { TILE_SIZE, GAME_HEIGHT } from '../config/sprites';
+import { TILE_SIZE } from '../config/sprites';
 import { Player } from '../actors/Player';
 import { PushBlock } from '../actors/PushBlock';
 import { Hat } from '../actors/Hat';
@@ -14,7 +14,6 @@ import { GameEventBus } from '../engine/GameEventBus';
 import { GameState } from '../engine/GameState';
 import { Sounds } from '../engine/Sounds';
 
-const DEATH_Y = GAME_HEIGHT + TILE_SIZE * 2;
 const GRAVITY_INTERVAL_MS = 200; // check block gravity every N ms
 
 export class LevelScene extends Scene {
@@ -151,11 +150,6 @@ export class LevelScene extends Scene {
       return;
     }
 
-    // Death zone (fell off bottom)
-    if (this._player && this._player.pos.y > DEATH_Y) {
-      this._resetLevel(engine);
-      return;
-    }
 
     // Cannonball hit detection — manual proximity check (reliable across builds)
     this._cannonballs = this._cannonballs.filter((b) => !b.dead);

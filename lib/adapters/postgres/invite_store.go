@@ -85,11 +85,15 @@ func domainEvent(e pgdb.InviteEvent) domain.Event {
 }
 
 func domainInvitee(i pgdb.InviteInvitee) domain.Invitee {
+	householdID := ""
+	if i.HouseholdID.Valid {
+		householdID = i.HouseholdID.UUID.String()
+	}
 	return domain.Invitee{
 		ID:          i.ID.String(),
 		EventID:     i.EventID.String(),
 		PersonID:    i.PersonID.String(),
-		HouseholdID: i.HouseholdID.String(),
+		HouseholdID: householdID,
 	}
 }
 
@@ -350,7 +354,12 @@ func (s *PostgresInviteStore) AddHouseholdMember(ctx context.Context, householdI
 	if err != nil {
 		return nil, err
 	}
-	q := pgdb.New(s.db)
+	tx, err := s.db.BeginTx(ctx, nil)
+	if err != nil {
+		return nil, err
+	}
+	defer func() { _ = tx.Rollback() }()
+	q := pgdb.New(tx)
 	row, err := q.InsertHouseholdMember(ctx, pgdb.InsertHouseholdMemberParams{
 		HouseholdID: hid,
 		PersonID:    pid,
@@ -359,11 +368,54 @@ func (s *PostgresInviteStore) AddHouseholdMember(ctx context.Context, householdI
 	if err != nil {
 		return nil, err
 	}
+	if err := q.UpdateInviteeHouseholdByPerson(ctx, pgdb.UpdateInviteeHouseholdByPersonParams{
+		HouseholdID: uuid.NullUUID{UUID: hid, Valid: true},
+		PersonID:    pid,
+	}); err != nil {
+		return nil, err
+	}
+	if err := tx.Commit(); err != nil {
+		return nil, err
+	}
 	return &domain.HouseholdMember{
 		HouseholdID: row.HouseholdID.String(),
 		PersonID:    row.PersonID.String(),
 		Role:        domain.MemberRole(row.Role),
 	}, nil
+}
+
+func (s *PostgresInviteStore) RemoveHouseholdMember(ctx context.Context, householdID, personID string) error {
+	hid, err := mustParseUUID(householdID)
+	if err != nil {
+		return err
+	}
+	pid, err := mustParseUUID(personID)
+	if err != nil {
+		return err
+	}
+	tx, err := s.db.BeginTx(ctx, nil)
+	if err != nil {
+		return err
+	}
+	defer func() { _ = tx.Rollback() }()
+	q := pgdb.New(tx)
+	n, err := q.DeleteHouseholdMember(ctx, pgdb.DeleteHouseholdMemberParams{
+		HouseholdID: hid,
+		PersonID:    pid,
+	})
+	if err != nil {
+		return err
+	}
+	if n == 0 {
+		return domain.ErrNotFound
+	}
+	if err := q.ClearInviteeHouseholdByPersonAndHousehold(ctx, pgdb.ClearInviteeHouseholdByPersonAndHouseholdParams{
+		PersonID:    pid,
+		HouseholdID: uuid.NullUUID{UUID: hid, Valid: true},
+	}); err != nil {
+		return err
+	}
+	return tx.Commit()
 }
 
 func (s *PostgresInviteStore) HouseholdOwner(ctx context.Context, householdID string) (string, error) {
@@ -391,19 +443,19 @@ func (s *PostgresInviteStore) AddInvitee(ctx context.Context, eventID, personID 
 		return nil, err
 	}
 
-	// resolve household from household_members
-	q := pgdb.New(s.db)
-	members, err := q.GetHouseholdChildMembers(ctx, pid) // we just need any membership
-	_ = members
-	// Actually we need to look up which household the person belongs to.
-	// We use ListPersonsForOwner etc., but here we need a direct lookup.
-	// Use a raw query since sqlc doesn't have a direct person→household query.
-	householdID, err := s.personHousehold(ctx, pid)
-	if err != nil {
-		return nil, err
+	// Look up existing household membership; null is fine (person-first flow).
+	householdID := uuid.NullUUID{}
+	row := s.db.QueryRowContext(ctx,
+		`SELECT household_id FROM household_members WHERE person_id = $1 LIMIT 1`,
+		pid,
+	)
+	var hid uuid.UUID
+	if err := row.Scan(&hid); err == nil {
+		householdID = uuid.NullUUID{UUID: hid, Valid: true}
 	}
 
-	row, err := q.InsertInvitee(ctx, pgdb.InsertInviteeParams{
+	q := pgdb.New(s.db)
+	inv, err := q.InsertInvitee(ctx, pgdb.InsertInviteeParams{
 		EventID:     eid,
 		PersonID:    pid,
 		HouseholdID: householdID,
@@ -411,24 +463,8 @@ func (s *PostgresInviteStore) AddInvitee(ctx context.Context, eventID, personID 
 	if err != nil {
 		return nil, err
 	}
-	inv := domainInvitee(row)
-	return &inv, nil
-}
-
-// personHousehold returns the first household the person belongs to.
-func (s *PostgresInviteStore) personHousehold(ctx context.Context, personID uuid.UUID) (uuid.UUID, error) {
-	var householdID uuid.UUID
-	row := s.db.QueryRowContext(ctx,
-		`SELECT household_id FROM household_members WHERE person_id = $1 LIMIT 1`,
-		personID,
-	)
-	if err := row.Scan(&householdID); err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return uuid.UUID{}, fmt.Errorf("person %s has no household", personID)
-		}
-		return uuid.UUID{}, err
-	}
-	return householdID, nil
+	result := domainInvitee(inv)
+	return &result, nil
 }
 
 func (s *PostgresInviteStore) AddHouseholdInvitees(ctx context.Context, eventID, householdID string) ([]*domain.Invitee, error) {
@@ -450,7 +486,7 @@ func (s *PostgresInviteStore) AddHouseholdInvitees(ctx context.Context, eventID,
 		row, err := q.InsertInvitee(ctx, pgdb.InsertInviteeParams{
 			EventID:     eid,
 			PersonID:    c.PersonID,
-			HouseholdID: hid,
+			HouseholdID: uuid.NullUUID{UUID: hid, Valid: true},
 		})
 		if err != nil {
 			if isPGUniqueViolation(err) {
@@ -489,12 +525,23 @@ func (s *PostgresInviteStore) ListInvitees(ctx context.Context, eventID string, 
 	}
 	result := make([]*domain.InviteeWithStatus, len(rows))
 	for i, r := range rows {
+		householdID := ""
+		if r.HouseholdID.Valid {
+			householdID = r.HouseholdID.UUID.String()
+		}
+		var household *domain.Household
+		if r.HouseholdID.Valid {
+			household = &domain.Household{
+				ID:   r.HouseholdID.UUID.String(),
+				Name: r.HouseholdName.String,
+			}
+		}
 		result[i] = &domain.InviteeWithStatus{
 			Invitee: domain.Invitee{
 				ID:          r.InviteeID.String(),
 				EventID:     r.EventID.String(),
 				PersonID:    r.PersonID.String(),
-				HouseholdID: r.HouseholdID.String(),
+				HouseholdID: householdID,
 			},
 			Person: domain.Person{
 				ID:    r.PersonID.String(),
@@ -503,6 +550,7 @@ func (s *PostgresInviteStore) ListInvitees(ctx context.Context, eventID string, 
 				Phone: r.PersonPhone.String,
 				Email: r.PersonEmail.String,
 			},
+			Household:  household,
 			RSVPStatus: domain.RSVPStatus(r.RsvpStatus),
 		}
 	}

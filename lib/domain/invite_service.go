@@ -169,6 +169,14 @@ func (s *InviteService) AddHouseholdMember(ctx context.Context, householdID, per
 	return s.store.AddHouseholdMember(ctx, householdID, personID, role)
 }
 
+func (s *InviteService) RemoveHouseholdMember(ctx context.Context, householdID, personID string) error {
+	err := s.store.RemoveHouseholdMember(ctx, householdID, personID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // ── Claims ────────────────────────────────────────────────────────────────────
 
 // ClaimHousehold links an authenticated user to an unclaimed household.
