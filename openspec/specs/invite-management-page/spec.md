@@ -48,29 +48,29 @@ When an authenticated host already has an event, the page SHALL display the even
 - **THEN** the left panel SHALL display the event details (name, venue, datetime, capacity, allow_siblings, require_parent_stay) instead of the creation form
 
 ### Requirement: Host can view the guest list
-The page SHALL display the list of current invitees for the host's event by calling `InviteService.ListInvitees`.
+The page SHALL display the list of current invitees for the host's event grouped by household. The right panel SHALL use the `HouseholdGuestList` component, which calls `ListHouseholds` and `ListInvitees` to build the grouped view.
 
 #### Scenario: Guest list loads on manage mode entry
 - **WHEN** the page enters manage mode (event exists or was just created)
-- **THEN** the page SHALL call `ListInvitees` with the event ID
-- **THEN** the right panel SHALL display each invitee's name and type
+- **THEN** the page SHALL call `ListHouseholds` and `ListInvitees` with the event ID
+- **THEN** the right panel SHALL display household cards and an "Unassigned" section
 
 #### Scenario: Guest list is empty
-- **WHEN** `ListInvitees` returns an empty list
+- **WHEN** both `ListHouseholds` and `ListInvitees` return empty results
 - **THEN** the right panel SHALL display an empty-state message indicating no guests have been added yet
 
-#### Scenario: ListInvitees fails
-- **WHEN** `ListInvitees` returns an error
+#### Scenario: ListHouseholds or ListInvitees fails
+- **WHEN** either RPC returns an error
 - **THEN** the right panel SHALL display a user-facing error message
 
 ### Requirement: Host can add a new invitee by name
-The guest list panel SHALL include an "Add guest" form with a name field and a child/adult type selector. Submitting it SHALL call `CreatePerson` then `AddInvitee` and refresh the guest list on success.
+The guest list panel SHALL include an "Add guest" form implemented by the standalone `PersonCreationForm` component. Submitting it SHALL call `CreatePerson` then `AddInvitee` and refresh the guest list on success. The form SHALL NOT create a household; the newly added person appears in the "Unassigned" section until the host assigns them.
 
 #### Scenario: Host adds a new child invitee
 - **WHEN** an authenticated host enters a name, selects type "child", and submits the add-guest form
 - **THEN** the page SHALL call `CreatePerson` with the name and type
 - **THEN** on success the page SHALL call `AddInvitee` with the new person's ID and the event ID
-- **THEN** on success the guest list SHALL refresh and display the newly added invitee
+- **THEN** on success the guest list SHALL refresh and display the newly added person in the "Unassigned" section
 
 #### Scenario: Add invitee fails
 - **WHEN** either `CreatePerson` or `AddInvitee` returns an error
