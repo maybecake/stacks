@@ -193,3 +193,121 @@
   border-top: 1px solid var(--border);
   margin-top: auto;
 }
+
+/* Household guest list */
+.household-guest-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  flex: 1;
+}
+
+/* Household card */
+.household-card {
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius);
+  background-color: var(--bg-primary);
+  overflow: hidden;
+}
+
+.household-card--unassigned {
+  border-style: dashed;
+  opacity: 0.85;
+}
+
+.household-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-xs, 4px) var(--spacing-sm);
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+}
+
+.household-card__name {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.household-card__count {
+  font-size: var(--font-size-xs, 11px);
+  color: var(--text-secondary);
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0 var(--spacing-xs, 4px);
+  min-width: 20px;
+  text-align: center;
+}
+
+.household-card__members {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.household-card__member-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs, 4px) var(--spacing-sm);
+  border-bottom: 1px solid var(--border);
+}
+
+.household-card__member-row:last-child {
+  border-bottom: none;
+}
+
+.household-card__member-name {
+  flex: 1;
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+}
+
+.household-card__member-type {
+  font-size: var(--font-size-xs, 11px);
+  color: var(--text-secondary);
+  text-transform: capitalize;
+  min-width: 40px;
+}
+
+.household-card__reassign-btn {
+  font-size: var(--font-size-xs, 11px);
+  color: var(--color-accent, #3498db);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.household-card__reassign-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* HouseholdPicker inline */
+.household-picker__select {
+  font-size: var(--font-size-sm);
+  padding: 2px var(--spacing-xs, 4px);
+  width: auto;
+  min-width: 140px;
+}
+
+.household-picker__new-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs, 4px);
+  flex: 1;
+}
+
+.household-picker__new-input {
+  font-size: var(--font-size-sm);
+  padding: 2px var(--spacing-xs, 4px);
+}
+
+.household-picker__new-actions {
+  display: flex;
+  gap: var(--spacing-xs, 4px);
+}

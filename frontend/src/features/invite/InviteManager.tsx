@@ -7,29 +7,21 @@ import {
   InviteService,
   CreateEventRequestSchema,
   ListEventsRequestSchema,
-  ListInviteesRequestSchema,
-  CreatePersonRequestSchema,
-  CreateHouseholdRequestSchema,
-  AddHouseholdMemberRequestSchema,
-  AddInviteeRequestSchema,
-  PersonType,
-  MemberRole,
 } from "../../gen/invite/invite_pb.js";
-import type { Event, InviteeWithStatus } from "../../gen/invite/invite_pb.js";
+import type { Event } from "../../gen/invite/invite_pb.js";
 import { makeAuthInterceptor } from "../../lib/authInterceptor.js";
 import { TwoColumnLayout } from "@layout/TwoColumnLayout";
 import { Button } from "@ui/button";
+import { HouseholdGuestList } from "./HouseholdGuestList.js";
 import "./invite.css";
 
 export const InviteManager: React.FC = () => {
   const { isLoaded, isSignedIn, getToken } = useAuth();
 
-  // Event state
   const [event, setEvent] = useState<Event | null>(null);
   const [createEventLoading, setCreateEventLoading] = useState(false);
   const [createEventError, setCreateEventError] = useState<string | null>(null);
 
-  // Event form fields
   const [eventName, setEventName] = useState("");
   const [venue, setVenue] = useState("");
   const [description, setDescription] = useState("");
@@ -38,36 +30,6 @@ export const InviteManager: React.FC = () => {
   const [allowSiblings, setAllowSiblings] = useState(false);
   const [requireParentStay, setRequireParentStay] = useState(false);
 
-  // Invitees state
-  const [invitees, setInvitees] = useState<InviteeWithStatus[]>([]);
-  const [inviteesLoading, setInviteesLoading] = useState(false);
-  const [inviteesError, setInviteesError] = useState<string | null>(null);
-
-  // Add guest form state
-  const [guestName, setGuestName] = useState("");
-  const [guestType, setGuestType] = useState<PersonType>(PersonType.CHILD);
-  const [addGuestLoading, setAddGuestLoading] = useState(false);
-  const [addGuestError, setAddGuestError] = useState<string | null>(null);
-
-  const loadInvitees = async (eventId: string) => {
-    setInviteesLoading(true);
-    setInviteesError(null);
-    try {
-      const transport = createConnectTransport({
-        baseUrl: "",
-        interceptors: [makeAuthInterceptor(getToken)],
-      });
-      const client = createClient(InviteService, transport);
-      const res = await client.listInvitees(create(ListInviteesRequestSchema, { eventId }));
-      setInvitees(res.invitees);
-    } catch (err) {
-      setInviteesError(err instanceof Error ? err.message : "Failed to load guests");
-    } finally {
-      setInviteesLoading(false);
-    }
-  };
-
-  // On mount (when authenticated), check for existing events
   useEffect(() => {
     if (!isLoaded || !isSignedIn) return;
     const run = async () => {
@@ -78,12 +40,9 @@ export const InviteManager: React.FC = () => {
         });
         const client = createClient(InviteService, transport);
         const res = await client.listEvents(create(ListEventsRequestSchema, {}));
-        if (res.events.length > 0) {
-          setEvent(res.events[0]);
-          await loadInvitees(res.events[0].id);
-        }
+        if (res.events.length > 0) setEvent(res.events[0]);
       } catch {
-        // No events or network error — creation form will be shown
+        // No events yet — creation form will be shown
       }
     };
     run();
@@ -112,48 +71,10 @@ export const InviteManager: React.FC = () => {
         }),
       );
       setEvent(newEvent);
-      await loadInvitees(newEvent.id);
     } catch (err) {
       setCreateEventError(err instanceof Error ? err.message : "Failed to create event");
     } finally {
       setCreateEventLoading(false);
-    }
-  };
-
-  const handleAddGuest = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!event) return;
-    setAddGuestLoading(true);
-    setAddGuestError(null);
-    try {
-      const transport = createConnectTransport({
-        baseUrl: "",
-        interceptors: [makeAuthInterceptor(getToken)],
-      });
-      const client = createClient(InviteService, transport);
-      const household = await client.createHousehold(
-        create(CreateHouseholdRequestSchema, { name: guestName }),
-      );
-      const person = await client.createPerson(
-        create(CreatePersonRequestSchema, { name: guestName, type: guestType }),
-      );
-      await client.addHouseholdMember(
-        create(AddHouseholdMemberRequestSchema, {
-          householdId: household.id,
-          personId: person.id,
-          role: guestType === PersonType.CHILD ? MemberRole.CHILD : MemberRole.GUARDIAN,
-        }),
-      );
-      await client.addInvitee(
-        create(AddInviteeRequestSchema, { eventId: event.id, personId: person.id }),
-      );
-      setGuestName("");
-      setGuestType(PersonType.CHILD);
-      await loadInvitees(event.id);
-    } catch (err) {
-      setAddGuestError(err instanceof Error ? err.message : "Failed to add guest");
-    } finally {
-      setAddGuestLoading(false);
     }
   };
 
@@ -272,51 +193,7 @@ export const InviteManager: React.FC = () => {
   const rightPanel = event ? (
     <div className="invite-manager__guest-panel">
       <h2 className="invite-manager__section-title">Guest List</h2>
-      {inviteesLoading && <p className="invite-manager__status">Loading guests…</p>}
-      {inviteesError && <p className="invite-manager__error">{inviteesError}</p>}
-      {!inviteesLoading && !inviteesError && invitees.length === 0 && (
-        <p className="invite-manager__empty">No guests added yet.</p>
-      )}
-      {invitees.length > 0 && (
-        <ul className="invite-manager__invitee-list">
-          {invitees.map((iws, i) => (
-            <li key={iws.invitee?.id ?? i} className="invite-manager__invitee-row">
-              <span className="invite-manager__invitee-name">{iws.person?.name}</span>
-              <span className="invite-manager__invitee-type">
-                {iws.person?.type === PersonType.CHILD ? "child" : "adult"}
-              </span>
-            </li>
-          ))}
-        </ul>
-      )}
-      <form className="invite-manager__add-guest-form" onSubmit={handleAddGuest}>
-        <h3 className="invite-manager__subsection-title">Add Guest</h3>
-        <label className="invite-manager__label">
-          Name
-          <input
-            className="invite-manager__input"
-            type="text"
-            value={guestName}
-            onChange={(e) => setGuestName(e.target.value)}
-            required
-          />
-        </label>
-        <label className="invite-manager__label">
-          Type
-          <select
-            className="invite-manager__input"
-            value={guestType}
-            onChange={(e) => setGuestType(Number(e.target.value) as PersonType)}
-          >
-            <option value={PersonType.CHILD}>Child</option>
-            <option value={PersonType.ADULT}>Adult</option>
-          </select>
-        </label>
-        {addGuestError && <p className="invite-manager__error">{addGuestError}</p>}
-        <Button type="submit" variant="default" disabled={addGuestLoading}>
-          {addGuestLoading ? "Adding…" : "Add Guest"}
-        </Button>
-      </form>
+      <HouseholdGuestList eventId={event.id} />
     </div>
   ) : (
     <div className="invite-manager__guest-panel invite-manager__guest-panel--empty">

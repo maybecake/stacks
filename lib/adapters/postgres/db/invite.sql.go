@@ -13,6 +13,20 @@ import (
 	"github.com/google/uuid"
 )
 
+const clearInviteeHouseholdByPersonAndHousehold = `-- name: ClearInviteeHouseholdByPersonAndHousehold :exec
+UPDATE invite__invitees SET household_id = NULL WHERE person_id = $1 AND household_id = $2
+`
+
+type ClearInviteeHouseholdByPersonAndHouseholdParams struct {
+	PersonID    uuid.UUID     `json:"person_id"`
+	HouseholdID uuid.NullUUID `json:"household_id"`
+}
+
+func (q *Queries) ClearInviteeHouseholdByPersonAndHousehold(ctx context.Context, arg ClearInviteeHouseholdByPersonAndHouseholdParams) error {
+	_, err := q.db.ExecContext(ctx, clearInviteeHouseholdByPersonAndHousehold, arg.PersonID, arg.HouseholdID)
+	return err
+}
+
 const confirmedAttendeeCount = `-- name: ConfirmedAttendeeCount :one
 SELECT COALESCE(SUM(ac.cnt), 0)::int AS total
 FROM (
@@ -29,6 +43,23 @@ func (q *Queries) ConfirmedAttendeeCount(ctx context.Context, eventID uuid.UUID)
 	var total int32
 	err := row.Scan(&total)
 	return total, err
+}
+
+const deleteHouseholdMember = `-- name: DeleteHouseholdMember :execrows
+DELETE FROM household_members WHERE household_id = $1 AND person_id = $2
+`
+
+type DeleteHouseholdMemberParams struct {
+	HouseholdID uuid.UUID `json:"household_id"`
+	PersonID    uuid.UUID `json:"person_id"`
+}
+
+func (q *Queries) DeleteHouseholdMember(ctx context.Context, arg DeleteHouseholdMemberParams) (int64, error) {
+	result, err := q.db.ExecContext(ctx, deleteHouseholdMember, arg.HouseholdID, arg.PersonID)
+	if err != nil {
+		return 0, err
+	}
+	return result.RowsAffected()
 }
 
 const deleteInvitee = `-- name: DeleteInvitee :exec
@@ -304,9 +335,9 @@ RETURNING id, event_id, person_id, household_id, created_at
 `
 
 type InsertInviteeParams struct {
-	EventID     uuid.UUID `json:"event_id"`
-	PersonID    uuid.UUID `json:"person_id"`
-	HouseholdID uuid.UUID `json:"household_id"`
+	EventID     uuid.UUID     `json:"event_id"`
+	PersonID    uuid.UUID     `json:"person_id"`
+	HouseholdID uuid.NullUUID `json:"household_id"`
 }
 
 // ── Invitees ──────────────────────────────────────────────────────────────────
@@ -572,6 +603,7 @@ SELECT
     ii.event_id,
     ii.person_id,
     ii.household_id,
+    h.name          AS household_name,
     p.name          AS person_name,
     p.type          AS person_type,
     p.phone         AS person_phone,
@@ -579,6 +611,7 @@ SELECT
     COALESCE(r.status, '')  AS rsvp_status
 FROM invite__invitees ii
 JOIN persons p ON p.id = ii.person_id
+LEFT JOIN households h ON h.id = ii.household_id
 LEFT JOIN invite__rsvps r ON r.event_id = ii.event_id AND r.household_id = ii.household_id
 WHERE ii.event_id = $1
 ORDER BY p.name
@@ -592,15 +625,16 @@ type ListInviteesWithStatusParams struct {
 }
 
 type ListInviteesWithStatusRow struct {
-	InviteeID   uuid.UUID      `json:"invitee_id"`
-	EventID     uuid.UUID      `json:"event_id"`
-	PersonID    uuid.UUID      `json:"person_id"`
-	HouseholdID uuid.UUID      `json:"household_id"`
-	PersonName  string         `json:"person_name"`
-	PersonType  string         `json:"person_type"`
-	PersonPhone sql.NullString `json:"person_phone"`
-	PersonEmail sql.NullString `json:"person_email"`
-	RsvpStatus  string         `json:"rsvp_status"`
+	InviteeID     uuid.UUID      `json:"invitee_id"`
+	EventID       uuid.UUID      `json:"event_id"`
+	PersonID      uuid.UUID      `json:"person_id"`
+	HouseholdID   uuid.NullUUID  `json:"household_id"`
+	HouseholdName sql.NullString `json:"household_name"`
+	PersonName    string         `json:"person_name"`
+	PersonType    string         `json:"person_type"`
+	PersonPhone   sql.NullString `json:"person_phone"`
+	PersonEmail   sql.NullString `json:"person_email"`
+	RsvpStatus    string         `json:"rsvp_status"`
 }
 
 func (q *Queries) ListInviteesWithStatus(ctx context.Context, arg ListInviteesWithStatusParams) ([]ListInviteesWithStatusRow, error) {
@@ -617,6 +651,7 @@ func (q *Queries) ListInviteesWithStatus(ctx context.Context, arg ListInviteesWi
 			&i.EventID,
 			&i.PersonID,
 			&i.HouseholdID,
+			&i.HouseholdName,
 			&i.PersonName,
 			&i.PersonType,
 			&i.PersonPhone,
@@ -838,4 +873,18 @@ func (q *Queries) PersonIsAccessibleViaEvent(ctx context.Context, arg PersonIsAc
 	var accessible bool
 	err := row.Scan(&accessible)
 	return accessible, err
+}
+
+const updateInviteeHouseholdByPerson = `-- name: UpdateInviteeHouseholdByPerson :exec
+UPDATE invite__invitees SET household_id = $1 WHERE person_id = $2
+`
+
+type UpdateInviteeHouseholdByPersonParams struct {
+	HouseholdID uuid.NullUUID `json:"household_id"`
+	PersonID    uuid.UUID     `json:"person_id"`
+}
+
+func (q *Queries) UpdateInviteeHouseholdByPerson(ctx context.Context, arg UpdateInviteeHouseholdByPersonParams) error {
+	_, err := q.db.ExecContext(ctx, updateInviteeHouseholdByPerson, arg.HouseholdID, arg.PersonID)
+	return err
 }

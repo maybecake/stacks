@@ -87,6 +87,9 @@ INSERT INTO household_members (household_id, person_id, role)
 VALUES ($1, $2, $3)
 RETURNING *;
 
+-- name: DeleteHouseholdMember :execrows
+DELETE FROM household_members WHERE household_id = $1 AND person_id = $2;
+
 -- name: GetHouseholdChildMembers :many
 SELECT * FROM household_members WHERE household_id = $1 AND role = 'child';
 
@@ -100,6 +103,12 @@ INSERT INTO invite__invitees (event_id, person_id, household_id)
 VALUES ($1, $2, $3)
 RETURNING *;
 
+-- name: UpdateInviteeHouseholdByPerson :exec
+UPDATE invite__invitees SET household_id = $1 WHERE person_id = $2;
+
+-- name: ClearInviteeHouseholdByPersonAndHousehold :exec
+UPDATE invite__invitees SET household_id = NULL WHERE person_id = $1 AND household_id = $2;
+
 -- name: GetInviteeByID :one
 SELECT * FROM invite__invitees WHERE id = $1 LIMIT 1;
 
@@ -112,6 +121,7 @@ SELECT
     ii.event_id,
     ii.person_id,
     ii.household_id,
+    h.name          AS household_name,
     p.name          AS person_name,
     p.type          AS person_type,
     p.phone         AS person_phone,
@@ -119,6 +129,7 @@ SELECT
     COALESCE(r.status, '')  AS rsvp_status
 FROM invite__invitees ii
 JOIN persons p ON p.id = ii.person_id
+LEFT JOIN households h ON h.id = ii.household_id
 LEFT JOIN invite__rsvps r ON r.event_id = ii.event_id AND r.household_id = ii.household_id
 WHERE ii.event_id = $1
 ORDER BY p.name
