@@ -200,12 +200,21 @@ const AvatarShowcase: React.FC = () => {
   );
 };
 
-const OptionsSliderShowcase: React.FC<{ selectedTheme: string }> = ({ selectedTheme }) => {
+const THEME_OPTIONS = [
+  { value: 'light', icon: '🌞' },
+  { value: 'solarized', icon: '🌕' },
+  { value: 'dark', icon: '🌚' },
+];
+
+const OptionsSliderShowcase: React.FC<{
+  selectedTheme: string;
+  onThemeChange: (value: string) => void;
+}> = ({ selectedTheme, onThemeChange }) => {
   return (
     <section className="samples__section">
       <h2>Options Slider</h2>
       <div className="theme-slider__group">
-        <OptionsSlider />
+        <OptionsSlider options={THEME_OPTIONS} value={selectedTheme} onChange={onThemeChange} />
         <p className="theme-slider__label">Current theme: {selectedTheme}</p>
       </div>
     </section>
@@ -213,7 +222,7 @@ const OptionsSliderShowcase: React.FC<{ selectedTheme: string }> = ({ selectedTh
 };
 
 export const Samples: React.FC = () => {
-  const [selectedTheme, _setSelectedTheme] = useState("light");
+  const [selectedTheme, setSelectedTheme] = useState("light");
   const navigate = useNavigate();
   const { count: countParam } = useParams<{ count?: string }>();
   const showCount: number | null = countParam ? parseInt(countParam, 10) : null;
@@ -233,7 +242,7 @@ export const Samples: React.FC = () => {
     <DropdownMenuShowcase key="dropdown" />,
     <TabsShowcase key="tabs" />,
     <AvatarShowcase key="avatar" />,
-    <OptionsSliderShowcase key="options" selectedTheme={selectedTheme} />,
+    <OptionsSliderShowcase key="options" selectedTheme={selectedTheme} onThemeChange={setSelectedTheme} />,
   ];
 
   const displayedShowcases = showCount !== null ? showcases.slice(0, showCount) : showcases;

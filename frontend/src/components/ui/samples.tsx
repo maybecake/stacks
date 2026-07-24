@@ -9,23 +9,21 @@ import { TwoColumnLayout } from '../layout/TwoColumnLayout'
 import { OptionsSlider } from '../OptionSlider'
 import './samples.css'
 
-export const Samples: React.FC = () => {
-  const [selectedTheme, _setSelectedTheme] = useState('light')
+const THEME_OPTIONS = [
+  { value: 'light', icon: '🌞' },
+  { value: 'solarized', icon: '🌕' },
+  { value: 'dark', icon: '🌚' },
+]
 
-//   const themeOptions = [
-//     { value: 'light', icon: '🌞' },
-//     { value: 'solarized', icon: '🌕' },
-//     { value: 'solarized-dark', icon: '🌒' },
-//     { value: 'dark', icon: '🌚' },
-//   ]
+export const Samples: React.FC = () => {
+  const [selectedTheme, setSelectedTheme] = useState('light')
 
   return (
     <div className="samples">
       <section className="samples__section">
         <h2>Options Slider</h2>
         <div className="theme-slider__group">
-          <OptionsSlider
-          />
+          <OptionsSlider options={THEME_OPTIONS} value={selectedTheme} onChange={setSelectedTheme} />
           <p className="theme-slider__label">Current theme: {selectedTheme}</p>
         </div>
       </section>

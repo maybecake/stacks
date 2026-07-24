@@ -51,7 +51,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: blue; /* Example color */
+  background-color: color-mix(in srgb, var(--interactive) 5%, transparent);
   border: none;
   cursor: grab;
   display: flex;
@@ -68,9 +68,13 @@
   pointer-events: auto; /* Ensure handle itself receives pointer events */
 }
 
+.option-slider__handle:hover {
+  background-color: color-mix(in srgb, var(--interactive) 20%, transparent);
+}
+
 .option-slider__handle--dragging {
   cursor: grabbing;
-  background-color: darkblue; /* Example color change */
+  background-color: color-mix(in srgb, var(--interactive) 20%, transparent);
   z-index: 2; /* Ensure dragging handle is above everything */
   /* Keep translateX(-50%) during drag for consistent centering */
   transform: translateX(-50%);
