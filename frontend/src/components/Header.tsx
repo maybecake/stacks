@@ -15,6 +15,7 @@ const NAV_LINKS = [
   { to: "/greetings", label: "Greetings" },
   { to: "/invite", label: "Invite" },
   { to: "/game",   label: "Game"   },
+  { to: "/jewel",  label: "Jewel"  },
 ] as const;
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>

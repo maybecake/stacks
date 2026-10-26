@@ -1,0 +1,72 @@
+.jewel-hud {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  gap: 16px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.jewel-hud__belt,
+.jewel-hud__progress {
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 18px;
+  font-family: monospace;
+  font-weight: bold;
+  user-select: none;
+}
+
+.jewel-hud__banner-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.jewel-hud__banner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 32px 48px;
+  border-radius: 12px;
+  background: #22222c;
+  border: 2px solid #444;
+}
+
+.jewel-hud__banner--won {
+  border-color: #3bbf6e;
+}
+
+.jewel-hud__banner--lost {
+  border-color: #e2473b;
+}
+
+.jewel-hud__banner-text {
+  margin: 0;
+  color: #fff;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.jewel-hud__restart-button {
+  padding: 8px 20px;
+  border-radius: 6px;
+  border: none;
+  background: #3b6fe2;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.jewel-hud__restart-button:hover {
+  background: #2f58b8;
+}
