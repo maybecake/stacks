@@ -20,6 +20,16 @@ pnpm lint       # ESLint on all .ts/.tsx files
 pnpm preview    # Preview production build
 ```
 
+### Protobuf codegen (run from repo root)
+```bash
+pnpm gen:proto  # buf generate — regenerates frontend/src/gen, api/.gen, gen/go, gen/python
+```
+Run this after editing any `.proto` file, and after a fresh checkout/clone (the devcontainer's
+`postCreateCommand` already runs it once on container creation). `frontend/src/gen/` and
+`api/.gen/` are gitignored and rebuilt by this command (also wired into Vercel's
+`installCommand`); `gen/go/` and `gen/python/` are committed, since Vercel's Go/Python
+builders run before `installCommand` and need those files to already exist in the repo.
+
 ### Bazel (run from repo root)
 ```bash
 bazel build //...                          # Build all targets
