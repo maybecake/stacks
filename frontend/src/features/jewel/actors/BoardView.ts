@@ -1,7 +1,7 @@
 import { Actor, Canvas, Color } from 'excalibur';
 import type { PointerEvent } from 'excalibur';
 import type { ColorId } from '../config/constants';
-import { COLOR_HEX } from '../config/constants';
+import { COLOR_HEX, CANVAS_WIDTH, CANVAS_HEIGHT } from '../config/constants';
 import { JEWEL_IMAGES } from './jewelImages';
 
 const LOCK_BORDER_COLOR = '#ffffff';
@@ -88,9 +88,31 @@ export class BoardView extends Actor {
     }, BLOCKED_FLASH_MS);
   }
 
+  /**
+   * Recomputes world position from the raw page coordinates and the canvas's actual rendered
+   * size, instead of trusting `evt.worldPos`. Excalibur's own screen->world transform assumes the
+   * canvas's CSS size matches its configured resolution (DisplayMode.Fixed), but JewelPage.css
+   * intentionally scales the canvas down to fit narrow/mobile viewports (`width/height: 100%` on
+   * a responsive container) — a mismatch Excalibur never re-measures, so its worldPos drifts
+   * toward the top-left as the real rendered size shrinks below the configured resolution.
+   */
   private _handlePointer(evt: PointerEvent): void {
-    const localX = evt.worldPos.x - (this.pos.x - this.width / 2);
-    const localY = evt.worldPos.y - (this.pos.y - this.height / 2);
+    let worldX = evt.worldPos.x;
+    let worldY = evt.worldPos.y;
+
+    const canvas = this.scene?.engine.canvas;
+    if (canvas) {
+      const rect = canvas.getBoundingClientRect();
+      if (rect.width > 0 && rect.height > 0) {
+        const canvasRelativeX = evt.pagePos.x - rect.left - window.scrollX;
+        const canvasRelativeY = evt.pagePos.y - rect.top - window.scrollY;
+        worldX = (canvasRelativeX / rect.width) * CANVAS_WIDTH;
+        worldY = (canvasRelativeY / rect.height) * CANVAS_HEIGHT;
+      }
+    }
+
+    const localX = worldX - (this.pos.x - this.width / 2);
+    const localY = worldY - (this.pos.y - this.height / 2);
     const col = Math.floor(localX / this.cellSize);
     const row = Math.floor(localY / this.cellSize);
     if (row < 0 || row >= this.rows || col < 0 || col >= this.cols) return;
