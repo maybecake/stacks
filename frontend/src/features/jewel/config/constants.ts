@@ -1,6 +1,6 @@
 export type ColorId = 'red' | 'blue' | 'green' | 'yellow' | 'purple';
 
-export type PickShape = 'plus' | 'block3x3';
+export type PickShape = 'plus' | 'block3x3' | 'flood';
 
 export const DEFAULT_PALETTE: ColorId[] = ['red', 'blue', 'green', 'yellow', 'purple'];
 
@@ -14,12 +14,13 @@ export const COLOR_HEX: Record<ColorId, string> = {
 
 export const DEFAULT_GRID_SIZE = 8;
 export const DEFAULT_PICK_SHAPE: PickShape = 'plus';
+/** Max cells a 'flood' pick can gather in one go (including the clicked cell). */
+export const DEFAULT_FLOOD_LIMIT = 10;
 export const DEFAULT_MAX_STACKS = 12;
 export const DEFAULT_MAX_STACK_SIZE = 8;
 export const DEFAULT_ROTATION_PERIOD_MS = 8000;
 
 export const DEFAULT_SHUFFLE_CONFIG = {
-  regionCount: 40,
   minRegionSize: 2,
   maxRegionSize: 5,
 };

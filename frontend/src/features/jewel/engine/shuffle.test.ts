@@ -22,7 +22,7 @@ function buildTargetGrid(size: number, palette: ColorId[]): ColorId[][] {
 describe('shuffleBoard', () => {
   const palette: ColorId[] = ['red', 'blue', 'green', 'yellow', 'purple'];
   const target = buildTargetGrid(8, palette);
-  const config = { regionCount: 40, minRegionSize: 2, maxRegionSize: 5 };
+  const config = { minRegionSize: 2, maxRegionSize: 5 };
 
   it('always produces a color-count-preserving permutation of the target grid', () => {
     const rng = mulberry32(1);
@@ -60,5 +60,22 @@ describe('shuffleBoard', () => {
     const tiny = buildTargetGrid(1, palette);
     const shuffled = shuffleBoard(tiny, config, mulberry32(1));
     expect(countColors(shuffled)).toEqual(countColors(tiny));
+  });
+
+  it('never leaves a jewel on its own matching target color', () => {
+    for (const seed of [1, 2, 3, 4, 5, 42, 7, 99]) {
+      const shuffled = shuffleBoard(target, config, mulberry32(seed));
+      for (let r = 0; r < target.length; r++) {
+        for (let c = 0; c < target[0].length; c++) {
+          expect(shuffled[r][c]).not.toBe(target[r][c]);
+        }
+      }
+    }
+  });
+
+  it('terminates on a single-color board even though self-matches are unavoidable', () => {
+    const monochrome = buildTargetGrid(4, ['red']);
+    const shuffled = shuffleBoard(monochrome, config, mulberry32(1));
+    expect(countColors(shuffled)).toEqual(countColors(monochrome));
   });
 });

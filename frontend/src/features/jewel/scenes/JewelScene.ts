@@ -140,7 +140,7 @@ export class JewelScene extends Scene {
   private _handlePick(row: number, col: number): void {
     if (this._ended) return;
 
-    const group = this._board.computePickGroup(row, col, this._level.pickShape);
+    const group = this._board.computePickGroup(row, col, this._level.pickShape, this._level.floodLimit);
     if (group.length === 0) return;
 
     const colors = this._board.colorsOf(group);
@@ -191,7 +191,7 @@ export class JewelScene extends Scene {
       return;
     }
 
-    if (!this._belt.hasAnyLegalPick(this._board, this._level.pickShape, this._rng)) {
+    if (!this._belt.hasAnyLegalPick(this._board, this._level.pickShape, this._rng, this._level.floodLimit)) {
       this._ended = true;
       GameEventBus.emit({ type: 'level-failed' });
     }

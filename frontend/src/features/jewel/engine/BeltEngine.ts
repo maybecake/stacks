@@ -138,12 +138,17 @@ export class BeltEngine {
    * "the loop filled up". Returns true (not stuck) when zero such cells exist, since any jewels
    * still on the belt are guaranteed to eventually find a matching empty cell.
    */
-  hasAnyLegalPick(board: BoardEngine, pickShape: PickShape, rng: () => number): boolean {
+  hasAnyLegalPick(
+    board: BoardEngine,
+    pickShape: PickShape,
+    rng: () => number,
+    floodLimit?: number,
+  ): boolean {
     const pickable = board.pickableCells();
     if (pickable.length === 0) return true;
 
     for (const [r, c] of pickable) {
-      const group = board.computePickGroup(r, c, pickShape);
+      const group = board.computePickGroup(r, c, pickShape, floodLimit);
       const colors = board.colorsOf(group);
       if (this.canAcceptGroup(colors, rng)) return true;
     }

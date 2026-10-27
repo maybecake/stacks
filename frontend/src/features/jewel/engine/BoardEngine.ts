@@ -56,9 +56,14 @@ export class BoardEngine {
     return this.isInBounds(r, c) && !this.isEmpty(r, c) && !this.isLocked(r, c);
   }
 
-  /** Clicked cell + neighbors per pick shape, filtered to in-bounds, non-empty, non-locked cells. */
-  computePickGroup(r: number, c: number, pickShape: PickShape): Cell[] {
+  /**
+   * Clicked cell + neighbors per pick shape, filtered to in-bounds, non-empty, non-locked cells.
+   * `floodLimit` caps the group size for the 'flood' shape (ignored otherwise).
+   */
+  computePickGroup(r: number, c: number, pickShape: PickShape, floodLimit = Infinity): Cell[] {
     if (!this.isPickable(r, c)) return [];
+
+    if (pickShape === 'flood') return this._computeFloodGroup(r, c, floodLimit);
 
     const offsets = pickShape === 'plus' ? PLUS_OFFSETS : BLOCK_OFFSETS;
     const group: Cell[] = [[r, c]];
@@ -67,6 +72,34 @@ export class BoardEngine {
       const nc = c + dc;
       if (this.isPickable(nr, nc)) group.push([nr, nc]);
     }
+    return group;
+  }
+
+  /** Breadth-first same-color flood fill from (r,c), capped at `limit` cells (including the start). */
+  private _computeFloodGroup(r: number, c: number, limit: number): Cell[] {
+    const startColor = this.jewels[r][c];
+    const visited = new Set<string>([`${r},${c}`]);
+    const group: Cell[] = [[r, c]];
+    const queue: Cell[] = [[r, c]];
+
+    for (let head = 0; head < queue.length && group.length < limit; head++) {
+      const [cr, cc] = queue[head];
+      for (const [dr, dc] of PLUS_OFFSETS) {
+        if (group.length >= limit) break;
+
+        const nr = cr + dr;
+        const nc = cc + dc;
+        const key = `${nr},${nc}`;
+        if (visited.has(key)) continue;
+        visited.add(key);
+
+        if (!this.isPickable(nr, nc) || this.jewels[nr][nc] !== startColor) continue;
+
+        group.push([nr, nc]);
+        queue.push([nr, nc]);
+      }
+    }
+
     return group;
   }
 

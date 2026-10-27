@@ -4,6 +4,8 @@ import { defineLevel } from './types';
 // Do not hand-edit targetColors — regenerate from the source image instead.
 export const level: ReturnType<typeof defineLevel> = defineLevel({
   name: "Gem",
+  pickShape: 'flood',
+  floodLimit: 8,
   targetColors: [
     ['blue', 'blue', 'blue', 'blue', 'blue', 'purple', 'purple', 'purple'],
     ['green', 'blue', 'blue', 'blue', 'blue', 'purple', 'purple', 'purple'],

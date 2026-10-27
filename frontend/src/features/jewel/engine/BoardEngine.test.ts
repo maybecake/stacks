@@ -104,6 +104,64 @@ describe('BoardEngine', () => {
     expect(group).toHaveLength(9); // center + all 8 neighbors
   });
 
+  it('flood-fills same-colored pickable cells breadth-first, uncapped', () => {
+    // A connected plus-shaped blob of 'yellow', a color absent from `target` so none of it can
+    // accidentally lock (the point of this fixture is purely connectivity, not lock edge cases).
+    const jewels: (ColorId | null)[][] = [
+      ['green', 'yellow', 'green'],
+      ['yellow', 'yellow', 'yellow'],
+      ['green', 'yellow', 'green'],
+    ];
+    const board = makeBoard(target, jewels);
+
+    const group = board.computePickGroup(1, 1, 'flood', 100);
+    expect(group).toHaveLength(5); // the whole yellow plus-shaped blob
+    expect(group).toEqual(
+      expect.arrayContaining([
+        [1, 1],
+        [0, 1],
+        [2, 1],
+        [1, 0],
+        [1, 2],
+      ]),
+    );
+  });
+
+  it('caps a flood pick at the configured limit', () => {
+    const allBlue: (ColorId | null)[][] = [
+      ['blue', 'blue', 'blue'],
+      ['blue', 'blue', 'blue'],
+      ['blue', 'blue', 'blue'],
+    ];
+    const board = makeBoard(target, allBlue);
+
+    const group = board.computePickGroup(1, 1, 'flood', 4);
+    expect(group).toHaveLength(4);
+    expect(group[0]).toEqual([1, 1]); // always includes the clicked cell
+  });
+
+  it('flood pick does not cross into a different color or a locked/empty cell', () => {
+    const jewels: (ColorId | null)[][] = [
+      ['blue', 'blue', 'green'],
+      ['blue', 'red', 'green'], // (1,1) locked: red === target red
+      [null, 'blue', 'blue'], // (2,0) empty, (2,2) locked: blue === target blue
+    ];
+    const board = makeBoard(target, jewels);
+
+    const group = board.computePickGroup(0, 0, 'flood', 10);
+    expect(group).toEqual(
+      expect.arrayContaining([
+        [0, 0],
+        [0, 1],
+        [1, 0],
+      ]),
+    );
+    expect(group).toHaveLength(3);
+    expect(group).not.toContainEqual([1, 1]); // locked, blocks the flood
+    expect(group).not.toContainEqual([2, 0]); // empty, blocks the flood
+    expect(group).not.toContainEqual([0, 2]); // different color (green)
+  });
+
   it('reports solved only when every cell is locked', () => {
     const allLocked: (ColorId | null)[][] = target.map((row) => [...row]);
     const board = makeBoard(target, allLocked);

@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { JewelCanvas } from './JewelCanvas';
-import { JewelHUD } from './JewelHUD';
+import { JewelOutcomeBanner } from './JewelHUD';
 import type { JewelScene } from '../scenes/JewelScene';
 import './JewelPage.css';
 
@@ -17,7 +17,7 @@ export const JewelPage = () => {
         </p>
       </div>
       <div className="jewel-page__viewport">
-        <JewelHUD onRestart={() => sceneRef.current?.restart()} />
+        <JewelOutcomeBanner onRestart={() => sceneRef.current?.restart()} />
         <JewelCanvas onSceneReady={(scene) => (sceneRef.current = scene)} />
       </div>
     </div>

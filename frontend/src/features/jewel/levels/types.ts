@@ -1,5 +1,6 @@
 import type { ColorId, PickShape } from '../config/constants';
 import {
+  DEFAULT_FLOOD_LIMIT,
   DEFAULT_MAX_STACK_SIZE,
   DEFAULT_MAX_STACKS,
   DEFAULT_PALETTE,
@@ -9,7 +10,6 @@ import {
 } from '../config/constants';
 
 export interface ShuffleConfig {
-  regionCount: number;
   minRegionSize: number;
   maxRegionSize: number;
 }
@@ -26,6 +26,8 @@ export interface LevelDef {
   targetColors: ColorId[][];
   palette: ColorId[];
   pickShape: PickShape;
+  /** Max cells a 'flood' pick can gather in one go (including the clicked cell); ignored otherwise. */
+  floodLimit: number;
   shuffle: ShuffleConfig;
   belt: BeltConfig;
 }
@@ -34,6 +36,7 @@ export interface LevelDef {
 export type LevelConfigInput = Pick<LevelDef, 'name' | 'targetColors'> & {
   palette?: ColorId[];
   pickShape?: PickShape;
+  floodLimit?: number;
   shuffle?: Partial<ShuffleConfig>;
   belt?: Partial<BeltConfig>;
 };
@@ -45,6 +48,7 @@ export function defineLevel(input: LevelConfigInput): LevelDef {
     targetColors: input.targetColors,
     palette: input.palette ?? DEFAULT_PALETTE,
     pickShape: input.pickShape ?? DEFAULT_PICK_SHAPE,
+    floodLimit: input.floodLimit ?? DEFAULT_FLOOD_LIMIT,
     shuffle: { ...DEFAULT_SHUFFLE_CONFIG, ...input.shuffle },
     belt: {
       maxStacks: input.belt?.maxStacks ?? DEFAULT_MAX_STACKS,
