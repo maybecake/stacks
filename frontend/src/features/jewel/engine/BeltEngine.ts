@@ -111,25 +111,30 @@ export class BeltEngine {
   }
 
   /**
-   * Resolves one eject attempt for a slot that just crossed the eject point: if the board has a
-   * matching empty cell, fills one at random and shrinks/frees the slot. No-op (stack rides on)
-   * if no matching empty cell exists right now.
+   * Resolves one eject attempt for a slot that just crossed the eject point: places as many of
+   * the stack's jewels as currently have a matching empty cell (one at a time, re-checking the
+   * board after each placement since each one removes a candidate), shrinking/freeing the slot by
+   * that amount. No-op (stack rides on, unchanged) if no matching empty cell exists right now.
    */
   resolveEject(slotIndex: number, board: BoardEngine, rng: () => number): boolean {
     const slot = this.slots[slotIndex];
     if (!slot) return false;
 
-    const candidates = board.emptyCellsMatching(slot.color);
-    if (candidates.length === 0) return false;
+    let placedAny = false;
+    while (slot.count > 0) {
+      const candidates = board.emptyCellsMatching(slot.color);
+      if (candidates.length === 0) break;
 
-    const [r, c] = candidates[Math.floor(rng() * candidates.length)];
-    board.placeJewel(r, c, slot.color);
+      const [r, c] = candidates[Math.floor(rng() * candidates.length)];
+      board.placeJewel(r, c, slot.color);
+      slot.count--;
+      placedAny = true;
+    }
 
-    slot.count--;
     if (slot.count <= 0) {
       this.slots[slotIndex] = null;
     }
-    return true;
+    return placedAny;
   }
 
   /**

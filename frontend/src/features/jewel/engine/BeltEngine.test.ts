@@ -157,6 +157,38 @@ describe('BeltEngine rotation and ejection', () => {
     expect(belt.slots[0]).toBeNull();
   });
 
+  it('places every eligible jewel from the stack in one eject, not just one', () => {
+    const target: ColorId[][] = [['red', 'red', 'red']];
+    const jewels: (ColorId | null)[][] = [[null, null, null]]; // three matching empty cells
+    const board = new BoardEngine(target, jewels);
+
+    const belt = new BeltEngine(4, 8, 360);
+    belt.slots = [{ color: 'red', count: 2 }, null, null, null]; // only 2 jewels in the stack
+
+    const ejected = belt.resolveEject(0, board, mulberry32(1));
+
+    expect(ejected).toBe(true);
+    const placedCount = board.jewels[0].filter((c) => c === 'red').length;
+    expect(placedCount).toBe(2); // both jewels placed, capped by stack size not cell count
+    expect(belt.slots[0]).toBeNull(); // stack fully emptied and freed
+  });
+
+  it('places jewels until it runs out of matching empty cells, keeping the remainder on the belt', () => {
+    const target: ColorId[][] = [['red', 'blue', 'blue']];
+    const jewels: (ColorId | null)[][] = [[null, 'blue', null]]; // only cell 0 is an empty red-target cell
+    const board = new BoardEngine(target, jewels);
+
+    const belt = new BeltEngine(4, 8, 360);
+    belt.slots = [{ color: 'red', count: 3 }, null, null, null];
+
+    const ejected = belt.resolveEject(0, board, mulberry32(1));
+
+    expect(ejected).toBe(true);
+    const placedCount = board.jewels[0].filter((c) => c === 'red').length;
+    expect(placedCount).toBe(1); // capped by the single available matching cell
+    expect(belt.slots[0]).toEqual({ color: 'red', count: 2 }); // remainder rides on
+  });
+
   it('leaves the stack unchanged when no empty cell matches its color', () => {
     const target: ColorId[][] = [['red', 'blue']];
     const jewels: (ColorId | null)[][] = [['red', 'blue']]; // no empty cells at all
