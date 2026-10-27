@@ -3,7 +3,7 @@ import { DefaultLoader } from 'excalibur';
 import type { Engine } from 'excalibur';
 import { createEngine } from '../engine/createEngine';
 import { JewelScene } from '../scenes/JewelScene';
-import { JEWEL_LOADABLES } from '../actors/JewelActor';
+import { JEWEL_LOADABLES } from '../actors/jewelImages';
 import { LEVELS } from '../levels';
 
 const CANVAS_ID = 'jewel-canvas';

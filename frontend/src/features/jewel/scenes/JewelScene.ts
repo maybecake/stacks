@@ -5,12 +5,14 @@ import { BeltEngine } from '../engine/BeltEngine';
 import { shuffleBoard } from '../engine/shuffle';
 import { createRng } from '../engine/rng';
 import { GameEventBus } from '../engine/GameEventBus';
-import { BoardCellActor } from '../actors/BoardCellActor';
-import { JewelActor } from '../actors/JewelActor';
+import { BoardView } from '../actors/BoardView';
+import type { BoardViewCell } from '../actors/BoardView';
 import { BeltSlotActor } from '../actors/BeltSlotActor';
 import {
   CANVAS_WIDTH,
-  CELL_SIZE,
+  CANVAS_HEIGHT,
+  MAX_CELL_SIZE,
+  MIN_CELL_SIZE,
   BELT_AREA_HEIGHT,
   BELT_RADIUS_X,
   BELT_RADIUS_Y,
@@ -25,6 +27,7 @@ const MARKER_FONT = new Font({ size: 12 });
 
 const BOARD_TOP_MARGIN = 24;
 const BELT_TOP_MARGIN = 40;
+const BOARD_SIDE_MARGIN = 16;
 
 function angleToOffset(angleDeg: number, radiusX: number, radiusY: number): { x: number; y: number } {
   const rad = (angleDeg * Math.PI) / 180;
@@ -36,11 +39,11 @@ export class JewelScene extends Scene {
   private _board!: BoardEngine;
   private _belt!: BeltEngine;
   private _rng: () => number = createRng();
-  private _cellActors: BoardCellActor[][] = [];
-  private _jewelActors: (JewelActor | null)[][] = [];
+  private _boardView!: BoardView;
   private _slotActors: BeltSlotActor[] = [];
   private _trackActors: Actor[] = [];
   private _ended = false;
+  private _cellSize = MAX_CELL_SIZE;
   private _boardOriginX = 0;
   private _boardOriginY = BOARD_TOP_MARGIN;
   private _beltCenterX = CANVAS_WIDTH / 2;
@@ -62,8 +65,7 @@ export class JewelScene extends Scene {
 
   /** Re-shuffles and rebuilds everything from scratch — used for the initial build and restart. */
   restart(): void {
-    for (const row of this._cellActors) for (const actor of row) this.remove(actor);
-    for (const row of this._jewelActors) for (const actor of row) if (actor) this.remove(actor);
+    if (this._boardView) this.remove(this._boardView);
     for (const actor of this._slotActors) this.remove(actor);
     for (const actor of this._trackActors) this.remove(actor);
     this._buildScene();
@@ -71,7 +73,17 @@ export class JewelScene extends Scene {
 
   private _buildScene(): void {
     const gridSize = this._level.targetColors.length;
-    const boardPixelSize = gridSize * CELL_SIZE;
+
+    // Cell size scales down to fit arbitrarily large grids (e.g. a 48x48 pixel-art level) within
+    // the fixed canvas, capped at MAX_CELL_SIZE so small grids keep today's familiar look.
+    const widthBudget = CANVAS_WIDTH - 2 * BOARD_SIDE_MARGIN;
+    const heightBudget = CANVAS_HEIGHT - BOARD_TOP_MARGIN - BELT_TOP_MARGIN - BELT_AREA_HEIGHT;
+    this._cellSize = Math.max(
+      MIN_CELL_SIZE,
+      Math.min(MAX_CELL_SIZE, Math.floor(Math.min(widthBudget, heightBudget) / gridSize)),
+    );
+
+    const boardPixelSize = gridSize * this._cellSize;
     this._boardOriginX = (CANVAS_WIDTH - boardPixelSize) / 2;
     this._beltCenterY = this._boardOriginY + boardPixelSize + BELT_TOP_MARGIN + BELT_AREA_HEIGHT / 2;
 
@@ -86,32 +98,11 @@ export class JewelScene extends Scene {
       this._level.belt.rotationPeriodMs,
     );
 
-    this._cellActors = [];
-    this._jewelActors = [];
-    for (let r = 0; r < gridSize; r++) {
-      const cellRow: BoardCellActor[] = [];
-      const jewelRow: (JewelActor | null)[] = [];
-      for (let c = 0; c < gridSize; c++) {
-        const { x, y } = this._cellCenter(r, c);
-        const cell = new BoardCellActor(r, c, this._level.targetColors[r][c], CELL_SIZE, (row, col) =>
-          this._handlePick(row, col),
-        );
-        cell.pos = vec(x, y);
-        this.add(cell);
-        cellRow.push(cell);
-
-        const color = initialJewels[r][c];
-        let jewel: JewelActor | null = null;
-        if (color) {
-          jewel = new JewelActor(color, CELL_SIZE * 0.7);
-          jewel.pos = vec(x, y);
-          this.add(jewel);
-        }
-        jewelRow.push(jewel);
-      }
-      this._cellActors.push(cellRow);
-      this._jewelActors.push(jewelRow);
-    }
+    this._boardView = new BoardView(gridSize, gridSize, this._cellSize, this._buildViewCells(), (row, col) =>
+      this._handlePick(row, col),
+    );
+    this._boardView.pos = vec(this._boardOriginX + boardPixelSize / 2, this._boardOriginY + boardPixelSize / 2);
+    this.add(this._boardView);
 
     this._slotActors = [];
     for (let i = 0; i < this._belt.maxStacks; i++) {
@@ -130,13 +121,6 @@ export class JewelScene extends Scene {
     this._emitBeltUpdated();
   }
 
-  private _cellCenter(row: number, col: number): { x: number; y: number } {
-    return {
-      x: this._boardOriginX + col * CELL_SIZE + CELL_SIZE / 2,
-      y: this._boardOriginY + row * CELL_SIZE + CELL_SIZE / 2,
-    };
-  }
-
   private _handlePick(row: number, col: number): void {
     if (this._ended) return;
 
@@ -147,7 +131,7 @@ export class JewelScene extends Scene {
     const accepted = this._belt.insertGroup(colors, this._rng);
 
     if (!accepted) {
-      this._cellActors[row][col].flashBlocked();
+      this._boardView.flashBlocked(row, col);
       GameEventBus.emit({ type: 'pick-blocked', row, col });
       return;
     }
@@ -197,31 +181,24 @@ export class JewelScene extends Scene {
     }
   }
 
-  private _syncBoardVisuals(): void {
+  private _buildViewCells(): BoardViewCell[][] {
+    const cells: BoardViewCell[][] = [];
     for (let r = 0; r < this._board.rows; r++) {
+      const row: BoardViewCell[] = [];
       for (let c = 0; c < this._board.cols; c++) {
-        const color = this._board.jewels[r][c];
-        const existing = this._jewelActors[r][c];
-
-        if (color === null) {
-          if (existing) existing.setVisible(false);
-          continue;
-        }
-
-        if (existing) {
-          existing.setColor(color);
-          existing.setVisible(true);
-        } else {
-          const { x, y } = this._cellCenter(r, c);
-          const jewel = new JewelActor(color, CELL_SIZE * 0.7);
-          jewel.pos = vec(x, y);
-          this.add(jewel);
-          this._jewelActors[r][c] = jewel;
-        }
-
-        this._cellActors[r][c].setLocked(this._board.isLocked(r, c));
+        row.push({
+          targetColor: this._board.targetColors[r][c],
+          jewelColor: this._board.jewels[r][c],
+          locked: this._board.isLocked(r, c),
+        });
       }
+      cells.push(row);
     }
+    return cells;
+  }
+
+  private _syncBoardVisuals(): void {
+    this._boardView.redraw(this._buildViewCells());
   }
 
   /** Static visual guide for the ring: a dot at each resting slot position, plus insert/eject markers. */

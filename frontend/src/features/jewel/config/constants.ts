@@ -25,8 +25,14 @@ export const DEFAULT_SHUFFLE_CONFIG = {
   maxRegionSize: 5,
 };
 
-/** Board cell size in pixels — board area scales with level gridSize */
-export const CELL_SIZE = 56;
+/**
+ * Board cell size in pixels. The board always fits within a fixed canvas, so the actual
+ * per-level cell size is computed at runtime (see JewelScene) from the level's grid size,
+ * clamped between these bounds — MAX_CELL_SIZE is what a small grid (e.g. the default 8x8)
+ * renders at; MIN_CELL_SIZE is the floor for very large grids (e.g. a 48x48 pixel-art level).
+ */
+export const MAX_CELL_SIZE = 56;
+export const MIN_CELL_SIZE = 6;
 
 /** Belt ring area dimensions, below the board */
 export const BELT_AREA_HEIGHT = 260;
@@ -37,6 +43,6 @@ export const BELT_RADIUS_Y = 90;
 export const BELT_INSERT_ANGLE_DEG = 270;
 export const BELT_EJECT_ANGLE_DEG = 90;
 
-export const CANVAS_WIDTH = DEFAULT_GRID_SIZE * CELL_SIZE + 2 * CELL_SIZE;
+export const CANVAS_WIDTH = DEFAULT_GRID_SIZE * MAX_CELL_SIZE + 2 * MAX_CELL_SIZE;
 /** Board area + belt ring area, see scenes/JewelScene.ts */
 export const CANVAS_HEIGHT = 820;

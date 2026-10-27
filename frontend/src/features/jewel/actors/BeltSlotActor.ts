@@ -1,6 +1,6 @@
 import { Actor, Color, Font, GraphicsGroup, Text, vec } from 'excalibur';
 import type { ColorId } from '../config/constants';
-import { JEWEL_IMAGES } from './JewelActor';
+import { JEWEL_IMAGES } from './jewelImages';
 
 const ICON_SIZE = 32;
 const GEM_NATIVE_SIZE = 64;
