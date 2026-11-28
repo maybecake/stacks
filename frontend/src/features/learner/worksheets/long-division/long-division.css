@@ -1,38 +1,13 @@
-.division-grid {
+/* Long division cards; the grid and card frame come from ProblemGrid (worksheets.css). */
+.division-problem {
   --division-digit-width: 28px;
   --division-row-height: 24px;
 
-  display: grid;
-  grid-template-columns: repeat(var(--division-grid-cols, 3), minmax(0, 1fr));
-  gap: 1rem;
-}
-
-.division-problem {
-  display: flex;
-  position: relative;
-  flex-direction: column;
-  align-items: center;
   min-height: 190px;
-  background-color: #ffffff;
-  border: 2px solid var(--paper-rule);
-  border-radius: 8px;
-  padding: 0.75rem;
-  break-inside: avoid;
-  page-break-inside: avoid;
 }
 
-.division-grid--rows-3 .division-problem {
+.problem-grid--rows-3 .division-problem {
   min-height: 250px;
-}
-
-.division-problem__number {
-  position: absolute;
-  top: 0.5rem;
-  left: 0.5rem;
-  font-family: "Source Code Pro", ui-monospace, Menlo, Consolas, monospace;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #94a3b8;
 }
 
 .division-problem__expression {
@@ -121,10 +96,4 @@
 .division-problem__work--lines {
   background-image: linear-gradient(to bottom, var(--paper-rule) 1px, transparent 1px);
   background-size: 100% var(--division-row-height);
-}
-
-@media print {
-  .division-problem {
-    border: 1.5px solid #000000;
-  }
 }

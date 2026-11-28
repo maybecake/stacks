@@ -247,6 +247,36 @@
   color: var(--paper-muted);
 }
 
+/* Problem grid + cards (ProblemGrid.tsx), shared by every generator */
+.problem-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--problem-grid-cols, 3), minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.problem-card {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  background-color: #ffffff;
+  border: 2px solid var(--paper-rule);
+  border-radius: 8px;
+  padding: 0.75rem;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.problem-card__number {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #94a3b8;
+}
+
 @media (max-width: 900px) {
   .worksheet {
     flex-direction: column;
@@ -293,6 +323,10 @@
     overflow: visible !important;
     margin: 0 !important;
     padding: 0 !important;
+  }
+
+  .problem-card {
+    border: 1.5px solid #000000;
   }
 
   .worksheet-sheet {

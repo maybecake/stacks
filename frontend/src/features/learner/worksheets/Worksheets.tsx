@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { AdditionWorksheet } from "./addition/AdditionWorksheet";
 import { LongDivisionWorksheet } from "./long-division/LongDivisionWorksheet";
 import "./worksheets.css";
 
@@ -11,6 +12,7 @@ type WorksheetGenerator = {
 
 /** Add new generators here; each one owns its controls and renders a <WorksheetSheet>. */
 const WORKSHEET_GENERATORS: WorksheetGenerator[] = [
+  { id: "addition", label: "Addition", component: AdditionWorksheet },
   { id: "long-division", label: "Long Division", component: LongDivisionWorksheet },
 ];
 

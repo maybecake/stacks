@@ -1,0 +1,69 @@
+/* Addition cards: big, friendly numbers for early learners. Frame comes from ProblemGrid. */
+.addition-problem {
+  --addition-font-size: 2.25rem;
+
+  justify-content: center;
+  min-height: 150px;
+  font-family: ui-rounded, "Arial Rounded MT Bold", "Trebuchet MS", Helvetica, sans-serif;
+  font-size: var(--addition-font-size);
+  font-weight: 700;
+  color: var(--paper-ink);
+}
+
+.problem-grid--rows-4 .addition-problem {
+  --addition-font-size: 2.75rem;
+
+  min-height: 195px;
+}
+
+.problem-grid--cols-3 .addition-problem {
+  --addition-font-size: 1.9rem;
+}
+
+.problem-grid--cols-4 .addition-problem {
+  --addition-font-size: 1.5rem;
+}
+
+.addition-problem__equation {
+  display: flex;
+  align-items: center;
+  gap: 0.35em;
+}
+
+/* Answer box sized for two digits */
+.addition-problem__answer {
+  display: inline-block;
+  width: 1.7em;
+  height: 1.3em;
+  border: 2px solid var(--paper-ink);
+  border-radius: 0.2em;
+}
+
+/* Stacked: operator column + right-aligned numbers, then a sum line across both columns */
+.addition-problem__stack {
+  display: grid;
+  grid-template-columns: auto 1.7em;
+  column-gap: 0.3em;
+  align-items: center;
+  line-height: 1.15;
+}
+
+.addition-problem__addend {
+  grid-column: 2;
+  text-align: right;
+}
+
+.addition-problem__operator {
+  grid-column: 1;
+}
+
+.addition-problem__rule {
+  grid-column: 1 / -1;
+  border-top: 3px solid var(--paper-ink);
+  margin-top: 0.1em;
+}
+
+.addition-problem__answer--stacked {
+  grid-column: 2;
+  margin-top: 0.25em;
+}

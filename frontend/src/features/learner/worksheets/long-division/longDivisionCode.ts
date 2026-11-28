@@ -1,7 +1,8 @@
+import { decodeLayout, encodeLayout, findLayout } from "../gridLayout";
 import { formatSeed } from "../random";
-import type { SheetCodec } from "../useSheetCode";
+import { invertRecord, normalizeCode, type SheetCodec } from "../sheetCode";
 import {
-  GRID_LAYOUTS,
+  DIVISION_LAYOUTS,
   normalizeRange,
   type Difficulty,
   type DivisionRange,
@@ -45,19 +46,15 @@ const CODE_PATTERN =
 export const DEFAULT_LONG_DIVISION_SETTINGS: LongDivisionSettings = {
   difficulty: "medium",
   customRange: { divisorMin: 2, divisorMax: 9, dividendMin: 100, dividendMax: 999 },
-  layoutId: GRID_LAYOUTS[0].id,
+  layoutId: DIVISION_LAYOUTS[0].id,
   workStyle: "aligned-columns",
   noRemainders: true,
   showNumbers: true,
   seed: 0,
 };
 
-function invert<K extends string>(record: Record<K, string>): Record<string, K> {
-  return Object.fromEntries(Object.entries(record).map(([k, v]) => [v, k])) as Record<string, K>;
-}
-
-const LETTER_TO_DIFFICULTY = invert(DIFFICULTY_LETTERS);
-const LETTER_TO_WORK_STYLE = invert(WORK_STYLE_LETTERS);
+const LETTER_TO_DIFFICULTY = invertRecord(DIFFICULTY_LETTERS);
+const LETTER_TO_WORK_STYLE = invertRecord(WORK_STYLE_LETTERS);
 
 export function encodeLongDivision(settings: LongDivisionSettings): string {
   let difficulty: string;
@@ -67,19 +64,19 @@ export function encodeLongDivision(settings: LongDivisionSettings): string {
   } else {
     difficulty = DIFFICULTY_LETTERS[settings.difficulty];
   }
-  const layout = GRID_LAYOUTS.find((l) => l.id === settings.layoutId) ?? GRID_LAYOUTS[0];
+  const layout = findLayout(DIVISION_LAYOUTS, settings.layoutId);
   const flags = `${settings.noRemainders ? "" : "R"}${settings.showNumbers ? "" : "U"}`;
-  const options = `${layout.cols}${layout.rows}${WORK_STYLE_LETTERS[settings.workStyle]}${flags}`;
+  const options = `${encodeLayout(layout)}${WORK_STYLE_LETTERS[settings.workStyle]}${flags}`;
   return `${difficulty}-${options}-${formatSeed(settings.seed)}`;
 }
 
 /** Parse a sheet code (case- and whitespace-insensitive); returns null if it isn't valid. */
 export function decodeLongDivision(code: string): LongDivisionSettings | null {
-  const match = CODE_PATTERN.exec(code.trim().toUpperCase());
+  const match = CODE_PATTERN.exec(normalizeCode(code));
   if (!match) return null;
   const [, preset, d1, d2, n1, n2, cols, rows, style, flags, seed] = match;
 
-  const layout = GRID_LAYOUTS.find((l) => l.cols === Number(cols) && l.rows === Number(rows));
+  const layout = decodeLayout(DIVISION_LAYOUTS, cols, rows);
   if (!layout) return null;
 
   return {

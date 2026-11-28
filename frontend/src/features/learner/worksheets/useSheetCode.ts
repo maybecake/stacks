@@ -1,13 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { randomSeed } from "./random";
-
-/** Converts a generator's settings (including its seed) to and from a short, printable code. */
-export interface SheetCodec<S extends { seed: number }> {
-  defaults: S;
-  encode: (settings: S) => string;
-  decode: (code: string) => S | null;
-}
+import type { SheetCodec } from "./sheetCode";
 
 const CODE_PARAM = "code";
 const TITLE_PARAM = "title";

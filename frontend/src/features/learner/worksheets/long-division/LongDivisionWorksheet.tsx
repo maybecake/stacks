@@ -1,13 +1,15 @@
 import React, { useMemo, useState } from "react";
-import { Button } from "@ui/button";
+import { findLayout } from "../gridLayout";
+import { ProblemCard, ProblemGrid } from "../ProblemGrid";
 import { mulberry32 } from "../random";
-import { SheetCodeField } from "../SheetCodeField";
 import { useSheetCode } from "../useSheetCode";
+import { WorksheetControls } from "../WorksheetControls";
+import { CheckboxField, ChoiceGroup, FieldGroup, SelectField, TextField } from "../WorksheetFields";
 import { WorksheetSheet } from "../WorksheetSheet";
 import { LONG_DIVISION_CODEC } from "./longDivisionCode";
 import {
   DIFFICULTY_PRESETS,
-  GRID_LAYOUTS,
+  DIVISION_LAYOUTS,
   WORK_STYLES,
   generateProblems,
   type Difficulty,
@@ -66,9 +68,7 @@ const DivisionProblemCard: React.FC<{
 }> = ({ problem, workStyle, showNumber }) => {
   const digits = problem.dividend.toString().split("");
   return (
-    <div className="division-problem">
-      {showNumber && <span className="division-problem__number">{problem.id}.</span>}
-
+    <ProblemCard className="division-problem" number={showNumber ? problem.id : undefined}>
       <div className="division-problem__expression">
         <div className="division-problem__divisor">{problem.divisor}</div>
         <div>
@@ -100,7 +100,7 @@ const DivisionProblemCard: React.FC<{
           </div>
         </div>
       </div>
-    </div>
+    </ProblemCard>
   );
 };
 
@@ -111,7 +111,7 @@ const LongDivisionWorksheet: React.FC = () => {
   // Raw text of the custom range inputs, so half-typed values aren't clamped while editing.
   const [customRange, setCustomRange] = useState(() => toCustomRangeInput(settings.customRange));
 
-  const layout = GRID_LAYOUTS.find((l) => l.id === layoutId) ?? GRID_LAYOUTS[0];
+  const layout = findLayout(DIVISION_LAYOUTS, layoutId);
   const range =
     difficulty === "custom" ? settings.customRange : DIFFICULTY_PRESETS[difficulty].range;
 
@@ -136,35 +136,13 @@ const LongDivisionWorksheet: React.FC = () => {
 
   return (
     <div className="worksheet">
-      <aside className="worksheet__controls">
-        <div className="worksheet__actions">
-          <Button variant="outline" size="sm" onClick={reseed}>
-            New sheet
-          </Button>
-          <Button size="sm" onClick={() => window.print()}>
-            Print
-          </Button>
-        </div>
-
-        <SheetCodeField key={code} code={code} onLoad={handleLoad} />
-
-        <fieldset className="worksheet__field">
-          <legend className="worksheet__label">Difficulty</legend>
-          <div className="worksheet__choice-grid">
-            {DIFFICULTY_OPTIONS.map((option) => (
-              <button
-                key={option.id}
-                type="button"
-                className={`worksheet__choice${difficulty === option.id ? " worksheet__choice--active" : ""}`}
-                aria-pressed={difficulty === option.id}
-                onClick={() => update({ difficulty: option.id })}
-              >
-                <span className="worksheet__choice-title">{option.label}</span>
-                <span className="worksheet__choice-hint">{option.description}</span>
-              </button>
-            ))}
-          </div>
-        </fieldset>
+      <WorksheetControls code={code} onReseed={reseed} onLoad={handleLoad}>
+        <ChoiceGroup
+          legend="Difficulty"
+          options={DIFFICULTY_OPTIONS}
+          value={difficulty}
+          onChange={(value) => update({ difficulty: value })}
+        />
 
         {difficulty === "custom" && (
           <div className="worksheet__custom">
@@ -182,77 +160,44 @@ const LongDivisionWorksheet: React.FC = () => {
           </div>
         )}
 
-        <label className="worksheet__field">
-          <span className="worksheet__label">Layout &amp; quantity</span>
-          <select
-            className="worksheet__input"
-            value={layoutId}
-            onChange={(e) => update({ layoutId: e.target.value })}
-          >
-            {GRID_LAYOUTS.map((l) => (
-              <option key={l.id} value={l.id}>
-                {l.label}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <label className="worksheet__field">
-          <span className="worksheet__label">Work area</span>
-          <select
-            className="worksheet__input"
-            value={workStyle}
-            onChange={(e) => update({ workStyle: e.target.value as WorkStyle })}
-          >
-            {WORK_STYLES.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.label}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <div className="worksheet__field">
-          <span className="worksheet__label">Options</span>
-          <label className="worksheet__checkbox">
-            <input
-              type="checkbox"
-              checked={noRemainders}
-              onChange={(e) => update({ noRemainders: e.target.checked })}
-            />
-            No remainders (exact division)
-          </label>
-          <label className="worksheet__checkbox">
-            <input
-              type="checkbox"
-              checked={showNumbers}
-              onChange={(e) => update({ showNumbers: e.target.checked })}
-            />
-            Show problem numbers
-          </label>
-        </div>
-
-        <label className="worksheet__field">
-          <span className="worksheet__label">Worksheet title</span>
-          <input
-            type="text"
-            className="worksheet__input"
-            value={title}
-            placeholder={DEFAULT_TITLE}
-            onChange={(e) => setTitle(e.target.value)}
+        <SelectField
+          label="Layout & quantity"
+          options={DIVISION_LAYOUTS}
+          value={layoutId}
+          onChange={(value) => update({ layoutId: value })}
+        />
+        <SelectField
+          label="Work area"
+          options={WORK_STYLES}
+          value={workStyle}
+          onChange={(value) => update({ workStyle: value })}
+        />
+        <FieldGroup label="Options">
+          <CheckboxField
+            label="No remainders (exact division)"
+            checked={noRemainders}
+            onChange={(checked) => update({ noRemainders: checked })}
           />
-        </label>
-      </aside>
+          <CheckboxField
+            label="Show problem numbers"
+            checked={showNumbers}
+            onChange={(checked) => update({ showNumbers: checked })}
+          />
+        </FieldGroup>
+        <TextField
+          label="Worksheet title"
+          value={title}
+          placeholder={DEFAULT_TITLE}
+          onChange={setTitle}
+        />
+      </WorksheetControls>
 
       <WorksheetSheet
         title={title || DEFAULT_TITLE}
         instructions="Solve each problem. Show all work in the space provided."
         code={code}
       >
-        <div
-          className={`division-grid division-grid--rows-${layout.rows}`}
-          style={{ "--division-grid-cols": layout.cols } as React.CSSProperties}
-        >
+        <ProblemGrid layout={layout}>
           {problems.map((p) => (
             <DivisionProblemCard
               key={p.id}
@@ -261,7 +206,7 @@ const LongDivisionWorksheet: React.FC = () => {
               showNumber={showNumbers}
             />
           ))}
-        </div>
+        </ProblemGrid>
       </WorksheetSheet>
     </div>
   );

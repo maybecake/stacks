@@ -1,3 +1,4 @@
+import { gridLayout, type GridLayout } from "../gridLayout";
 import { randomInt } from "../random";
 
 export type Difficulty = "easy" | "medium" | "hard" | "custom";
@@ -17,13 +18,6 @@ export interface DivisionProblem {
   dividend: number;
   quotient: number;
   remainder: number;
-}
-
-export interface GridLayout {
-  id: string;
-  cols: number;
-  rows: number;
-  label: string;
 }
 
 export const DIFFICULTY_PRESETS: Record<
@@ -47,11 +41,11 @@ export const DIFFICULTY_PRESETS: Record<
   },
 };
 
-export const GRID_LAYOUTS: GridLayout[] = [
-  { id: "3x4", cols: 3, rows: 4, label: "3 columns × 4 rows (12 problems)" },
-  { id: "2x3", cols: 2, rows: 3, label: "2 columns × 3 rows (6 problems, extra space)" },
-  { id: "2x4", cols: 2, rows: 4, label: "2 columns × 4 rows (8 problems)" },
-  { id: "3x3", cols: 3, rows: 3, label: "3 columns × 3 rows (9 problems)" },
+export const DIVISION_LAYOUTS: GridLayout[] = [
+  gridLayout(3, 4),
+  gridLayout(2, 3, "extra space"),
+  gridLayout(2, 4),
+  gridLayout(3, 3),
 ];
 
 export const WORK_STYLES: { id: WorkStyle; label: string }[] = [

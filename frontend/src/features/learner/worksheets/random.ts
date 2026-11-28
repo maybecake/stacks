@@ -25,3 +25,13 @@ export function randomSeed(): number {
 export function formatSeed(seed: number): string {
   return seed.toString().padStart(SEED_DIGITS, "0");
 }
+
+/** Fisher–Yates shuffle into a new array, driven by the seeded rng. */
+export function shuffle<T>(items: readonly T[], rng: () => number): T[] {
+  const result = [...items];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = randomInt(rng, 0, i);
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
