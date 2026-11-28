@@ -1,5 +1,5 @@
 .learner {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: var(--spacing-lg);
 }
@@ -14,4 +14,30 @@
   font-size: var(--font-size-md);
   color: var(--text-secondary);
   line-height: 1.6;
+}
+
+.learner__tabs-list {
+  display: flex;
+  gap: var(--spacing-sm);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: var(--spacing-md);
+}
+
+.learner__tab {
+  font-size: var(--font-size-md);
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  cursor: pointer;
+}
+
+.learner__tab:hover {
+  color: var(--text-primary);
+}
+
+.learner__tab[data-state="active"] {
+  color: var(--text-primary);
+  border-bottom-color: var(--accent);
 }

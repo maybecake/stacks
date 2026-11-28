@@ -13,7 +13,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/samples" element={<Samples />} />
             <Route path="/samples/:count" element={<Samples />} />
-            <Route path="/learner" element={<Learner />} />
+            <Route path="/learner/:tab?/:worksheet?" element={<Learner />} />
             <Route path="/greetings" element={<Greetings />} />
             <Route path="/invite" element={<InviteManager />} />
             <Route path="/game" element={<GamePage />} />
