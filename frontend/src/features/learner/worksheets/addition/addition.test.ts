@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { mulberry32 } from "../random";
-import { additionPairs, generateAdditionProblems } from "./addition";
+import { SHAPE_CYCLE, additionPairs, generateAdditionProblems, shapeForProblem } from "./addition";
 import {
   DEFAULT_ADDITION_SETTINGS,
   decodeAddition,
@@ -54,6 +54,14 @@ describe("generateAdditionProblems", () => {
   });
 });
 
+describe("shapeForProblem", () => {
+  it("rotates through every shape starting with the first problem", () => {
+    const ids = SHAPE_CYCLE.map((_, i) => i + 1);
+    expect(ids.map(shapeForProblem)).toEqual(SHAPE_CYCLE);
+    expect(shapeForProblem(SHAPE_CYCLE.length + 1)).toBe(SHAPE_CYCLE[0]);
+  });
+});
+
 describe("addition sheet code", () => {
   const base: AdditionSettings = { ...DEFAULT_ADDITION_SETTINGS, seed: 482913 };
 
@@ -66,11 +74,13 @@ describe("addition sheet code", () => {
       base,
       { ...base, maxSum: 5, layoutId: "4x5", format: "vertical", allowZero: true, seed: 7 },
       { ...base, maxSum: 10, layoutId: "2x4", showNumbers: false, seed: 999999 },
+      { ...base, maxSum: 10, layoutId: "3x5", counting: true, allowZero: true },
     ];
     for (const settings of variants) {
       expect(decodeAddition(encodeAddition(settings))).toEqual(settings);
     }
     expect(encodeAddition(variants[1])).toBe("A5-45VZ-000007");
+    expect(encodeAddition(variants[3])).toBe("A10-35HZC-482913");
   });
 
   it("rejects malformed codes, including codes from other generators", () => {

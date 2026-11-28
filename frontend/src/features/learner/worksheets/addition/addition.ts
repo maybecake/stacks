@@ -3,6 +3,7 @@ import { shuffle } from "../random";
 
 export type MaxSum = 5 | 10 | 20;
 export type AdditionFormat = "horizontal" | "vertical";
+export type CountingShape = "circle" | "star" | "square" | "heart" | "triangle";
 
 export interface AdditionProblem {
   id: number;
@@ -21,6 +22,9 @@ export const ADDITION_FORMATS: { id: AdditionFormat; label: string }[] = [
   { id: "horizontal", label: "Side by side (3 + 4 = ☐)" },
   { id: "vertical", label: "Stacked (in columns)" },
 ];
+
+/** Counting shapes rotate from problem to problem; both numbers in a problem share one shape. */
+export const SHAPE_CYCLE: CountingShape[] = ["circle", "star", "square", "heart", "triangle"];
 
 export const ADDITION_LAYOUTS: GridLayout[] = [
   gridLayout(2, 5, "large"),
@@ -58,4 +62,9 @@ export function generateAdditionProblems(
     problems.push({ id: problems.length + 1, a, b, sum: a + b });
   }
   return problems;
+}
+
+/** The counting shape for a problem, used for both numbers so the learner counts one kind of thing. */
+export function shapeForProblem(id: number): CountingShape {
+  return SHAPE_CYCLE[(id - 1) % SHAPE_CYCLE.length];
 }

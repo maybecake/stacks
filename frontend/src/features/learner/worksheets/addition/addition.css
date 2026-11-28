@@ -24,10 +24,98 @@
   --addition-font-size: 1.5rem;
 }
 
+/*
+ * Stacked problems are ~3.8em tall (two numbers, rule, answer box) vs ~1.3em side by side,
+ * so they get smaller type to keep 5 rows on one letter page.
+ */
+.addition-problem--vertical {
+  --addition-font-size: 1.8rem;
+}
+
+.problem-grid--rows-4 .addition-problem--vertical {
+  --addition-font-size: 2.1rem;
+
+  min-height: 185px;
+}
+
+.problem-grid--cols-4 .addition-problem--vertical {
+  --addition-font-size: 1.5rem;
+}
+
+/*
+ * Counting shapes make problems wider (side by side) or wider still (stacked), so narrower
+ * layouts shrink the type to keep every card inside its column and the page.
+ */
+.problem-grid .addition-problem--horizontal.addition-problem--counting {
+  --addition-font-size: 2rem;
+}
+
+.problem-grid--rows-4 .addition-problem--horizontal.addition-problem--counting {
+  --addition-font-size: 2.4rem;
+}
+
+.problem-grid--cols-3 .addition-problem--horizontal.addition-problem--counting {
+  --addition-font-size: 1.75rem;
+}
+
+.problem-grid--cols-4 .addition-problem--horizontal.addition-problem--counting {
+  --addition-font-size: 1.35rem;
+}
+
+.problem-grid--cols-3 .addition-problem--vertical.addition-problem--counting {
+  --addition-font-size: 1.6rem;
+}
+
+.problem-grid--cols-4 .addition-problem--vertical.addition-problem--counting {
+  --addition-font-size: 1.2rem;
+}
+
+.addition-problem__a {
+  grid-area: a;
+}
+
+.addition-problem__op {
+  grid-area: op;
+}
+
+.addition-problem__b {
+  grid-area: b;
+}
+
+.addition-problem__eq {
+  grid-area: eq;
+}
+
+.addition-problem__answer {
+  grid-area: ans;
+}
+
+.addition-problem__rule {
+  grid-area: rule;
+}
+
+.addition-problem__shapes-a {
+  grid-area: sa;
+}
+
+.addition-problem__shapes-b {
+  grid-area: sb;
+}
+
+/* Side by side: 3 + 4 = ☐, with counting shapes (if on) under each number */
 .addition-problem__equation {
-  display: flex;
+  display: grid;
+  grid-template-areas: "a op b eq ans";
+  justify-items: center;
   align-items: center;
-  gap: 0.35em;
+  column-gap: 0.35em;
+}
+
+.addition-problem--counting .addition-problem__equation {
+  grid-template-areas:
+    "a op b eq ans"
+    "sa . sb . .";
+  row-gap: 0.25em;
 }
 
 /* Answer box sized for two digits */
@@ -39,31 +127,92 @@
   border-radius: 0.2em;
 }
 
-/* Stacked: operator column + right-aligned numbers, then a sum line across both columns */
+/* Stacked: right-aligned numbers, then a sum line and the answer box */
 .addition-problem__stack {
   display: grid;
+  grid-template-areas:
+    ". a"
+    "op b"
+    "rule rule"
+    ". ans";
   grid-template-columns: auto 1.7em;
   column-gap: 0.3em;
   align-items: center;
-  line-height: 1.15;
+  line-height: 1.1;
 }
 
-.addition-problem__addend {
-  grid-column: 2;
+/* Counting shapes sit in their own column to the left of each number */
+.addition-problem--counting .addition-problem__stack {
+  grid-template-areas:
+    "sa . a"
+    "sb op b"
+    ". rule rule"
+    ". . ans";
+  grid-template-columns: auto auto 1.7em;
+}
+
+.addition-problem__stack .addition-problem__a,
+.addition-problem__stack .addition-problem__b {
   text-align: right;
 }
 
-.addition-problem__operator {
-  grid-column: 1;
-}
-
-.addition-problem__rule {
-  grid-column: 1 / -1;
+.addition-problem__stack .addition-problem__rule {
   border-top: 3px solid var(--paper-ink);
   margin-top: 0.1em;
 }
 
-.addition-problem__answer--stacked {
-  grid-column: 2;
-  margin-top: 0.25em;
+.addition-problem__stack .addition-problem__answer {
+  margin-top: 0.2em;
+}
+
+.addition-problem__stack .counting-shapes {
+  justify-self: end;
+  margin-right: 0.2em;
+}
+
+/* Counting shapes (CountingShapes.tsx): outlined so they can be colored in, grouped by fives */
+.counting-shapes {
+  --shape-size: 0.38em;
+  --shape-gap: 0.08em;
+
+  display: flex;
+  gap: 0.2em;
+  color: var(--paper-ink);
+}
+
+.counting-shapes__group {
+  display: flex;
+  gap: var(--shape-gap);
+}
+
+/* Stacks of 5 standing side by side (under numbers) */
+.counting-shapes--columns {
+  align-self: start;
+}
+
+.counting-shapes--columns .counting-shapes__group {
+  flex-direction: column;
+}
+
+/* Rows of 10, split 5 + 5 like a ten-frame (beside numbers) */
+.counting-shapes--rows {
+  --shape-size: 0.42em;
+
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  justify-content: start;
+  row-gap: var(--shape-gap);
+}
+
+.problem-grid--cols-4 .counting-shapes--rows {
+  --shape-size: 0.32em;
+}
+
+.counting-shapes__shape {
+  width: var(--shape-size);
+  height: var(--shape-size);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linejoin: round;
 }
